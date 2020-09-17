@@ -40,9 +40,9 @@ bool isPerfectSquare(long double x)
 
 pair<ll,bool> find(ll halfSum) {
 
-    int temp = (ll)((sqrt(1 + 8*halfSum) - 2)/2);
+    int temp = (ll)((sqrt(1 + 8*halfSum) - 1)/2);
     if(isPerfectSquare(1 + 8*halfSum)) {
-        if((ll)((sqrt(1 + 8*halfSum) - 2))%2 == 0){
+        if((ll)((sqrt(1 + 8*halfSum) - 1))%2 == 0){
             return(MP(temp, true));
         }
         else {
@@ -80,17 +80,26 @@ int main()
     ll t;
     cin>>t;
     
+    // fo(i,1,100){
+    //     //cout<<i<<" "<<isPerfectSquare(i)<<endl;
+    //     if(i%4 == 3 || i%4==0) {
+    //         int temp = (i*(i + 1))/4;
+            
+    //         cout<<i<<" "<<find(temp).F<<" "<<find(temp).S<<endl;
+    //     }
+        
+    // }
     while(t--)
     {
         ll n;
         cin>>n;
         if(n%4 == 3 || n%4==0) {
-            ll halfsum = (n*(n + 1))/2;
+            ll halfsum = (n*(n + 1))/4;
             auto ans = find(halfsum);
-            cout<<n<<" "<<ans.F<<endl;
+            //cout<<n<<" "<<ans.F<<endl;
             //ll finalans = (ans*(ans + 1))/2;
-            if(ans.S) {
-                cout<<(ans.F*(ans.F - 1))/2 + ((n - ans.F)*(n - ans.F - 1))/2<<endl;
+            if(ans.S == true) {
+                cout<<(ans.F*(ans.F - 1))/2 + ((n - ans.F)*(n - ans.F - 1))/2 + (n - ans.F)<<endl;
             }
             else {
                 cout<<n - ans.F<<endl;
