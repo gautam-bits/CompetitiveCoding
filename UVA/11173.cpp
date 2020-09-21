@@ -36,40 +36,19 @@ int main()
     cin.tie(NULL);
     
     ll t;
-    t = 1;
+    cin>>t;
     
     while(t--)
     {
-        ll n;
-        cin>>n;
-        ll a[n];
-        fo(i,0,n) cin>>a[i];
-        sort(a,a + n);
-
-        if(n&1) {
-            cout<<n/2;
-            vector<ll> aaa, bbb;
-            fo(i,0,n/2) aaa.pb(a[i]);
-            fo(i,n/2,n) bbb.pb(a[i]);
-            fo(i,0,n/2){
-                cout<<bbb[i]<<" ";
-                cout<<aaa[i]<<" ";
-            }
-            cout<<bbb[n/2 -1]<<endl;;
+        ll n,k;
+        cin>>n>>k;
+        bitset<31> answer(k),ans;
+        //ans[0] = answer[0];
+        fo(i,0,n){
+            //cout<<answer[i]<<endl;
+            ans[i] = answer[i] ^ answer[i+1];
         }
-        else{
-            cout<<n/2 - 1;
-            vector<ll> aaa, bbb;
-            fo(i,0,n/2 - 1) aaa.pb(a[i]);
-            fo(i,n/2 - 1,n) bbb.pb(a[i]);
-            fo(i,0,n/2 - 1){
-                cout<<bbb[i]<<" ";
-                cout<<aaa[i]<<" ";
-            }
-            cout<<bbb[n/2 - 1]<<" ";
-            cout<<bbb[n/2]<<endl;
-        }
-
+        cout<<ans.to_ullong()<<endl;
     
     
     }
