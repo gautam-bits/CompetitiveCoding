@@ -28,29 +28,55 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+
+
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-
-    while(cin>>n && n > 0)
+    ll t;
+    cin>>t;
+    
+    while(t--)
     {
-        int a = 0,b = 0, count=0,i  = 0;
-        while(n){
-            if(n&1){
-                count++;
-                if(count&1) a += 1<<i;
-                else b += 1<<i;
-            }
-            i++;
-            n = n >> 1;
-        }
-        cout<<a<<" "<<b<<endl;
+        ll n,q;
+        cin>>n>>q;
+        ll a[n],ans = 0;
+        vector<ll> node;
+        fo(i,0,n) cin>>a[i];
+        //sort(a,a+n);
+        //vector<ll> node;
+        bool ok = true;
 
+        fo(i,0,n){
+            if(i == 0) {
+                if(a[i] > a[i+1]) node.pb(a[i]);
+            }
+            
+            else if(i < n-1) {
+                if(a[i] > a[i-1] && a[i] > a[i+1]) node.pb(a[i]);
+                else if(a[i] < a[i-1] && a[i] < a[i+1]) node.pb(a[i]);
+            }
+            else if(i == n-1){
+                 if(a[i] > a[i-1]) node.pb(a[i]);
+            }
+        }
+        int len = node.size();
+
+        fo(i,0,len){
+            if(i&1){
+                ans -= node[i];
+            }
+            else {
+                ans += node[i];
+            }
+        }
+        
+        cout<<ans<<endl;
+    
+    
     }
     return 0;
 }

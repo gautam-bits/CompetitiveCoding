@@ -35,22 +35,49 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
+    // ll t;
+    // cin>>t;
     ll n;
+    while(cin>>n)
+    {   
+        ll position[n] ;
+        fo(i,0,n) position[i] = i + 1 ;
 
-    while(cin>>n && n > 0)
-    {
-        int a = 0,b = 0, count=0,i  = 0;
-        while(n){
-            if(n&1){
-                count++;
-                if(count&1) a += 1<<i;
-                else b += 1<<i;
+        while (true) {
+
+            int temp;
+            cin>>temp;
+
+            if(temp == 0) break;
+
+            ll orient[n];
+            orient[0] = temp;
+            stack<ll> st;
+            fo(i,1,n) cin>>orient[i];
+
+            ll j = 0,k = 0;
+
+            while(k < n && j < n) {
+                if(st.empty()){
+                    st.push(position[j]);
+                    j++;
+                }
+                else {
+                    if(st.top() == orient[k]) {
+                        st.pop();
+                        k++;
+                    }
+                    else {
+                        st.push(position[j]);
+                        j++;
+                    }
+                }
             }
-            i++;
-            n = n >> 1;
-        }
-        cout<<a<<" "<<b<<endl;
 
+            if(j == n-1  && k == n-1) cout<<"YES"<<endl;
+            else cout<<"NO"<<endl;
+        }
+    
     }
     return 0;
 }

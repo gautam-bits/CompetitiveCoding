@@ -35,22 +35,36 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-
-    while(cin>>n && n > 0)
+    ll t;
+    cin>>t;
+    
+    while(t--)
     {
-        int a = 0,b = 0, count=0,i  = 0;
-        while(n){
-            if(n&1){
-                count++;
-                if(count&1) a += 1<<i;
-                else b += 1<<i;
-            }
-            i++;
-            n = n >> 1;
-        }
-        cout<<a<<" "<<b<<endl;
+        ll n;
+        cin>>n;
+        ll a[n],ans[40] = {0},fin = 0;
+        fo(i,0,n) cin>>a[i];
 
+        ll temp;
+
+        fo(i,0,n){
+            temp = 0;
+            while(a[i]>0){
+                a[i] = a[i]>>1;
+                temp++;
+            }
+
+            
+            ans[temp]++;  
+        }
+
+        fo(i,0,40){
+            fin += (ans[i]*(ans[i] - 1))/2;
+        }
+
+        cout<<fin<<endl;
+    
+    
     }
     return 0;
 }

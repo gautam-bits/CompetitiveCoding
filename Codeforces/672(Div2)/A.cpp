@@ -28,29 +28,57 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-
-    while(cin>>n && n > 0)
+    ll t;
+    cin>>t;
+    
+    while(t--)
     {
-        int a = 0,b = 0, count=0,i  = 0;
-        while(n){
-            if(n&1){
-                count++;
-                if(count&1) a += 1<<i;
-                else b += 1<<i;
-            }
-            i++;
-            n = n >> 1;
-        }
-        cout<<a<<" "<<b<<endl;
+        ll n;
+        cin>>n;
+        ll a[(int)1e6],b[n],ans = 0, fino[n]={0};
+        // map<ll,ll> mp;
+        // fo(i,0,n) {
+        //     cin>>a[i];
+        //     b[i] = a[i] ;
+        // }
+        // sort(b, b+ n);
+        // fo(i,0,n){
+        //     mp[b[i]]=i;
+        // }
+        // fo(i,0,n){    
+        //     fino[mp[a[i]]] = abs((int)(lower_bound(b,b+n,a[i])- b) - i);    
+        // }
 
+        //int ans = sort(a,a+n);
+
+        //fo(i,0,n)cout<<fino[i]<<" ";
+
+        fo(i,0,n){
+            if(fino[i]>0){
+                fino[i] = 0;
+                break;
+            }
+        }
+        
+        fo(i,0,n){
+            ans+= fino[i];
+        }
+        
+        
+        ll rand = (n*(n-1))/2 - 1;
+        
+        //cout<<ans<<endl;
+        if(ans <= rand) cout<<"YES"<<endl;
+        else cout<<"NO"<<endl;
+    
+    
     }
     return 0;
 }
