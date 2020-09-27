@@ -35,34 +35,46 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    int n;
+    ll t;
+    cin>>t;
     
-    while(cin>>n && n > 0)
+    while(t--)
     {
-        map<set<ll>,ll> freq;
-        set<ll> temp;
-        ll te,anss=0;
-        fo(i,0,n){
-            fo(i,0,5){
-                cin>>te;
-                temp.insert(te);
-            }
-            freq[temp]++;
-            temp.clear();
+        ll n;
+        cin>>n;
+        ll a[n],ans = 0;
+        fo(i,0,n) cin>>a[i];
+        map<ll,bool> freq;
+
+        ll i = 0, j = 1;
+        freq[a[0]] = true;
+        
+           
+        if(n == 1) {
+            cout<<1<<endl;
         }
 
-        ll maxx = 0 ;
-//        for(auto x : freq){
-//            maxx = max(maxx, x.S);
-//        }
-//
-//        for(auto x : freq){
-//            if(x.S == maxx) anss += maxx;
-//        }
-
-        cout<<anss<<endl;
-
+        
+        else{
+            while(j<n){
+                //cout<<j<<" "<<freq[a[j]]<<endl;
+                if(freq[a[j]] ) {
+                    freq[a[i]] = false;
+                    i++;
+                    
+                }
+                else{
+                    //cout<<ans<<" "<<i<<" "<<j<<endl;
+                    ans = max(ans,j - i + 1);
+                    freq[a[j]] = true;
+                    j++;
+                }
+            }
+            cout<<ans<<endl;
+        }
+        
     
     }
+    
     return 0;
 }
