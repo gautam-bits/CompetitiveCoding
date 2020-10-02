@@ -28,10 +28,7 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-ll poww(ll a){
-    return pow((ll)2,a-1)*(pow((ll)2,a) - 1);
-}   
+    
 int main() 
 {
     
@@ -40,20 +37,45 @@ int main()
     
     ll t;
     cin>>t;
+    
     while(t--)
     {
-        ll n,ans = 0;
+        ll n;
         cin>>n;
-        ll x = 1;
-        while(n > 0) {
-            n -= 2*poww(x);
-            x++;
-            if(n>=0)
-                ans++;
+        int a[n],b[n],c[n];
+        fo(i,0,n)cin>>a[i];
+        fo(i,0,n)cin>>b[i];
+        fo(i,0,n)cin>>c[i];
+        cout<<a[0]<<" ";
+        ll temp = a[0];
+        fo(i,1,n-1){
+            if(a[i] != temp){
+                cout<<a[i]<<" ";
+                temp = a[i];
+            }
+            else if(b[i] != temp){
+                cout<<b[i]<<" ";
+                temp = b[i];
+            }
+            else if(c[i] != temp){
+                cout<<c[i]<<" ";
+                temp = a[i];
+            }
         }
-
-        cout<<ans<<endl;
         
+        if(a[n-1] != a[0] && a[n-1] != temp){
+                cout<<a[n-1]<<" ";
+                temp = a[n-1];
+            }
+        else if(b[n-1] != a[0] && b[n-1] != temp){
+                cout<<b[n-1]<<" ";
+                temp = b[n-1];
+            }
+        else if(c[n-1] != a[0] && c[n-1] != temp){
+                cout<<c[n-1]<<" ";
+                temp = a[n-1];
+        }
+        cout<<endl;
     
     
     }

@@ -28,10 +28,7 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-ll poww(ll a){
-    return pow((ll)2,a-1)*(pow((ll)2,a) - 1);
-}   
+    
 int main() 
 {
     
@@ -40,20 +37,37 @@ int main()
     
     ll t;
     cin>>t;
+    
     while(t--)
     {
-        ll n,ans = 0;
-        cin>>n;
-        ll x = 1;
-        while(n > 0) {
-            n -= 2*poww(x);
-            x++;
-            if(n>=0)
-                ans++;
+        ll n,k,temp,ran,sz,ans = 0;
+        bool flag = true;
+        cin>>n>>k;
+        
+        set<ll> unq;
+
+        fo(i,0,n) {
+            cin>>temp;
+            unq.insert(temp);
         }
 
-        cout<<ans<<endl;
-        
+        sz = unq.size();
+
+        while(sz>0){
+            ran = sz;
+            sz -= k;
+            ans++;
+            if(sz <= 0) break;
+            sz += 1 ;
+            if(sz >= ran) {
+                flag = false;
+                break;
+            }
+        }
+        if(flag)
+            cout<<ans<<endl;
+        else
+            cout<<-1<<endl;
     
     
     }
