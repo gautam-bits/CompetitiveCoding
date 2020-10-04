@@ -13,14 +13,15 @@
     #define fo(i,a,b) for(int i=a;i<b;i++)
     #define rfo(i,b,a) for(int i=b;i>=a;i--)
     #define deb(x) cout<<#x<<' '<<x<<endl;
+    #define all(x) x.begin(),x.end()
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
     #define endl "\n" 
     
     
-    typedef vector<ll> vi;
-    typedef pair<ll,ll> pi;
+    typedef vector<int> vi;
+    typedef pair<int,int> pi;
     
     const int MOD =  1000000007 ;
     const int MAX = 2e4 + 7;
@@ -40,32 +41,24 @@ int main()
     
     while(t--)
     {
-        ll n,d;
-        cin>>n>>d;
+        ll n,x,p,k;
+        cin>>n>>x>>p>>k;
         
-        ll temp[n][d];
+        vector<ll> arr(n);
 
-        vector<pair<ll,pi>> EdgeList;
+        fo(i,0,n) cin>>arr[i];
 
-        fo(i,0,n) fo(j,0,d) cin>>temp[i][j];
+        sort(all(arr));
 
-        fo(i,0,n){
-            fo(j,0,n){
-                if(j!=i){
-                    ll te = 0;
-                    fo(x,0,d){
-                        te += abs(temp[i][x] - temp[j][x]);
-                    }
-                    EdgeList.pb({te,{i,j}});
-                }
-            }
+        p--;
+        k--;
+
+        if(arr[p-1] == x){
+            cout<<"0"<<endl;
         }
-
-        qsort(EdgeList.begin(), EdgeList.end());
-
-        
-
-    
+        else{
+            
+        }
     
     }
     return 0;
