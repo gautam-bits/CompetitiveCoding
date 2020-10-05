@@ -1,0 +1,71 @@
+//-------We can be heroes , just for one day!!.---------//
+    
+    #include <bits/stdc++.h>
+    using namespace std;
+    
+//*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ knowledge $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+    
+    #define pb push_back
+    #define MP make_pair
+    #define F first
+    #define S second
+    #define ll long long
+    #define fo(i,a,b) for(int i=a;i<b;i++)
+    #define rfo(i,b,a) for(int i=b;i>=a;i--)
+    #define deb(x) cout<<#x<<' '<<x<<endl;
+    #define mem( a, val ) memset(a, val, sizeof( a ) )
+    #define deci( x ) cout<<fixed<<setprecision( x )
+    #define bitcount( x ) __builtin_popcountll( x )
+    #define endl "\n" 
+    
+    
+    typedef vector<int> vi;
+    typedef pair<int,int> pi;
+    
+    const int MOD =  1000000007 ;
+    const int MAX = 2e4 + 7;
+    const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
+    const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
+    
+//*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+    
+int main() 
+{
+    
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    // ll t;
+    // //cin>>t;
+    // t = 1;
+    
+    ll n,q;
+    while(cin>>n>>q)
+    {
+        
+        
+        
+        ll temp ;
+
+        map<ll,vi> mp;
+
+        fo(i,1,n+1){
+            cin>>temp;
+            mp[temp].pb(i);
+        }
+
+        ll k,v;
+
+        fo(i,0,q) {
+            cin>>k>>v;
+            if(mp[v].size() < k) cout<<0<<endl;
+            else cout<< mp[v][k-1]<<endl;
+        }
+        //cout<<n;
+  
+
+    
+    
+    }
+    return 0;
+}
