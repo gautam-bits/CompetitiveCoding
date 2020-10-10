@@ -53,11 +53,22 @@ int main()
         p--;
         k--;
 
-        if(arr[p-1] == x){
+        if(arr[p] == x){
             cout<<"0"<<endl;
         }
         else{
-            
+            if(p == k) {
+                if(x > arr[p])cout<<(lower_bound(all(arr),x) - arr.begin()) - p <<endl;
+                else cout<<p - (upper_bound(all(arr),x) - arr.begin()) + 1 <<endl;
+            }
+            else if(p < k){
+                if(x > arr[p]) cout<<"-1"<<endl;
+                else cout<<p - (upper_bound(all(arr),x) - arr.begin()) + 1 <<endl;
+            }
+            else {
+                if(x < arr[p]) cout<<"-1"<<endl;
+                else cout<<(lower_bound(all(arr),x) - arr.begin()) - p <<endl;
+            }
         }
     
     }
