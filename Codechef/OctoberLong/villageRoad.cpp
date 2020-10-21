@@ -56,7 +56,8 @@ int main()
 
             pair<pair<pi,pi>,ll> temp = q1.front();
 
-            int x = temp.F.F.F,y = temp.F.F.S;
+            ll x = temp.F.F.F,y = temp.F.F.S;
+            ll t11 = temp.F.S.F,t22 = temp.F.S.S;
 
             // int x = temp.F.F.F,y = temp.F.F.S;
 
@@ -93,10 +94,10 @@ int main()
                 ans= temp.S + 1;
                 break;
             }
-            if(ee_x != x || ee_y != y) q1.push({{{ee_x,ee_y},{x,y}},temp.S + 1});
-            if(ww_x != x || ww_y != y) q1.push({{{ww_x,ww_y},{x,y}},temp.S + 1});
-            if(nn_x != x || nn_y != y) q1.push({{{nn_x,nn_y},{x,y}},temp.S + 1});
-            if(ss_x != x || ss_y != y) q1.push({{{ss_x,ss_y},{x,y}},temp.S + 1});
+            if(ee_x != t11 || ee_y != t22) q1.push({{{ee_x,ee_y},{x,y}},temp.S + 1});
+            if(ww_x != t11 || ww_y != t22) q1.push({{{ww_x,ww_y},{x,y}},temp.S + 1});
+            if(nn_x != t11 || nn_y != t22) q1.push({{{nn_x,nn_y},{x,y}},temp.S + 1});
+            if(ss_x != t11 || ss_y != t22) q1.push({{{ss_x,ss_y},{x,y}},temp.S + 1});
             
         }
 
