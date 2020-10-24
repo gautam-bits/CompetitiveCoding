@@ -3,6 +3,10 @@
         "iostream": "cpp",
         "vector": "cpp",
         "bitset": "cpp",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "chrono": "cpp",
+        "random": "cpp",
+        "limits": "cpp",
+        "valarray": "cpp"
     }
 }
