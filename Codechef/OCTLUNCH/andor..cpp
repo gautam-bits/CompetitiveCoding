@@ -40,15 +40,9 @@ int main()
     
     while(t--)
     {
-        ll n,ans=0;
+        ll n;
         cin>>n;
-        int a[n];
-        fo(i,0,n)cin>>a[i];
-
-        fo(i,1,n) ans += max(a[i-1]-a[i],0);
-
-        cout<<ans<<endl;
-        
+        cout<<n<<" "<<0<<endl;
     
     
     }

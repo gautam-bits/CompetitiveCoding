@@ -40,15 +40,35 @@ int main()
     
     while(t--)
     {
-        ll n,ans=0;
-        cin>>n;
+        ll n,q;
+        cin>>n>>q;
         int a[n];
-        fo(i,0,n)cin>>a[i];
+        fo(i,0,n) cin>>a[i];
+        int t1,t2;
+        cin>>t1>>t2;
 
-        fo(i,1,n) ans += max(a[i-1]-a[i],0);
+        a[t1-1] = t2;
 
-        cout<<ans<<endl;
-        
+        ll haha = n;
+
+        vi ans,ans2;
+        //fo(i,0,n) cout<<a[i]<<" ";
+
+        fo(i,0,n-1){
+            if(a[i] == a[i+1])haha--;
+        }
+        // if(ans.size() == 0) haha = n;
+
+        // else {
+        //     ans2.pb(ans[0] + 1);
+        //     ans2.pb(n - ans[ans.size()-1] - 1 );
+        //     fo(i,1,ans.size()){
+        //         ans2.pb(ans[i]-ans[i-1]);
+        //     }
+        //     haha = *max_element(ans2.begin(),ans2.end());
+        // }
+
+        cout<<haha<<endl;
     
     
     }

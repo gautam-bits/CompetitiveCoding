@@ -36,19 +36,19 @@ int main()
     cin.tie(NULL);
     
     ll t;
-    cin>>t;
+    t = 1;
     
     while(t--)
     {
-        ll n,ans=0;
+        ll n;
         cin>>n;
-        int a[n];
-        fo(i,0,n)cin>>a[i];
-
-        fo(i,1,n) ans += max(a[i-1]-a[i],0);
-
-        cout<<ans<<endl;
-        
+        cout<<n<<" ";
+        while(n > 1 ){
+            
+            if(n&1) n = 3*n + 1;
+            else n /= 2;
+            cout<<n<<" ";
+        }
     
     
     }

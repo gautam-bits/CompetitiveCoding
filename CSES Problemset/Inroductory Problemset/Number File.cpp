@@ -9,7 +9,7 @@
     #define MP make_pair
     #define F first
     #define S second
-    #define ll long long
+    #define ll unsigned long long
     #define fo(i,a,b) for(int i=a;i<b;i++)
     #define rfo(i,b,a) for(int i=b;i>=a;i--)
     #define deb(x) cout<<#x<<' '<<x<<endl;
@@ -40,15 +40,30 @@ int main()
     
     while(t--)
     {
-        ll n,ans=0;
-        cin>>n;
-        int a[n];
-        fo(i,0,n)cin>>a[i];
+        ll x, y;
+        cin>>y>>x;
 
-        fo(i,1,n) ans += max(a[i-1]-a[i],0);
+        ll abc2 = max(x,y);
+        ll abc = abc2-1;
+        abc *= abc;
+        abc2 = abc2*abc2 ;
+        //cout<<abc2 - min(x,y) + 1<<endl;
+        // if(abc & 1){
+        //     cout<< abc + min(x,<<endl;
+        // }
+        // else {
+        //     cout<< abc2 - <<endl;
+        // }
 
-        cout<<ans<<endl;
-        
+        if(abc&1){
+            if(y < x)cout<<abc+y<<endl;
+            else cout<<abc+y + y - x<<endl;
+        } else {
+            if(y < x)cout<<abc+x + x - y<<endl;
+            else cout<<abc+ + x<<endl;
+        }
+
+
     
     
     }

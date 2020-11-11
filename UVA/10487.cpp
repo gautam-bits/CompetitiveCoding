@@ -28,28 +28,51 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+void printnew(ll a,ll b){
+    cout<<"Closest sum to "<<a<<" is "<<b<<"."<<endl;
+} 
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll t;
-    cin>>t;
+    ll n;
+    ll t = 1;
     
-    while(t--)
+    while(cin>>n && n != 0)
     {
-        ll n,ans=0;
-        cin>>n;
-        int a[n];
-        fo(i,0,n)cin>>a[i];
+        ll a[n];
+        fo(i,0,n) cin>>a[i];
 
-        fo(i,1,n) ans += max(a[i-1]-a[i],0);
+        ll m;
+        cin>>m;
+        cout<<"Case "<<t<<":"<<endl;
+        fo(i,0,m){
+            ll key;
+            cin>>key;
+            ll itr1 = 0, itr2 = n-1;
+            ll ans1=(ll)(-1e17),ans2=(ll)(-1e17);
+            while(itr1 < itr2) {
+                if(a[itr1] + a[itr2] < key){
+                    ans1 = a[itr1] + a[itr2];
+                    itr1++;
+                }
+                else if(a[itr1] + a[itr2] > key){
+                    ans2 = a[itr1] + a[itr2];
+                    itr2--;
+                }
+                else{
+                    ans1 = a[itr1] + a[itr2];
+                    break;
+                }
+            }
+            if(abs(ans1-key) > abs(ans2-key))printnew(key,ans2);
+            else printnew(key,ans1);
+            
 
-        cout<<ans<<endl;
-        
-    
+        }
+        t++;
     
     }
     return 0;

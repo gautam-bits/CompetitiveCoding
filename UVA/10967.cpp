@@ -19,8 +19,8 @@
     #define endl "\n" 
     
     
-    typedef vector<int> vi;
-    typedef pair<int,int> pi;
+    typedef vector<ll> vi;
+    typedef pair<ll,ll> pi;
     
     const int MOD =  1000000007 ;
     const int MAX = 2e4 + 7;
@@ -28,27 +28,35 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+void printnew(ll a,ll b,ll c){
+    cout<<"1/"<<a<<" = "<<"1/"<<b<<" + 1/"<<c<<endl;
+}
+
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll t;
-    cin>>t;
+    ll k;
     
-    while(t--)
+    while(cin>>k)
     {
-        ll n,ans=0;
-        cin>>n;
-        int a[n];
-        fo(i,0,n)cin>>a[i];
-
-        fo(i,1,n) ans += max(a[i-1]-a[i],0);
+        ll y = k + 1;
+        vector<pi> pairs;
+        ll ans = 0;
+        while(y <= 2*k){
+            if((k*y)%(y-k) == 0 && (k*y)/(y-k) >= y) {
+                pairs.pb({(k*y)/(y-k),y});
+                ans++;
+            }
+            y++;
+        }
 
         cout<<ans<<endl;
-        
+        fo(i,0,ans){
+            printnew(k,pairs[i].F,pairs[i].S);
+        }
     
     
     }

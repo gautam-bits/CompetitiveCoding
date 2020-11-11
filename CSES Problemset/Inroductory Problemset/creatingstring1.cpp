@@ -36,19 +36,32 @@ int main()
     cin.tie(NULL);
     
     ll t;
-    cin>>t;
+    t = 1;
     
     while(t--)
     {
-        ll n,ans=0;
-        cin>>n;
-        int a[n];
-        fo(i,0,n)cin>>a[i];
+        string s;
+        cin>>s;
 
-        fo(i,1,n) ans += max(a[i-1]-a[i],0);
+        set<string> sett;
+        //for(char x : s)sett.insert(ix);
 
-        cout<<ans<<endl;
-        
+        for(ll i = 0; i < (1<<s.size()) ; i++) {
+            ll te = i;
+            string temp = "";
+            ll idx = 0;
+            while(te){
+                if(te&1) temp+=s[idx];
+                idx++;
+                te >>= 1;
+            }
+            sett.insert(temp);
+
+        }
+        for(string str : sett){
+            cout<<str<<endl;
+        }
+
     
     
     }

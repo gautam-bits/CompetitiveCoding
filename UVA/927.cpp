@@ -28,7 +28,19 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+ll poly[30];    // global polynomial
+
+
+ll solve(ll n, ll d, ll k ) {
+    ll k_top = (k + d - 1)/d;
+    ll itr = (ll)( (1 + sqrt(8*k_top - 7)) / 2  );
+    ll ans = 0;
+    fo(i,0,n+1){
+        //cout<<k_top<<" "; 
+        ans += poly[i]*((ll)pow(itr,i));
+    }
+    return ans;
+}
 int main() 
 {
     
@@ -39,16 +51,19 @@ int main()
     cin>>t;
     
     while(t--)
-    {
-        ll n,ans=0;
+    {   
+        ll n;
         cin>>n;
-        int a[n];
-        fo(i,0,n)cin>>a[i];
-
-        fo(i,1,n) ans += max(a[i-1]-a[i],0);
-
-        cout<<ans<<endl;
+        //ll poly[n+1];
+        mem(poly,0);
+        fo(i,0,n+1)cin>>poly[i];
         
+        ll d,k;
+        cin>>d>>k;
+
+        cout<<solve(n,d,k)<<endl;
+
+
     
     
     }

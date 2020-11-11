@@ -129,35 +129,6 @@ int main()
     t = 1;
     while(t--)
     {
-        //vi arr = {1,2,33,3,3,4,3,445,66,5,6,4,5,65,45};
-        // vi arr = {1,3,2,6,4,5,7};
-        // SegmentTree st(arr);
-        // st.update(1,0);
-        // fo(x,0,5){
-        //     ll i,j;
-        //     cin>>i>>j;
-        //     cout<< arr[st.rmq(i,j)] <<" ";
-        // }
-        // cout<<endl;
-
-        // fo(i,0,15)cout<<arr[i]<<" ";
-        // cout<<endl;
-        // fo(x,0,5){
-        //     ll idx,val;
-        //     cin>>idx>>val;
-        //     st.update(idx,val);
-        //     // cout<< arr[st.rmq(i,j)] <<endl;
-        // }
-        // fo(i,0,15)cout<<arr[i]<<" ";
-        // cout<<endl;
-
-        // fo(x,0,5){
-        //     ll i,j;
-
-        //     cin>>i>>j;
-        //     cout<< arr[st.rmq(i,j)] <<" ";
-        // }
-        // cout<<endl;
 
         ll n,q;
         cin>>n>>q;

@@ -31,26 +31,20 @@
     
 int main() 
 {
+    int number ;
+    cin >> number ;
     
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    
-    ll t;
-    cin>>t;
-    
-    while(t--)
-    {
-        ll n,ans=0;
-        cin>>n;
-        int a[n];
-        fo(i,0,n)cin>>a[i];
+    int answer = 0 ;
 
-        fo(i,1,n) ans += max(a[i-1]-a[i],0);
+    while(number > 1){
+        if(number & 1) number = 3*number + 1;
+        else number = number/2 ;
 
-        cout<<ans<<endl;
-        
-    
-    
+        answer = answer + 1 ; 
     }
+
+    cout<<answer<<endl;
+
+
     return 0;
 }

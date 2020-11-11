@@ -19,7 +19,7 @@
     #define endl "\n" 
     
     
-    typedef vector<int> vi;
+    typedef vector<ll> vi;
     typedef pair<int,int> pi;
     
     const int MOD =  1000000007 ;
@@ -28,7 +28,28 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+
+void dfs1(vector<vi>& graph, vi& val, ll node){
+    if(graph[node].empty()) {
+        val[node] = 1;
+        return;
+    }
+    for(ll x : graph[node]){
+        dfs1(graph,val,x);
+        val[node] += val[x];
+    }
+    val[node]++;
+}  
+ll anss(vector<vi>& graph, vi& val, ll node){
+    if(graph[node].empty()) {
+        return val[node];
+    }
+    ll maxx = -1;
+    for(ll x : graph[node]){
+        maxx = max(maxx,anss(graph,val,x));
+    }
+    return val[node] + maxx;
+}
 int main() 
 {
     
@@ -37,20 +58,29 @@ int main()
     
     ll t;
     cin>>t;
+    //cout<<t;
     
     while(t--)
     {
-        ll n,ans=0;
+        ll n;
         cin>>n;
-        int a[n];
-        fo(i,0,n)cin>>a[i];
+        //cout<<n;
+        vector<vi> graph(n+1);
+        vi val(n+1,0); // val[node]
+        //vi ans(n+1,0);
 
-        fo(i,1,n) ans += max(a[i-1]-a[i],0);
+        ll temp;
+        fo(i,2,n+1){
+            cin>>temp;
+            graph[temp].pb(i);
+        }
 
-        cout<<ans<<endl;
-        
+        dfs1(graph,val,1);
+        // fo(i,1,n+1){
+        //     cout<<val[i]<<" ";
+        // }
     
-    
+        cout << anss(graph,val,1)<< endl;
     }
     return 0;
 }

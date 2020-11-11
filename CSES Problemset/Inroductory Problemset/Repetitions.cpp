@@ -36,19 +36,20 @@ int main()
     cin.tie(NULL);
     
     ll t;
-    cin>>t;
+    t = 1;
     
     while(t--)
     {
-        ll n,ans=0;
-        cin>>n;
-        int a[n];
-        fo(i,0,n)cin>>a[i];
-
-        fo(i,1,n) ans += max(a[i-1]-a[i],0);
-
-        cout<<ans<<endl;
-        
+        string s;
+        cin>>s;
+        ll ans = 0;
+        ll maxx = 0;
+        fo(i,1,s.size()){
+            if(s[i] == s[i-1])ans++;
+            else maxx = max(maxx,ans),ans = 0;
+        }
+        maxx = max(maxx,ans);
+        cout<<maxx+1<<endl;
     
     
     }

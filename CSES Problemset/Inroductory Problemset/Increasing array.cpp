@@ -36,19 +36,22 @@ int main()
     cin.tie(NULL);
     
     ll t;
-    cin>>t;
+    t = 1;
     
     while(t--)
     {
-        ll n,ans=0;
+        ll n;
         cin>>n;
-        int a[n];
+        ll a[n];
         fo(i,0,n)cin>>a[i];
-
-        fo(i,1,n) ans += max(a[i-1]-a[i],0);
-
+        ll ans = 0;
+        fo(i,1,n){
+            if(a[i] < a[i-1]) {
+                ans += a[i-1]-a[i];
+                a[i] = a[i-1];
+            }
+        }
         cout<<ans<<endl;
-        
     
     
     }
