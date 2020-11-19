@@ -36,30 +36,36 @@ int main()
     cin.tie(NULL);
     
     ll t;
+    //cin>>t;
     t = 1;
-    
     while(t--)
     {
         string s;
         cin>>s;
-        vector<string> ans;
+        ll freq[26]={0};
 
-        set<string> sett;
-        multiset<char> te;
-        for(char x : s) te.insert(x);
-        s.clear();
-        for(char x : te)s+=x;
+        for(char x : s) freq[x-'A']++;
+        ll spec_char = -1;
 
-        do{
-            ans.pb(s);
+        ll ans = 0;
+        fo(i,0,26) if(freq[i]&1) ans++,spec_char = i ; 
+
+        if(ans > 1){
+            cout<<"NO SOLUTION"<<endl;
+        } else {
+            string ans="";
+            fo(j,0,26) if(!(freq[j]&1)){
+                fo(i,0,freq[j]/2){
+                    ans += (char)('A' + j);
+                }
+            }
+            cout<<ans;
+            if(spec_char != -1) fo(i,0,freq[spec_char]) cout<<(char)('A' + spec_char);
+            reverse(ans.begin(),ans.end());
+            cout<<ans;
         }
-        while(next_permutation(s.begin(),s.end()));
 
-        cout<<ans.size()<<endl;
 
-        for(string x : ans){
-            cout<<x<<endl;
-        }
 
     
     

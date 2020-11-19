@@ -40,26 +40,34 @@ int main()
     
     while(t--)
     {
-        string s;
-        cin>>s;
-        vector<string> ans;
+        ll n;
+        cin>>n;
+        ll a[n],sum = 0;
 
-        set<string> sett;
-        multiset<char> te;
-        for(char x : s) te.insert(x);
-        s.clear();
-        for(char x : te)s+=x;
+        ll ans=0,ans1=0,ans2=0,ans3=0,ans4=0,ans5=0;
+        ll a1,a2,a3,a4,a5;
+        a1 = a2 = a3 = a4 = a5 = 0;
 
-        do{
-            ans.pb(s);
+        fo(i,0,n)cin>>a[i],sum+=a[i];
+
+        ans1 = sum/n;
+        ans2 = ans1-1;
+        ans3 = ans1 + 1;
+        ans4 = ans1 + 2;
+        ans5 = ans1 - 2;
+
+
+        fo(i,0,n){
+            a1+=abs(a[i]-ans1);
+            a2+=abs(a[i]-ans2);
+            a3+=abs(a[i]-ans3);
+            a4+=abs(a[i]-ans4);
+            a5+=abs(a[i]-ans5);
+
         }
-        while(next_permutation(s.begin(),s.end()));
+        ans = min(min(a1,min(a2,a3)),min(a4,a5));
 
-        cout<<ans.size()<<endl;
-
-        for(string x : ans){
-            cout<<x<<endl;
-        }
+        cout<<ans<<endl;
 
     
     

@@ -40,26 +40,31 @@ int main()
     
     while(t--)
     {
-        string s;
-        cin>>s;
-        vector<string> ans;
+        ll n,sum = 0;
+        cin>>n;
+        //cout<<n;
+        ll a[n];
+        ll ans = (ll)(1e18);
+        fo(i,0,n)cin>>a[i],sum+=a[i];
+        ll temp_ans = 0;
+        ll incr = 1,incr_cpy;
+        ll itr = 0 ;
 
-        set<string> sett;
-        multiset<char> te;
-        for(char x : s) te.insert(x);
-        s.clear();
-        for(char x : te)s+=x;
-
-        do{
-            ans.pb(s);
+        while(incr < (1 << n)){
+            incr_cpy = incr;
+            itr = 0;
+            temp_ans = 0;
+            while(incr_cpy){
+                if(incr_cpy&1) temp_ans += a[itr];
+                itr++;
+                incr_cpy >>= 1;
+            }
+            ans = min(ans,abs(sum - (2*temp_ans)));
+            incr++;
         }
-        while(next_permutation(s.begin(),s.end()));
 
-        cout<<ans.size()<<endl;
+        cout<<ans;
 
-        for(string x : ans){
-            cout<<x<<endl;
-        }
 
     
     

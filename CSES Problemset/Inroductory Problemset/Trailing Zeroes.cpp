@@ -40,27 +40,17 @@ int main()
     
     while(t--)
     {
-        string s;
-        cin>>s;
-        vector<string> ans;
+        ll n;
+        cin>>n;
+        ll ans = 0;
+        ll k = 5;
 
-        set<string> sett;
-        multiset<char> te;
-        for(char x : s) te.insert(x);
-        s.clear();
-        for(char x : te)s+=x;
-
-        do{
-            ans.pb(s);
-        }
-        while(next_permutation(s.begin(),s.end()));
-
-        cout<<ans.size()<<endl;
-
-        for(string x : ans){
-            cout<<x<<endl;
+        while(n >= k){
+            ans += n/k;
+            k *= 5;
         }
 
+        cout<<ans;
     
     
     }

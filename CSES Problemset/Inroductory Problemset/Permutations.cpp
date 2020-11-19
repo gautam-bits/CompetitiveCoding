@@ -40,27 +40,21 @@ int main()
     
     while(t--)
     {
-        string s;
-        cin>>s;
-        vector<string> ans;
+        ll n;
+        cin>>n;
+        if(n == 1)cout<<1<<endl;
+        else if(n == 4)cout<<"2 4 1 3"<<endl;
 
-        set<string> sett;
-        multiset<char> te;
-        for(char x : s) te.insert(x);
-        s.clear();
-        for(char x : te)s+=x;
-
-        do{
-            ans.pb(s);
+        else if(n < 5) cout<<"NO SOLUTION"<<endl;
+        else{
+            fo(i,0,(n+1)/2){
+                cout<<2*i + 1<<" ";
+            }
+            fo(i,0,(n)/2){
+                cout<<2*i + 2<<" ";
+            }
+            cout<<endl;
         }
-        while(next_permutation(s.begin(),s.end()));
-
-        cout<<ans.size()<<endl;
-
-        for(string x : ans){
-            cout<<x<<endl;
-        }
-
     
     
     }

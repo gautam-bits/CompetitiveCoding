@@ -40,27 +40,43 @@ int main()
     
     while(t--)
     {
-        string s;
-        cin>>s;
-        vector<string> ans;
+        ll n;
+        cin>>n;
 
-        set<string> sett;
-        multiset<char> te;
-        for(char x : s) te.insert(x);
-        s.clear();
-        for(char x : te)s+=x;
-
-        do{
-            ans.pb(s);
+        if(n%4 == 1 || n%4 == 2) cout<<"NO"<<endl;
+        else if(n%4 == 0){
+            cout<<"YES"<<endl;
+            cout<<n/2<<endl;
+            fo(i,0,n/4 ){
+                cout<< 4*i + 1<<" ";
+                cout<< 4*i + 4<<" ";
+            }
+            cout<<endl;
+            cout<<n/2<<endl;
+            fo(i,0,n/4 ){
+                cout<< 4*i + 2<<" ";
+                cout<< 4*i + 3<<" ";
+            }
+            cout<<endl;
         }
-        while(next_permutation(s.begin(),s.end()));
-
-        cout<<ans.size()<<endl;
-
-        for(string x : ans){
-            cout<<x<<endl;
+        else{
+            cout<<"YES"<<endl;
+            cout<<(n-3)/2 + 2<<endl;
+            cout<<1<<" ";
+            cout<<2<<" ";
+            fo(i,0,(n-3)/4 ){
+                cout<< 4*i + 4<<" ";
+                cout<< 4*i + 7<<" ";
+            }
+            cout<<endl;
+            cout<<(n-3)/2 + 1<<endl;
+            cout<<3<<" ";
+            fo(i,0,n/4 ){
+                cout<< 4*i + 5<<" ";
+                cout<< 4*i + 6<<" ";
+            }
+            cout<<endl;
         }
-
     
     
     }

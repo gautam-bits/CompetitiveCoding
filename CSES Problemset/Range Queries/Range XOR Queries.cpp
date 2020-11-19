@@ -40,27 +40,32 @@ int main()
     
     while(t--)
     {
-        string s;
-        cin>>s;
-        vector<string> ans;
+        ll n,q;
+        cin>>n>>q;
 
-        set<string> sett;
-        multiset<char> te;
-        for(char x : s) te.insert(x);
-        s.clear();
-        for(char x : te)s+=x;
+        ll a[n];
 
-        do{
-            ans.pb(s);
-        }
-        while(next_permutation(s.begin(),s.end()));
+        fo(i,0,n) cin>>a[i] ;
 
-        cout<<ans.size()<<endl;
+        ll prefix[n];
+        prefix[0] = a[0];
 
-        for(string x : ans){
-            cout<<x<<endl;
+        fo(i,1,n){
+            prefix[i] = a[i] ^ prefix[i-1];
         }
 
+        ll x,y;
+
+        fo(i,0,q){
+            cin>>x>>y;
+            if(x == 1){
+                cout<<prefix[y-1]<<endl;
+            }
+            else {
+                ll temp = prefix[y-1]^prefix[x-2];
+                cout<<temp<<endl;
+            }
+        }
     
     
     }

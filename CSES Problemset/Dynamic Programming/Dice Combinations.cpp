@@ -40,28 +40,21 @@ int main()
     
     while(t--)
     {
-        string s;
-        cin>>s;
-        vector<string> ans;
+        ll n;
+        cin>>n;
+        
+        ll dp[n + 1] = {0};
+        dp[0] = 0;
+        dp[1] = 1;
 
-        set<string> sett;
-        multiset<char> te;
-        for(char x : s) te.insert(x);
-        s.clear();
-        for(char x : te)s+=x;
-
-        do{
-            ans.pb(s);
+        fo(i,2,n+1) {
+            fo(j,max(1,i-6),i){
+                dp[i] += dp[j];
+                dp[i] %= MOD;
+            }
+            if(i <= 6)dp[i]++;
         }
-        while(next_permutation(s.begin(),s.end()));
-
-        cout<<ans.size()<<endl;
-
-        for(string x : ans){
-            cout<<x<<endl;
-        }
-
-    
+        cout<<dp[n];
     
     }
     return 0;
