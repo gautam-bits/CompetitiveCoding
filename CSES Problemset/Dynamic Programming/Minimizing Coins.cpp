@@ -36,14 +36,38 @@ int main()
     cin.tie(NULL);
     
     ll t;
-    cin>>t;
+    t = 1 ;
+
     
     while(t--)
     {
-        ll n;
-        cin>>n;
-        cout<<n;
+        ll n,x;
+        cin>>n>>x;
+
+        ll a[n];
+
+        fo(i,0,n)cin>>a[i];
+        //cout<<22;
+
+        int d = 10000;
+
+        ll dp[1000099] ;
+        fo(i,0,1000099) dp[i] = (ll)1e11;
+
+        dp[0] = 0;
+
+        fo(i,0,n)dp[a[i]] = 1;
     
+        fo(i,1,x+10){
+            fo(j,0,n){
+                if(i>=a[j] ) dp[i] = min(dp[i], 1 + dp[i-a[j]]);
+            }
+        }
+        if(dp[x] == (ll)1e11){
+            cout<<-1;
+        } else {
+            cout<<dp[x];
+        }
     
     }
     return 0;

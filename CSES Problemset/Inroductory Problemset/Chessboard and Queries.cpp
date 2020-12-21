@@ -28,7 +28,7 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+char board[8][8];
 int main() 
 {
     
@@ -36,13 +36,13 @@ int main()
     cin.tie(NULL);
     
     ll t;
-    cin>>t;
+    t = 1;
     
     while(t--)
     {
-        ll n;
-        cin>>n;
-        cout<<n;
+        fo(i,0,8)fo(j,0,8) cin>>board[i][j];
+
+        
     
     
     }

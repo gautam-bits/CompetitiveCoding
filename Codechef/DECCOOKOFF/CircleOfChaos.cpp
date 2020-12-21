@@ -28,7 +28,45 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+ll gcd(ll a, ll b) 
+{ 
+    if (a == 0) 
+        return b; 
+    return gcd(b % a, a); 
+} 
+ll findGCD(vi& arr) 
+{   
+    ll n = arr.size();
+    ll result = arr[0]; 
+    for (ll i = 1; i < n; i++) 
+    { 
+        result = gcd(arr[i], result); 
+  
+        if(result == 1) 
+        { 
+           return (ll)1; 
+        } 
+    } 
+    return result; 
+} 
+void divisors(ll n,set<ll>& dd) 
+{ 
+    // Note that this loop runs till square root 
+    for (ll i=1; i<=sqrt(n); i++) 
+    { 
+        if (n%i == 0) 
+        { 
+            // If divisors are equal, print only one 
+            if (n/i == i) 
+                dd.insert(i); 
+  
+            else {
+                dd.insert(i);
+                dd.insert(n/i);
+            }
+        } 
+    } 
+}
 int main() 
 {
     
@@ -40,9 +78,23 @@ int main()
     
     while(t--)
     {
-        ll n;
-        cin>>n;
-        cout<<n;
+        ll n,m;
+        cin>>n>>m;
+        vi tem(m);
+        fo(i,0,m)cin>>tem[i];
+
+        ll gcc = findGCD(tem);
+
+        if(n >= gcc)cout<<n-gcc<<endl;
+        else {
+            set<ll> mod;
+            divisors(gcc,mod);
+            auto itr = mod.upper_bound(n);
+            itr--;
+            ll aaa = *itr;
+            cout<<n-aaa<<endl;
+        }
+        
     
     
     }

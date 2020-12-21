@@ -36,13 +36,26 @@ int main()
     cin.tie(NULL);
     
     ll t;
-    cin>>t;
+    t = 1;
     
     while(t--)
     {
         ll n;
         cin>>n;
-        cout<<n;
+        ll a[n];
+        ll sum = 0;
+        ll ans = (ll)(-1e11);
+        fo(i,0,n){
+            cin>>a[i];
+        }
+
+        fo(i,0,n){
+            //ans = max(ans,sum);
+            sum+=a[i];
+            ans = max(ans,sum);
+            sum = max(sum,(ll)0);
+        }
+        cout<<ans;
     
     
     }

@@ -39,11 +39,21 @@ int main()
     cin>>t;
     
     while(t--)
-    {
-        ll n;
+    {   
+        int n;
         cin>>n;
-        cout<<n;
+        string s;
+        cin>>s;
+        //cout<<s<<endl;
+        int ans = 0;
+        fo(i,0,n){
+            if(s[i] == ')') ans++;
+            else ans = 0;
+        }
+        if(ans > n - ans) cout<<"Yes"<<endl;
+        else cout<<"No"<<endl;
     
+        //cout<<n<<" "<<ans<<" "<<s<<endl;
     
     }
     return 0;

@@ -36,7 +36,7 @@ int main()
     cin.tie(NULL);
     
     ll t;
-    cin>>t;
+    t = 1;
     
     while(t--)
     {

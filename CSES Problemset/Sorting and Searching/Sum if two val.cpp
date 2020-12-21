@@ -2,6 +2,7 @@
     
     #include <bits/stdc++.h>
     using namespace std;
+
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ knowledge $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
     
@@ -50,14 +51,30 @@ int main()
         cin>>n>>x;
         ll temp;
 
+        bool possible = false;
         unordered_set<ll,custom_hash> s1;
-    
+        
+        ll a[n];
+        fo(i,0,n)cin>>a[i];
+
         fo(i,0,n){
-            cin>>temp;
-            s1.insert(temp);
 
-            if(!s1.empty() && (s1.find(x - temp) != s1.end()))
+            if(!s1.empty() && (s1.find(x - a[i]) != s1.end())){
+                ll xx = -1;
+                fo(j,0,n) if(a[j] == (x-a[i])){
+                    xx = j;
+                    break;
+                }
+                cout<<i+1<<" "<<xx+1<<endl;
+                possible = true;
+                break;
+            }
+            s1.insert(a[i]);
 
+        }
+
+        if(!possible){
+            cout<<"IMPOSSIBLE"<<endl;
         }
     }
     return 0;

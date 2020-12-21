@@ -28,7 +28,14 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+bool func(ll x, set<ll> nos){
+    bool aa = true;
+    for(ll r : nos){
+        if(x%r == 0) continue;
+        else return false;
+    }
+    return true;
+}  
 int main() 
 {
     
@@ -42,7 +49,26 @@ int main()
     {
         ll n;
         cin>>n;
-        cout<<n;
+        set<ll> nos;
+        ll te = n;
+        while(te > 0) {
+            if(te%10 != 0) nos.insert(te%10);
+            te /= 10;
+        }
+
+        while(true){
+            if(func(n,nos)){
+                cout<<n<<endl;
+                break;
+            }
+            n++;
+            nos.clear();
+            ll tem = n;
+            while(tem > 0) {
+                if(tem%10 != 0) nos.insert(tem%10);
+                tem /= 10;
+        }
+        }
     
     
     }

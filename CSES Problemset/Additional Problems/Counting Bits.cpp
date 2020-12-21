@@ -36,13 +36,23 @@ int main()
     cin.tie(NULL);
     
     ll t;
-    cin>>t;
+    t = 1;
     
     while(t--)
     {
         ll n;
         cin>>n;
-        cout<<n;
+        ll ans = 0 ;
+
+        ll te = (ll)(log(n + 1));
+
+        ll itr = (1<<te) ;
+
+        ans += te*(1<<(te-1));
+
+        fo(i,itr,n+1) ans += bitcount(i);
+
+        cout<<ans;
     
     
     }

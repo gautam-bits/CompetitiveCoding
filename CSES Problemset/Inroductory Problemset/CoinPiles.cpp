@@ -40,9 +40,19 @@ int main()
     
     while(t--)
     {
-        ll n;
-        cin>>n;
-        cout<<n;
+        ll a,b;
+        cin>>a>>b;
+        ll c = max(a,b);
+        ll d = a + b - c;
+
+        if(c == d){
+            if(c%3 == 0) cout<<"YES"<<endl;
+            else cout<<"NO"<<endl;
+        }
+        else {
+            if((2*d - c) >= 0 && (2*d - c)% 3 == 0 ) cout<<"YES"<<endl;
+            else cout<<"NO"<<endl;
+        }
     
     
     }

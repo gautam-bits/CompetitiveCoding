@@ -36,13 +36,37 @@ int main()
     cin.tie(NULL);
     
     ll t;
-    cin>>t;
+    t = 1;
     
     while(t--)
     {
-        ll n;
-        cin>>n;
-        cout<<n;
+        ll n,x;
+        cin>>n>>x;
+        
+        ll a[n];
+
+        fo(i,0,n)cin>>a[i];
+
+        ll ans = 0;
+        ll i = 0 , j = 1;
+        ll temp_sum = 0;
+
+        while(j<=n+1){
+            //cout<<i<<" "<<j<<endl;
+            if(temp_sum == x) ans++;
+
+            if(temp_sum < x){
+                temp_sum += a[j-1];
+                j++;
+            }
+            else{
+                temp_sum -= a[i];
+                i++;
+            }
+
+        }
+
+        cout<<ans<<endl;
     
     
     }

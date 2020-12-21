@@ -19,8 +19,9 @@
     #define endl "\n" 
     
     
-    typedef vector<int> vi;
-    typedef pair<int,int> pi;
+    typedef vector<ll> vi;
+    typedef vector<bool> vb;
+    typedef pair<ll,ll> pi;
     
     const int MOD =  1000000007 ;
     const int MAX = 2e4 + 7;
@@ -28,23 +29,70 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+
 int main() 
 {
-    int number ;
-    cin >> number ;
     
-    int answer = 0 ;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    ll t;
+    cin>>t;
+    
+    while(t--)
+    {
+        ll n,x;
+        cin>>n;
+        ll a[n];
+        fo(i,0,n) cin>>a[i];
 
-    while(number > 1){
-        if(number & 1) number = 3*number + 1;
-        else number = number/2 ;
+        vector<vb> table(n,vb (35,0));
 
-        answer = answer + 1 ; 
+        vb help(35,0);
+
+        //fill table
+        ll idx = 0;
+        fo(i,0,n) {
+            idx = 0;
+            while(a[i]){
+                if(a[i]&1){
+                    table[i][idx] = 1;
+                }
+                a[i] >>= 1;
+                idx++;
+            }
+        }
+
+        //greedy use of x operations
+        fo(i,0,n){
+            rfo(j,34,0){
+                if(table[i][j]){
+                    if(help[j]){
+                        table[i][j] = 0;
+                        help[j] = 0;
+                    }
+                    else {
+                        table[i][j] = 0;
+                        help[j] = 1;
+                        x--;
+                        if(!x) break;
+                    }
+                }
+            }
+        }
+
+        //test
+        fo(i,0,n){
+            fo(j,0,35){
+                cout<<table[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+
+
+        
+    
+    
     }
-
-    cout<<answer<<endl;
-
-
     return 0;
 }

@@ -36,13 +36,17 @@ int main()
     cin.tie(NULL);
     
     ll t;
-    cin>>t;
+    t = 1;
     
     while(t--)
     {
         ll n;
         cin>>n;
-        cout<<n;
+        ll a[n];
+
+        fo(i,0,n) cin>>a[i];
+
+        
     
     
     }

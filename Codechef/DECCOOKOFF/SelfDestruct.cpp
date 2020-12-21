@@ -40,9 +40,26 @@ int main()
     
     while(t--)
     {
-        ll n;
-        cin>>n;
-        cout<<n;
+        string str;
+        cin>>str;
+        //cout<<str<<endl;
+        //stack<char> st;
+
+        ll n = str.length();
+        ll a = 0 , b = 0;
+        fo(i,0,n){
+            if(str[i] == '1')a++;
+            else b++;
+            
+        }
+        if(n%2 == 1) cout<<-1<<endl; 
+        else {
+            if(a == n || b == n) cout<<-1<<endl;
+            else cout<< abs(a-b)/2<<endl;
+        }
+
+        // if(st.size() % 2 == 0 ) cout<<st.size() / 2 <<endl;
+        // else cout<<-1<<endl; 
     
     
     }

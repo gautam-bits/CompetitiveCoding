@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "CodeLens (Launch) - ff",
+            "request": "launch",
+            "mainClass": "ff",
+            "projectName": "Github_dcb2a544"
+        },
+        {
             "name": "g++.exe - Build and debug active file",
             "type": "cppdbg",
             "request": "launch",
