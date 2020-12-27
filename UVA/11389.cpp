@@ -19,7 +19,7 @@
     #define endl "\n" 
     
     
-    typedef vector<int> vi;
+    typedef vector<ll> vi;
     typedef pair<int,int> pi;
     
     const int MOD =  1000000007 ;
@@ -35,14 +35,24 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll t;
-    cin>>t;
+    ll n,d,r;
+
     
-    while(t--)
+    while(cin>>n>>d>>r)
     {
-        ll n;
-        cin>>n;
-        cout<<n;
+        if(n + d + r == 0) break;
+        vi mor(n),aft(n);
+        ll ans = 0;
+        fo(i,0,n)cin>>mor[i];
+        fo(i,0,n)cin>>aft[i];
+
+        sort(mor.begin(),mor.end(),greater<ll>());
+        sort(aft.begin(),aft.end());
+
+        fo(i,0,n) {
+            ans += max(mor[i] + aft[i] - d,(ll)0) * r;
+        }
+        cout<<ans<<endl;
     
     
     }

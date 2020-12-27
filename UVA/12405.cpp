@@ -37,14 +37,24 @@ int main()
     
     ll t;
     cin>>t;
+    ll cs = 1;
     
     while(t--)
     {
         ll n;
         cin>>n;
-        cout<<n;
-    
-    
+        string s;
+        cin>>s;
+        ll ans = 0;
+        for(ll i = 0 ; i < s.size() ; i++){
+            if(s[i] == '.') {
+                ans++;
+                i +=2;
+            }
+        }
+        cout<<"Case "<<cs<<": "<<ans<<endl;
+
+        cs++;
     }
     return 0;
 }

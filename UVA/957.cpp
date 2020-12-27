@@ -35,14 +35,30 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll t;
-    cin>>t;
-    
-    while(t--)
-    {
+    ll y;
+
+    while(cin>>y)
+    {  
         ll n;
         cin>>n;
-        cout<<n;
+        vi years(n);
+        fo(i,0,n) cin>>years[i];
+
+        ll max = -1;
+        ll a = -1,b = -1;
+        y--;
+        fo(i,0,n) {
+            auto itr = upper_bound(years.begin(),years.end(),years[i] + y);
+            ll temp = (ll)(itr-years.begin()) - i ;
+            if(temp > max){
+                max = temp;
+                a = years[i];
+                itr--;
+                b = *itr;
+            }
+        }
+
+        cout<<max<<" "<<a<<" "<<b<<endl;
     
     
     }

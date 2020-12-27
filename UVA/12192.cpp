@@ -35,14 +35,36 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll t;
-    cin>>t;
+    ll n,m;
     
-    while(t--)
-    {
-        ll n;
-        cin>>n;
-        cout<<n;
+    
+    while(cin>>n>>m)
+    {   
+        if( n + m == 0) break;
+        vi numbers[n+m-1];
+        fo(i,0,n){
+            fo(j,0,m){
+                ll temp;
+                cin>>temp;
+                numbers[j - i + n - 1].push_back(temp);
+            }
+        }
+        
+        ll q;
+        cin>>q;
+        fo(i,0,q) {
+            ll l,r;
+            cin>>l>>r;
+            ll ans = 0;
+            fo(j,0,n+m-1) {
+                auto itrL = lower_bound(numbers[j].begin(),numbers[j].end(),l);
+                auto itrR = upper_bound(numbers[j].begin(),numbers[j].end(),r);
+                ans = max(ans,(ll)(itrR - itrL));
+            }
+            cout<<ans<<endl;
+
+        }
+        cout<<"-"<<endl;
     
     
     }

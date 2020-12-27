@@ -35,15 +35,36 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll t;
-    cin>>t;
+    ll n;
     
-    while(t--)
+    
+    while(cin>>n)
     {
-        ll n;
-        cin>>n;
-        cout<<n;
-    
+        ll price[n];
+        fo(i,0,n)cin>>price[i];
+
+        sort(price,price+n);
+        ll money;
+        cin>>money;
+        ll i = 0, j = n-1;
+        ll a = -1,b = -1;
+        bool ans = false;
+        while(j > i) {
+            if(price[i] + price[j] > money) j--;
+            else if (price[i] + price[j] < money) i++;
+            else {
+                ans = true;
+                a = i;
+                b = j;
+                i++;
+            }
+        }
+        if(ans){
+            cout<<"Peter should buy books whose prices are "<<price[a]<<" and "<<price[b]<<".";
+            cout<<endl;
+            cout<<endl;
+
+        }
     
     }
     return 0;
