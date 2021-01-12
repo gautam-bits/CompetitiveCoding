@@ -21,7 +21,7 @@
     #define cnl(x) cout << x << endl
     #define csp(x) cout << x << " "
     #define read(x) cin >> x
-    #define cinarr1d(n,arr) fo(i,0,n) read(arr[i]);
+    #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
     #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
     #define all(v) v.begin(),v.end()
 
@@ -45,53 +45,103 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    const int MOD   = 998244353 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+ll fact[(ll)1e5 + 10];
+
+ll add(ll x, ll y)
+{
+    x += y;
+    while(x >= MOD) x -= MOD;
+    while(x < 0) x += MOD;
+    return x;
+}
+
+ll mul(ll x, ll y)
+{
+    return (x * 1ll * y) % MOD;
+}
+
+ll binpow(ll x, ll y)
+{
+    ll ans = 1;
+    while(y > 0)
+    {
+        if(y % 2 == 1)
+            ans = mul(ans, x);
+        x = mul(x, x);
+        y >>= 1;
+    }
+    return ans;
+}
+
+ll divide(ll x, ll y)    // for modInv of y use divide(1,y)
+{
+    return mul(x, binpow(y, MOD - 2));
+}
+
+
+ll nCr(ll n,ll r)
+{
+    if (n < r)
+        return 0;
+
+    if (r == 0)
+        return 1;
+ 
+
+    ll ans = mul(fact[n], mul(divide(1,fact[r]),divide(1,fact[n-r])));
+ 
+    return ans;
+}
+
+void init_fact() {
+    fact[0] = 1;
+    fo(i,1,(ll)1e5 + 10) fact[i] = mul(fact[i-1],i);
+}
+
+
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    while(true) {
-        cin >> n;
-        if(n == 0) break;
+    //important
+    init_fact();
+    
+    ll m,n,k;
+    read(m);
+    read(n);
+    read(k);
 
-        vi arr(n);
-        cinarr1d(n,arr);
+    if(m == 1) {
+        ll ans = 0;
+        fo(i,0,n) {
+            ll term = 0;
+            //cnl(term);
+            term = mul(i+1,nCr(n-1,i));
+            //cnl(term);
+            term = mul(term,k);
+            //cnl(term);
+            term = mul(term,binpow(k-1,i));
 
-        map<ll,ll> mp;
-
-        fo(i,0,n) mp[arr[i]]++;
-
-        ll maxx = -1;
-        for(auto x : mp) {
-            maxx = max(maxx,x.S);
+            ans = add(ans,term);
         }
-
-        sort(all(arr));
-
-        vector<vi> answer(maxx);
-
-        ll idx = 0 ;
-
-        fo(i,0,n){
-            if(idx == maxx) idx = 0;
-            answer[idx].pb(arr[i]);
-            idx++;
-        }
-        cnl(maxx);
-        vshow2d(answer);
-        cnl("");
-
-
+        //cnl(ans);
+        //cnl(binpow(k,n));
+        cnl(divide(ans,binpow(k,n)));
     }
+        
+    
+    
+
+
+    
     return 0;
 }

@@ -21,7 +21,7 @@
     #define cnl(x) cout << x << endl
     #define csp(x) cout << x << " "
     #define read(x) cin >> x
-    #define cinarr1d(n,arr) fo(i,0,n) read(arr[i]);
+    #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
     #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
     #define all(v) v.begin(),v.end()
 
@@ -52,46 +52,80 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+ll func(ll n){
+    ll ans = 0;
+    while(n>0) {
+        n >>=1;
+        ans++;
+    }
+    return ans;
+} 
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    while(true) {
-        cin >> n;
-        if(n == 0) break;
+    test(t){     // tno[1..t]
+    
+        ll n,m;
+        read(n);
+        read(m);
+        vi arrn(n),arrm(m);
+        ll ans = 0;
 
-        vi arr(n);
-        cinarr1d(n,arr);
+        cinarr(n,arrn);
+        cinarr(m,arrm);
 
-        map<ll,ll> mp;
+        ll a1 = *max_element(all(arrn));
+        ll a2 = *max_element(all(arrm));
 
-        fo(i,0,n) mp[arr[i]]++;
+        ll sz = func(max(a1,a2));
 
-        ll maxx = -1;
-        for(auto x : mp) {
-            maxx = max(maxx,x.S);
+        sz = 1 << sz;
+
+        
+        vector<bool> visited(sz);
+        visited[0] = 1;
+
+        queue<ll> line;
+
+        for(ll& x : arrn) {
+            line.push(x);
+            visited[x] = 1;
+            //cnl(x);
+        }
+        ll cnt = 0;
+        while(!line.empty()) {
+            if(cnt == 1200) break;
+            ll temp = line.front();
+            line.pop();
+
+            for(ll& x : arrn){
+                ll aaa = temp | x;
+                if(!visited[aaa]){
+                    line.push(aaa);
+                    visited[aaa] = 1;
+                    //cnl(aaa);
+                }
+            }
+            for(ll& x : arrm){
+                ll bbb = temp & x;
+                if(!visited[bbb]){
+                    line.push(bbb);
+                    visited[bbb] = 1;
+                    //cnl(bbb);
+                }
+            }
+            cnt++;
         }
 
-        sort(all(arr));
+        for(bool x : visited) if(x) ans++;
 
-        vector<vi> answer(maxx);
+        cnl(ans);
 
-        ll idx = 0 ;
-
-        fo(i,0,n){
-            if(idx == maxx) idx = 0;
-            answer[idx].pb(arr[i]);
-            idx++;
-        }
-        cnl(maxx);
-        vshow2d(answer);
-        cnl("");
-
-
+        
+    
     }
     return 0;
 }

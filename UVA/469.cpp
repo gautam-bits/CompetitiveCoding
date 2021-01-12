@@ -21,7 +21,7 @@
     #define cnl(x) cout << x << endl
     #define csp(x) cout << x << " "
     #define read(x) cin >> x
-    #define cinarr1d(n,arr) fo(i,0,n) read(arr[i]);
+    #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
     #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
     #define all(v) v.begin(),v.end()
 
@@ -46,52 +46,45 @@
     typedef vector<vi> vvi;
 
     const int MOD   = 1000000007 ;
-    const int N     = 100005 ;
+    //const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+
+char land[105][105];
+bool visited[105][105];
+ll N,M;
+ll R,C;
+
+int dfs(ll x,ll y){
+    if(visited[x][y]) return 0;
+    visited[x][y] = 1;
+    if(x < 0 || x > N-1 || y < 0 || y > M-1) return 0;
+    if(land[x][y]=='L') return 0;
+    ll ans = 1;
+    fo(i,0,8) {
+        ans += dfs(x+dx[i],y+dy[i]);
+    }
+    return ans;
+}
+
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    while(true) {
-        cin >> n;
-        if(n == 0) break;
-
-        vi arr(n);
-        cinarr1d(n,arr);
-
-        map<ll,ll> mp;
-
-        fo(i,0,n) mp[arr[i]]++;
-
-        ll maxx = -1;
-        for(auto x : mp) {
-            maxx = max(maxx,x.S);
-        }
-
-        sort(all(arr));
-
-        vector<vi> answer(maxx);
-
-        ll idx = 0 ;
-
-        fo(i,0,n){
-            if(idx == maxx) idx = 0;
-            answer[idx].pb(arr[i]);
-            idx++;
-        }
-        cnl(maxx);
-        vshow2d(answer);
-        cnl("");
-
-
+    test(t){     // tno[1..t]
+        mem(visited,0);
+        cinarr2d(9,9,land);
+        show2d(9,9,land);
+        N = 9;
+        M = 9;
+        cnl("fv");
+        cout<<dfs(6,4)<<endl;
+    
     }
     return 0;
 }

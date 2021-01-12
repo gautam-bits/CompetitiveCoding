@@ -43,8 +43,6 @@
     typedef vector<ll> vi;
     typedef pair<ll,ll> pi;
     typedef vector<pi> vpi;
-    typedef vector<bool> vb;
-    typedef vector<vb> vvb;
     typedef vector<vi> vvi;
 
     const int MOD   = 1000000007 ;
@@ -54,6 +52,62 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+ll func(ll k,ll n,vi& height,vi& preheight,multiset<ll>& mset2,ll freq) {      
+        ll idx2 = 0;
+        ll a2 = 0 ;
+        ll anss2 = 0;
+        bool poss12a = true;
+        while(a2 < k){
+            if(idx2 == n) {
+                poss12a = false;
+                break;
+            } 
+            a2 += height[idx2];
+            mset2.insert(height[idx2]);
+            idx2++;
+        }
+        fo(i,0,freq){
+            if(idx2 == n) poss12a = false;
+            else{
+                mset2.insert(height[idx2]);
+                idx2++;
+            }
+        }
+
+        if(!poss12a) {
+            anss2 = -1;
+        }
+        bool poss2 = false;
+
+        while(idx2 < n){
+            //mset updation  // remember a update;
+
+            ll wantheight = height[idx2] + a2 - k;
+
+            auto itr = upper_bound(all(mset2),wantheight);
+
+            if(itr != mset2.begin()) {
+                itr--;
+                ll remove = *itr;
+                mset2.erase(itr);
+                a2 += height[idx2] - remove;
+                mset2.insert(height[idx2]);
+            }
+            
+            // check presum  - a >= k a >=k
+            if(preheight[idx2] - a2 >= k && a2 >=k){
+                poss2 = true;
+                break;
+            }
+            idx2++;
+        }
+        if(poss2 && anss2 == 0 ) anss2 = idx2+1;
+        else anss2 = -1;
+
+
+        return anss2;
+}
     
 int main() 
 {
@@ -61,46 +115,37 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll t;
-    cin>>t;
+    test(t){     // tno[1..t]
     
-    while(t--)
-    {
-        ll n;
-        cin>>n;
-        ll a[n],ans = 0;
-        fo(i,0,n) cin>>a[i];
-        map<ll,bool> freq;
+        ll n,k;
+        read(n);
+        read(k);
 
-        ll i = 0, j = 1;
-        freq[a[0]] = true;
+        vi height(n);
+        cinarr(n,height);
+        sort(all(height),greater<ll>());
+        vi preheight(n);
+
+        preheight[0] = height[0];
+        fo(i,1,n) preheight[i] = height[i] + preheight[i-1];
         
-           
-        if(n == 1) {
-            cout<<1<<endl;
+        vi finnn;
+        fo(i,0,40){
+            multiset<ll> rootset;
+            finnn.push_back(func(k,n,height,preheight,rootset,i));
         }
-
-        
-        else{
-            while(j<n){
-                //cout<<j<<" "<<freq[a[j]]<<endl;
-                if(freq[a[j]] ) {
-                    freq[a[i]] = false;
-                    i++;
-                    
-                }
-                else{
-                    //cout<<ans<<" "<<i<<" "<<j<<endl;
-                    ans = max(ans,j - i + 1);
-                    freq[a[j]] = true;
-                    j++;
-                }
+        sort(all(finnn));
+        ll anssss = -1;
+        for(ll x : finnn){
+            if(x>0) {
+                anssss = x;
+                break;
             }
-            cout<<ans<<endl;
         }
+
+        cnl(anssss);
+
         
-    
     }
-    
     return 0;
 }

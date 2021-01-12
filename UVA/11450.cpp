@@ -21,7 +21,7 @@
     #define cnl(x) cout << x << endl
     #define csp(x) cout << x << " "
     #define read(x) cin >> x
-    #define cinarr1d(n,arr) fo(i,0,n) read(arr[i]);
+    #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
     #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
     #define all(v) v.begin(),v.end()
 
@@ -52,46 +52,60 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+ll M,C, cost[25][25];
+ll dp[210][25];      //money, garment
+ll shop(ll money, ll g) {
+    if(money < 0) return (ll)-1e6;
+    if(g == C) return M - money;
+    if(dp[money][g] != -1) return dp[money][g];
+    ll ans = -1 ;
+    fo(model,1,cost[g][0] + 1){
+        ans = max(ans,shop(money - cost[g][model],g+1));
+    }
+
+    dp[money][g] = ans;
+    return ans;
     
+}
+void print_shop(ll money, ll g) {
+    //cnl("dfdf");
+    if(money < 0 || g == C) return;
+    fo(model,1,cost[g][0] + 1) {
+        if(shop(money - cost[g][model],g + 1) == dp[money][g]) {
+            csp(cost[g][model]);
+            print_shop(money-cost[g][model],g+1);
+            if(g == C-1)cnl("");
+            break;
+        }
+        
+    }
+}
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    while(true) {
-        cin >> n;
-        if(n == 0) break;
-
-        vi arr(n);
-        cinarr1d(n,arr);
-
-        map<ll,ll> mp;
-
-        fo(i,0,n) mp[arr[i]]++;
-
-        ll maxx = -1;
-        for(auto x : mp) {
-            maxx = max(maxx,x.S);
+    test(t){     // tno[1..t]
+    
+        read(M);
+        read(C);
+        ll ans;
+        fo(i,0,C){
+            read(cost[i][0]);
+            fo(j,1,cost[i][0] + 1) read(cost[i][j]);
         }
+        mem(dp,-1);
 
-        sort(all(arr));
-
-        vector<vi> answer(maxx);
-
-        ll idx = 0 ;
-
-        fo(i,0,n){
-            if(idx == maxx) idx = 0;
-            answer[idx].pb(arr[i]);
-            idx++;
+        ans = shop(M,0);
+        //show2d(M,C,dp);
+        if(ans < 0) {
+            cnl("no solution");
         }
-        cnl(maxx);
-        vshow2d(answer);
-        cnl("");
-
-
+        else {
+            //print_shop(M,0);   for printing backtracingly
+            cnl(ans);
+        }
     }
     return 0;
 }

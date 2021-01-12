@@ -21,7 +21,7 @@
     #define cnl(x) cout << x << endl
     #define csp(x) cout << x << " "
     #define read(x) cin >> x
-    #define cinarr1d(n,arr) fo(i,0,n) read(arr[i]);
+    #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
     #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
     #define all(v) v.begin(),v.end()
 
@@ -45,53 +45,72 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    const ll MOD   = 998244353 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+// use these overloaded operators for both p and q
+ll add(ll x, ll y)
+{
+    x += y;
+    while(x >= MOD) x -= MOD;
+    while(x < 0) x += MOD;
+    return x;
+}
+
+ll mul(ll x, ll y)
+{
+    return (x * 1ll * y) % MOD;
+}
+
+ll binpow(ll x, ll y)
+{
+    ll ans = 1;
+    while(y > 0)
+    {
+        if(y % 2 == 1)
+            ans = mul(ans, x);
+        x = mul(x, x);
+        y >>= 1;
+    }
+    return ans;
+}
+
+ll divide(ll x, ll y)
+{
+    return mul(x, binpow(y, MOD - 2));
+}
+   
 int main() 
 {
-    
+    // for m=1(1d)      => ans[i]  = k*ans[i-1] + k^i - k^(i-1);
+    // for m=2(2layers) => ans[i]  = idk?
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    while(true) {
-        cin >> n;
-        if(n == 0) break;
-
-        vi arr(n);
-        cinarr1d(n,arr);
-
-        map<ll,ll> mp;
-
-        fo(i,0,n) mp[arr[i]]++;
-
-        ll maxx = -1;
-        for(auto x : mp) {
-            maxx = max(maxx,x.S);
+    ll m,n,k;
+    read(m);
+    read(n);
+    read(k);
+    if(m == 1) {
+        vi ans(n+3,0);   //ans is p
+        ans[1] = k;
+        ans[2] = mul(k,add(2*k,-1)); 
+        fo(i,3,n+1){
+            ans[i] = add(mul(ans[i-1],k),add(binpow(k,i),mul(-1,binpow(k,i-1))));
         }
-
-        sort(all(arr));
-
-        vector<vi> answer(maxx);
-
-        ll idx = 0 ;
-
-        fo(i,0,n){
-            if(idx == maxx) idx = 0;
-            answer[idx].pb(arr[i]);
-            idx++;
-        }
-        cnl(maxx);
-        vshow2d(answer);
-        cnl("");
-
+        cnl(divide(ans[n],binpow(k,n)));
+    }
+    else{
 
     }
+    //cnl(ans[3]);
+
+
+
+
     return 0;
 }

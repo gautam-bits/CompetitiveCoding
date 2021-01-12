@@ -21,7 +21,7 @@
     #define cnl(x) cout << x << endl
     #define csp(x) cout << x << " "
     #define read(x) cin >> x
-    #define cinarr1d(n,arr) fo(i,0,n) read(arr[i]);
+    #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
     #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
     #define all(v) v.begin(),v.end()
 
@@ -59,39 +59,27 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    while(true) {
-        cin >> n;
-        if(n == 0) break;
+    test(t){     // tno[1..t]
+    
+        ll n;
+        read(n);
+        if(n == 1) {
+            ll m;
+            read(m);
+            vi pos(m);
+            cinarr(m,pos);
 
-        vi arr(n);
-        cinarr1d(n,arr);
+            ll a = 0 , b = 0;
 
-        map<ll,ll> mp;
+            for(ll x : pos) {
+                if(x >0)a++;
+                else b++;
+            }
+            cnl(a*b);
 
-        fo(i,0,n) mp[arr[i]]++;
 
-        ll maxx = -1;
-        for(auto x : mp) {
-            maxx = max(maxx,x.S);
         }
-
-        sort(all(arr));
-
-        vector<vi> answer(maxx);
-
-        ll idx = 0 ;
-
-        fo(i,0,n){
-            if(idx == maxx) idx = 0;
-            answer[idx].pb(arr[i]);
-            idx++;
-        }
-        cnl(maxx);
-        vshow2d(answer);
-        cnl("");
-
-
+    
     }
     return 0;
 }

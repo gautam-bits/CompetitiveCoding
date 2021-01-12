@@ -21,7 +21,7 @@
     #define cnl(x) cout << x << endl
     #define csp(x) cout << x << " "
     #define read(x) cin >> x
-    #define cinarr1d(n,arr) fo(i,0,n) read(arr[i]);
+    #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
     #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
     #define all(v) v.begin(),v.end()
 
@@ -46,52 +46,91 @@
     typedef vector<vi> vvi;
 
     const int MOD   = 1000000007 ;
-    const int N     = 100005 ;
+    //const int N     = 100005 ;
+    
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+ll height[1005];         //change while submitting to 4005
+ll postsum[1005];
+ll dp[500][500][500];   //change all while submitting to 4005
+ll N,K;
+ll calculate(ll idx,ll sum1,ll sum2){
+    //cnl("call");
+    if(idx == N) {
+        if(sum1 >= K && sum2 >= K) return 0;
+        else return (ll)1e7;
+    }
+    if(sum1 >= K && sum2 >= K) return 0;
+    if(sum1 >= K) {
+        if(postsum[idx] + sum2 < K) return (ll)1e7;
+        ll tem = idx ;
+        ll temans = 0;
+        ll temsum = sum2;
+        while(temsum < K){
+            temsum += height[tem];
+            temans++;
+            tem++;
+        }
+        return temans;
+    }
+    if(sum2 >= K) {
+        if(postsum[idx] + sum1 < K) return (ll)1e7;
+        ll tem = idx ;
+        ll temans = 0;
+        ll temsum = sum1;
+        while(temsum < K){
+            temsum += height[tem];
+            temans++;
+            tem++;
+        }
+        return temans;
+    }
     
+    ll ans ;
+    ll a,b,c;
+    if(dp[idx+1][sum1+height[idx]][sum2] != -1) a = dp[idx+1][sum1+height[idx]][sum2];
+    else a = calculate(idx+1,sum1+height[idx],sum2);
+
+    if(dp[idx+1][sum1][sum2+height[idx]] != -1) b = dp[idx+1][sum1][sum2+height[idx]];
+    else b = calculate(idx+1,sum1,sum2+height[idx]);
+
+
+    ans = min(a+1,b+1);
+    dp[idx][sum1][sum2] = ans;
+    return ans;
+}
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    while(true) {
-        cin >> n;
-        if(n == 0) break;
+    test(t){     // tno[1..t]
+    
+        N = K = 0;
 
-        vi arr(n);
-        cinarr1d(n,arr);
-
-        map<ll,ll> mp;
-
-        fo(i,0,n) mp[arr[i]]++;
-
-        ll maxx = -1;
-        for(auto x : mp) {
-            maxx = max(maxx,x.S);
+        read(N);
+        read(K);
+        //cnl(N);
+        //cnl(K);
+        mem(height,0);
+        mem(postsum,0);
+        mem(dp,-1);
+        
+        cinarr(N,height);
+        sort(height,height+N,greater<ll>());
+        rfo(i,N-1,0){
+            if(i==N-1) postsum[i] = height[i];
+            else postsum[i] = height[i] + postsum[i+1];
         }
+        ll ans = calculate(0,0,0);
 
-        sort(all(arr));
-
-        vector<vi> answer(maxx);
-
-        ll idx = 0 ;
-
-        fo(i,0,n){
-            if(idx == maxx) idx = 0;
-            answer[idx].pb(arr[i]);
-            idx++;
-        }
-        cnl(maxx);
-        vshow2d(answer);
-        cnl("");
-
-
+        if(ans > N) ans = -1;
+        cnl(ans);
+    
     }
     return 0;
 }

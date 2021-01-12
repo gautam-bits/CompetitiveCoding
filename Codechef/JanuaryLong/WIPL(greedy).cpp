@@ -1,3 +1,4 @@
+
 // This is an intellectual property of Diablo Escata ,
 // So please use it with extreme CAUTION .
 
@@ -21,7 +22,7 @@
     #define cnl(x) cout << x << endl
     #define csp(x) cout << x << " "
     #define read(x) cin >> x
-    #define cinarr1d(n,arr) fo(i,0,n) read(arr[i]);
+    #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
     #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
     #define all(v) v.begin(),v.end()
 
@@ -59,39 +60,63 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    while(true) {
-        cin >> n;
-        if(n == 0) break;
+    test(t){     // tno[1..t]
+    
+        ll n,k;
+        read(n);
+        read(k);
 
-        vi arr(n);
-        cinarr1d(n,arr);
+        multiset<ll> height ;
 
-        map<ll,ll> mp;
+        ll temp;
 
-        fo(i,0,n) mp[arr[i]]++;
-
-        ll maxx = -1;
-        for(auto x : mp) {
-            maxx = max(maxx,x.S);
+        fo(i,0,n) {
+            read(temp);
+            height.insert(temp);
         }
 
-        sort(all(arr));
+        ll sum1 = 0, sum2 = 0;
+        ll noOfBoxes = 0;
+        bool flag = 1;
+        while(true) {
+            if(height.empty()){
+                flag = 0;
+                break;
 
-        vector<vi> answer(maxx);
+                
+            }
+            if(sum1 >= k && sum2 >= k) break;
+            if(sum1 > sum2) { //focus on 2
+                ll left = k - sum2;
+                auto itr = lower_bound(all(height),left);
+                if(itr != height.end()){
+                    sum2 += *itr;
+                    height.erase(itr);
+                }
+                else {
+                    itr--;
+                    sum2 += *itr;
+                    height.erase(itr);
+                }
+            }
+            else {
+                ll left = k - sum1;
+                auto itr = lower_bound(all(height),left);
+                if(itr != height.end()){
+                    sum1 += *itr;
+                    height.erase(itr);
+                }
+                else {
+                    itr--;
+                    sum1 += *itr;
+                    height.erase(itr);
+                }
+            }
 
-        ll idx = 0 ;
-
-        fo(i,0,n){
-            if(idx == maxx) idx = 0;
-            answer[idx].pb(arr[i]);
-            idx++;
+            noOfBoxes++;
         }
-        cnl(maxx);
-        vshow2d(answer);
-        cnl("");
-
-
+        cnl(noOfBoxes);
+    
     }
     return 0;
 }
