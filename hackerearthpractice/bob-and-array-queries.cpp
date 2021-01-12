@@ -54,7 +54,6 @@
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 ll arr[(int)5e5+6];
 ll seg_tree[(int)2e6 + 21];
-bool isOdd[(int)5e5+6];
 ll N,Q;
 
 ll mid(ll x, ll y) {
@@ -86,7 +85,7 @@ ll query(ll index,ll L,ll R, ll x,ll y){
 void update(ll index,ll L,ll R,ll x){
     //if we reached segment end
     if(L == R) {
-        seg_tree[index] = arr[x];
+        seg_tree[index] = bitcount(x);
         return;
     }
     // intermidiate node updation(remember to update only 1 node to keep it in logn)
@@ -117,32 +116,26 @@ int main()
     read(Q);
     mem(arr,0);
     mem(seg_tree,0);
-    mem(isOdd,0);
-    ll type;
+
+    int type;
 
     fo(i,0,Q) {
         read(type);
-        
-        ll x,y;
+        int x,y;
         if(type == 1){
             read(x);
             x--;
-            arr[x]++;
-            update(0,0,(ll)5e5 + 20,x);
-            //show1d(3*N,seg_tree);
+            arr[x] = 2*arr[x] + 1;
+            update(0,0,N-1,x);
         }
-        else if(type == 2){
+        if(type == 2){
             read(x);
-            x--;
-            if(arr[x] > 0) arr[x]--; 
-            update(0,0,(ll)5e5 + 20,x);
-            //show1d(3*N,seg_tree);
+            arr[x] = arr[x]/2;
+            update(0,0,N-1,x);
         }
         else {
             read(x);read(y);
-            x--;
-            y--;
-            cnl(query(0,0,(ll)5e5 + 20,x,y));
+            cnl(query(0,1,N-1,x,y));
         }
 
     }
