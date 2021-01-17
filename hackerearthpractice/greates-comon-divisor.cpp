@@ -61,7 +61,10 @@
 //################################
 
 ll A[(ll)1e5 + 5];
-ll tree[(ll)2e6 + 20];
+ll tree_max[(ll)2e6 + 20];
+ll tree_sum[(ll)2e6 + 20];
+ll lazy_replace[(ll)2e6 + 20];
+ll lazy_gcd[(ll)2e6 + 20];
 
 int get_mid(int x,int y) {
     return x + (x-y)/2;
@@ -76,21 +79,53 @@ int right(int x) {      //0 - indexed
 }
 
 
-void build(ll index, ll L, ll R) {
+void build_both(ll index, ll L, ll R) {     // done
     if(L == R) {
-        tree[index] = A[L];
+        tree_max[index] = A[L];
+        tree_sum[index] = A[L];
     }
     else {
         ll mid = get_mid(L,R);
 
-        build(left(index), L, mid);
-        build(right(index), mid+1, R);
+        build_both(left(index), L, mid);
+        build_both(right(index), mid+1, R);
 
+        // segment relation to its children
+        tree_sum[index] = tree_sum[left(index)] + tree_sum[right(index)];
+        tree_max[index] = max(tree_max[left(index)],tree_max[right(index)]);
+    }
+}
+void update_replace(ll index, ll L, ll R, ll i,ll j, ll val) {
+
+    if(lazy_replace[index] != 0) {
+        tree_max[index] = val;
+        tree_sum[index] += 
+        if(L != R){
+
+        }
+    }
+
+    if(lazy_gcd[index] != 0){
+
+    }
+    if(L == R) {
+        // Leaf node
+        A[idx] = val;
+        tree[index] += val;
+    }
+    else {
+        ll mid = get_mid(L,R);
+        if(L <= idx && idx <= mid) {
+            update(left(index), L, mid, idx, val);
+        }
+        else{
+            update(right(index), mid+1, R, idx, val);
+        }
         // segment relation to its children
         tree[index] = tree[left(index)] + tree[right(index)];
     }
 }
-void update(ll index, ll L, ll R, ll idx, ll val) {
+void update_gcd(ll index, ll L, ll R, ll idx, ll val) {
     if(L == R) {
         // Leaf node
         A[idx] += val;
@@ -143,12 +178,7 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+    //reset global trees
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
-    
-    }
     return 0;
 }

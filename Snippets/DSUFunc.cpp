@@ -46,98 +46,64 @@
     typedef vector<vi> vvi;
 
     const int MOD   = 1000000007 ;
-    const int N     = 100005 ; 
+    const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+vi parent ;
+vi rank_element;
+vi sz_set;
+ll noOfDisSets;
 
-//################################
-// ALERTTTTT
-// THIS IS 0 INDEXED SEGMENT TREE SO THE ROOT SEGMET IS LABELLED 0
-// AND CORRESPONDINGLY THE SUBSEQUENT LEFT AND RIGHT SEGMENT
-// take care of query no. and convert them to indexes
-//################################
-
-ll A[(ll)1e5 + 5];
-ll tree[(ll)2e6 + 20];
-
-int get_mid(int x,int y) {
-    return x + (x-y)/2;
-}
-
-int left(int x) {      //0 - indexed
-    return (x << 1) + 1;
-}
-
-int right(int x) {      //0 - indexed
-    return (x << 1) + 2;
-}
-
-
-void build(ll index, ll L, ll R) {
-    if(L == R) {
-        tree[index] = A[L];
+ll findSet(ll i) {              // find the representative element of i in the forest
+    if(i == parent[i]) {
+        return i;
     }
-    else {
-        ll mid = get_mid(L,R);
-
-        build(left(index), L, mid);
-        build(right(index), mid+1, R);
-
-        // segment relation to its children
-        tree[index] = tree[left(index)] + tree[right(index)];
-    }
+    parent[i] = findSet(parent[i]);
+    return parent[i];
 }
-void update(ll index, ll L, ll R, ll idx, ll val) {
-    if(L == R) {
-        // Leaf node
-        A[idx] += val;
-        tree[index] += val;
-    }
-    else {
-        ll mid = get_mid(L,R);
-        if(L <= idx && idx <= mid) {
-            update(left(index), L, mid, idx, val);
+
+bool isSameSet(ll i,ll j){
+    return findSet(i) == findSet(j);
+}
+
+void unionSet(ll i, ll j) {    // merging sets containing i and j
+    if(!isSameSet(i,j)) {
+        ll x = findSet(i);
+        ll y = findSet(j);
+
+        noOfDisSets--; // if we are merging 2 different sets
+
+        if(rank_element[x] > rank_element[y]){
+            parent[y] = x;
+            sz_set[x] += sz_set[y];  //increasing the size
         }
-        else{
-            update(right(index), mid+1, R, idx, val);
+        else {
+            parent[x] = y;
+            sz_set[y] += sz_set[x];  //increasing the size
+            if(rank_element[x] == rank_element[y]) rank_element[y]++;
         }
-        // segment relation to its children
-        tree[index] = tree[left(index)] + tree[right(index)];
+
     }
 }
-ll query(ll index, ll L, ll R, ll i, ll j) {   
-    //1) complete overlap
-    if(i <= L && R <= j) {
-        return tree[index];
-    }
 
-    //2) no overlap
-    if(j < L || R < i){
-        return 0;
-    }
-    
-    //3) partial overlap
-    ll mid = get_mid(L,R);
-    ll p1 = query(left(index), L, mid, i, j);
-    ll p2 = query(right(index), mid+1, R, i, j);
-
-    // segment relation to its children
-    ll seg_ans = p1+p2;
-
-
-    return seg_ans;
+ll sizeOfSet(ll i) {    // returns size of set that currently contains i
+    ll x = findSet(i);
+    return sz_set[x];
 }
 
-//################################
-// ALERTTTTT
-// THIS IS 0 INDEXED SEGMENT TREE SO THE ROOT SEGMET IS LABELLED 0
-// AND CORRESPONDINGLY THE SUBSEQUENT LEFT AND RIGHT SEGMENT
-// take care of query no and convert them to indexes
-//################################
+ll noOfDisjointSets() {
+    return noOfDisSets;
+}
 
+// remember set is [0...n-1] 
+/*
+################################################################
+NOTE - IF DATA IS NOT IN 0-N-1 RANGE USE A MAP <DATA,INT[0..N-1]>
+################################################################
+*/
 int main() 
 {
     
@@ -148,6 +114,16 @@ int main()
     
         ll n;
         read(n);
+
+        //reset global variables
+        parent.assign(n,0);
+        rank_element.assign(n,0);
+        sz_set.assign(n,1);
+        noOfDisSets = n;
+        fo(i,0,n)parent[i] = i;
+
+
+        //start from here
     
     }
     return 0;
