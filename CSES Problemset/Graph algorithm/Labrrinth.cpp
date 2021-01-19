@@ -65,8 +65,8 @@ bool dfs(int i, int j) {
         int y = j + dy_2d[k];
         if(isValidateCoord(x,y) && graph[x][y] != '#' && (!visited[x][y])){
             if(dfs(x,y)) {
-                cout<<"pare "<<i<<" "<<j<<endl;
-                cout<<x<<" "<<y<<endl;
+                //cout<<"pare "<<i<<" "<<j<<endl;
+                //cout<<x<<" "<<y<<endl;
                 ans += direction[{dx_2d[k],dy_2d[k]}];
                 return true;
             }
@@ -107,7 +107,12 @@ int main()
 
         yes = dfs(pos.F,pos.S);
 
-        if(yes) cout<<ans<<endl;
+        if(yes) {
+            cout<<"YES"<<endl;
+            cout<<ans.size()<<endl;
+            reverse(ans.begin(),ans.end());
+            cout<<ans<<endl;
+        }
         else    cout<<"NO"<<endl;
     }
     return 0;

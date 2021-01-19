@@ -60,8 +60,8 @@
 // take care of query no. and convert them to indexes
 //################################
 
-ll A[(ll)1e5 + 5];
-ll tree[(ll)2e6 + 20];
+ll A[(ll)2e6 + 5];
+ll tree[(ll)1e7 + 20];
 
 int get_mid(int x,int y) {
     return x + (y-x)/2;
@@ -79,6 +79,7 @@ int right(int x) {      //0 - indexed
 void build(ll index, ll L, ll R) {
     if(L == R) {
         tree[index] = A[L];
+        //cnl("ff");
     }
     else {
         ll mid = get_mid(L,R);
@@ -87,14 +88,14 @@ void build(ll index, ll L, ll R) {
         build(right(index), mid+1, R);
 
         // segment relation to its children
-        tree[index] = tree[left(index)] + tree[right(index)];
+        tree[index] = min(tree[left(index)], tree[right(index)]);
     }
 }
 void update(ll index, ll L, ll R, ll idx, ll val) {
     if(L == R) {
         // Leaf node
-        A[idx] += val;
-        tree[index] += val;
+        A[idx] = val;
+        tree[index] = val;
     }
     else {
         ll mid = get_mid(L,R);
@@ -105,18 +106,19 @@ void update(ll index, ll L, ll R, ll idx, ll val) {
             update(right(index), mid+1, R, idx, val);
         }
         // segment relation to its children
-        tree[index] = tree[left(index)] + tree[right(index)];
+        tree[index] = min(tree[left(index)], tree[right(index)]);
     }
 }
 ll query(ll index, ll L, ll R, ll i, ll j) {   
     //1) complete overlap
     if(i <= L && R <= j) {
         return tree[index];
+        //csp("ffdd");cnl(tree[index]);
     }
 
     //2) no overlap
     if(j < L || R < i){
-        return 0;
+        return 1e17;
     }
     
     //3) partial overlap
@@ -125,7 +127,7 @@ ll query(ll index, ll L, ll R, ll i, ll j) {
     ll p2 = query(right(index), mid+1, R, i, j);
 
     // segment relation to its children
-    ll seg_ans = p1+p2;
+    ll seg_ans = min(p1,p2);
 
 
     return seg_ans;
@@ -144,11 +146,38 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
     
-        ll n;
+        ll n,q;
         read(n);
+        read(q);
+        mem(A,0);
+        mem(tree,0);
+
+        //cinarr(n,A);
+        fo(i,0,n) read(A[i]);
+        //show1d(n,A);
+        
+
+        build(0,0,n-1);
+        //show1d(4*n,tree);
+        ll type;
+        fo(i,0,q) {
+            read(type);
+            if(type == 1) {
+                ll k,u;
+                read(k);
+                read(u);
+                k--;
+                update(0,0,n-1,k,u);
+            }
+            else{
+                ll a,b;
+                read(a);
+                read(b);
+                cnl(query(0,0,n-1,a-1,b-1));
+            }
+        }
     
-    }
+    
     return 0;
 }

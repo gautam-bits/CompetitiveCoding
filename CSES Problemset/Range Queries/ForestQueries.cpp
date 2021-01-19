@@ -1,0 +1,121 @@
+// This is an intellectual property of Diablo Escada ,
+// So please use it with extreme CAUTION .
+
+
+//-------We can be heroes , just for one day!!.---------//
+    
+    #include <bits/stdc++.h>
+    using namespace std;
+    
+//*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ knowledge $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+    
+    #define pb push_back
+    #define MP make_pair
+    #define F first
+    #define S second
+    #define ll long long
+    #define lb lower_bound
+    #define ub upper_bound
+    #define bs binary_search
+
+    #define cnl(x) cout << x << endl
+    #define csp(x) cout << x << " "
+    #define read(x) cin >> x
+    #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
+    #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
+    #define all(v) v.begin(),v.end()
+
+    #define fo(i,a,b) for(int i=a;i<b;i++)
+    #define rfo(i,b,a) for(int i=b;i>=a;i--)
+    #define test(t) ll t; cin >> t; fo(tno,1,t+1)
+
+    #define vshow1d(arr) {ll n = arr.size(); fo(i,0,n) {csp(arr[i]);}cout<<endl;}
+    #define show1d(n,arr) fo(i,0,n) {csp(arr[i]);}cout<<endl;
+    #define vshow2d(arr) {ll n=arr.size();   fo(i,0,n) {ll m = arr[i].size(); fo(j,0,m) csp(arr[i][j]); cout << endl;}}
+    #define show2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) csp(arr[i][j]); cout << endl;}}
+    
+    #define mem( a, val ) memset(a, val, sizeof( a ) )
+    #define deci( x ) cout<<fixed<<setprecision( x )
+    #define bitcount( x ) __builtin_popcountll( x )
+    #define endl "\n" 
+    
+    
+    typedef vector<ll> vi;
+    typedef pair<ll,ll> pi;
+    typedef vector<pi> vpi;
+    typedef vector<vi> vvi;
+
+    const int MOD   = 1000000007 ;
+    const int N     = 100005 ;
+    const int MAX   = 2e4 + 7;
+    const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
+    const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
+    
+//*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+bool valid(ll i, ll j, ll n){
+    return i >= 0 && i < n && j >= 0 && j < n;
+}
+int main() 
+{
+    
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+
+    
+    ll n,q;
+    read(n);read(q);
+
+    vector<vector<char>> forest(n,vector<char> (n,'-'));
+    vvi pre_cnt(n,vi (n,0));
+
+    fo(i,0,n) fo(j,0,n) read(forest[i][j]);
+
+    fo(i,0,n){
+        if(i == 0){
+            fo(j,0,n){
+                if(j == 0){
+                    if(forest[i][j] == '*') pre_cnt[i][j]++;
+                }
+                else{
+                    if(forest[i][j] == '*') pre_cnt[i][j] = pre_cnt[i][j-1] + 1;
+                    else pre_cnt[i][j] = pre_cnt[i][j-1];
+                }
+            }
+        }
+        else{
+            fo(j,0,n){
+                if(j == 0){
+                    if(forest[i][j] == '*') pre_cnt[i][j] = pre_cnt[i-1][j] + 1 ;
+                    else pre_cnt[i][j] = pre_cnt[i-1][j];
+                }
+                else{
+                    if(forest[i][j] == '*') pre_cnt[i][j] = pre_cnt[i][j-1] + pre_cnt[i-1][j] - pre_cnt[i-1][j-1] + 1;
+                    else pre_cnt[i][j] = pre_cnt[i][j-1] + pre_cnt[i-1][j] - pre_cnt[i-1][j-1];
+                }
+            }
+        }
+    }
+
+    ll a,b,c,d;
+
+    fo(i,0,q){
+        read(a);read(b);read(c);read(d);
+        a--;b--;c--;d--;
+
+        // return p[c][d] + p[a-1][b-1] - p[c][b-1] - p[a-1][d]
+
+        ll ans = 0;
+
+        if(valid(c,d,n)) ans += pre_cnt[c][d];
+        if(valid(a-1,b-1,n)) ans += pre_cnt[a-1][b-1];
+        if(valid(c,b-1,n)) ans -= pre_cnt[c][b-1];
+        if(valid(a-1,d,n)) ans -= pre_cnt[a-1][d];
+
+        cnl(ans);
+
+    }
+    
+    
+    return 0;
+}
