@@ -10,10 +10,10 @@ using namespace std;
 #define ff first
 #define ss second
 #define all(c) cc.begin(), c.end()
-#define min(a, b, c) min(c, min(a,b))
-#define min(a, b, c, d) min(d, min(c, min(a,b)))
+#define min3(a, b, c) min((int)c, min((int)a,(int)b))
+#define min4(a, b, c, d) min((int)d, min((int)c, min((int)a,(int)b)))
 #define rrep(i, n) for(int i=n-1; i>=0;i--)
-#define fo(i,a,b) for(int i=a;i<b;i++)
+#define rep(i,n) for(int i=0;i<n;i++)
 #define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
 
 template<typename T>
@@ -25,12 +25,14 @@ void pop_front(vector<T> &v)
 int32_t main()
 {
     fast
-
     int t=1;
     cin >> t;
     while(t--)
     {
+        int n;
+        cin>>n;
 
+        
     }
     return 0;
 }

@@ -35,7 +35,7 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     ll n,ans = 0;
-    while(cin>>n) ans++;
-    cout<<ans;
+    unsigned int h = 5;
+    cout<<~h;
     return 0;
 }

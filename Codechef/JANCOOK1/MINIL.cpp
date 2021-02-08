@@ -1,4 +1,4 @@
-// This is an intellectual property of Diablo Escata ,
+// This is an intellectual property of Diablo Escada ,
 // So please use it with extreme CAUTION .
 
 
@@ -45,103 +45,90 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 998244353 ;
+    const int MOD   = 1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-ll fact[(ll)1e5 + 10];
-
-ll add(ll x, ll y)
-{
-    x += y;
-    while(x >= MOD) x -= MOD;
-    while(x < 0) x += MOD;
-    return x;
-}
-
-ll mul(ll x, ll y)
-{
-    return (x * 1ll * y) % MOD;
-}
-
-ll binpow(ll x, ll y)
-{
-    ll ans = 1;
-    while(y > 0)
-    {
-        if(y % 2 == 1)
-            ans = mul(ans, x);
-        x = mul(x, x);
-        y >>= 1;
-    }
-    return ans;
-}
-
-ll divide(ll x, ll y)    // for modInv of y use divide(1,y)
-{
-    return mul(x, binpow(y, MOD - 2));
-}
-
-
-ll nCr(ll n,ll r)
-{
-    if (n < r)
-        return 0;
-
-    if (r == 0)
-        return 1;
- 
-
-    ll ans = mul(fact[n], mul(divide(1,fact[r]),divide(1,fact[n-r])));
- 
-    return ans;
-}
-
-void init_fact() {
-    fact[0] = 1;
-    fo(i,1,(ll)1e5 + 10) fact[i] = mul(fact[i-1],i);
-}
-
-
+    
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    //important
-    init_fact();
+    test(t){     // tno[1..t]
     
-    ll m,n,k;
-    read(m);
-    read(n);
-    read(k);
+        ll n,m;
+        read(n);
+        read(m);
 
-    if(m == 1) {
-        ll ans = 0;
+        vector<vector<char>> grid(n,vector<char> (m));
+
         fo(i,0,n) {
-            ll term = 0;
-            //cnl(term);
-            term = mul(i+1,nCr(n-1,i));
-            //cnl(term);
-            term = mul(term,k);
-            //cnl(term);
-            term = mul(term,binpow(k-1,i));
-
-            ans = add(ans,term);
+            fo(j,0,m) {
+                read(grid[i][j]);
+            }
         }
-        //cnl(ans);
-        //cnl(binpow(k,n));
-        cnl(divide(ans,binpow(k,n)));
-    }
 
-    //cnl(divide(4,2));
-        
+        if((n*m)%2 == 1){
+            vector<vector<char>> temp(n,vector<char> (m));
 
+            ll abc = 0;
+            ll ans = 0;
 
+            fo(i,0,n) {
+                fo(j,0,m) {
+                    if(abc%2 == 0) temp[i][j] = '*';
+                    else temp[i][j] = '.';
+                    abc++;
+                }
+            }
+
+            fo(i,0,n) {
+                fo(j,0,m) {
+                    if(grid[i][j] != temp[i][j]) ans++;
+                }
+            }
+
+            cnl(ans);
+        }
+        else {
+            vector<vector<char>> temp1(n,vector<char> (m));
+            vector<vector<char>> temp2(n,vector<char> (m));
+
+            ll abc = 0;
+            ll ans1 = 0,ans2=0;
+
+            fo(i,0,n) {
+                fo(j,0,m) {
+                    if(abc%2 == 0){
+                        temp1[i][j] = '*';
+                        temp2[i][j] = '.';
+                    } 
+                    else {
+                        temp1[i][j] = '.';
+                        temp2[i][j] = '*';
+                    }
+                    abc++;
+                }
+                if(m%2 == 0)abc++;
+            }
+
+            fo(i,0,n) {
+                fo(j,0,m) {
+                    if(grid[i][j] != temp1[i][j]) ans1++;
+                    if(grid[i][j] != temp2[i][j]) ans2++;
+                }
+            }
+            //show2d(n,m,grid);
+            //show2d(n,m,temp1);
+            //show2d(n,m,temp2);
+            cnl(min(ans1,ans2));
+        }
     
+    }
     return 0;
 }

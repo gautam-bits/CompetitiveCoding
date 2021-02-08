@@ -1,4 +1,4 @@
-// This is an intellectual property of Diablo Escata ,
+// This is an intellectual property of Diablo Escada ,
 // So please use it with extreme CAUTION .
 
 
@@ -45,103 +45,62 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 998244353 ;
+    const int MOD   = 1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-ll fact[(ll)1e5 + 10];
 
-ll add(ll x, ll y)
-{
-    x += y;
-    while(x >= MOD) x -= MOD;
-    while(x < 0) x += MOD;
-    return x;
-}
+bool isDec(vi& hi){
+    ll n = hi.size();
 
-ll mul(ll x, ll y)
-{
-    return (x * 1ll * y) % MOD;
-}
-
-ll binpow(ll x, ll y)
-{
-    ll ans = 1;
-    while(y > 0)
-    {
-        if(y % 2 == 1)
-            ans = mul(ans, x);
-        x = mul(x, x);
-        y >>= 1;
+    fo(i,0,n-1){
+        if(hi[i] >= hi[i+1]) continue;
+        else return 0;
     }
-    return ans;
+    return 1;
 }
-
-ll divide(ll x, ll y)    // for modInv of y use divide(1,y)
-{
-    return mul(x, binpow(y, MOD - 2));
-}
-
-
-ll nCr(ll n,ll r)
-{
-    if (n < r)
-        return 0;
-
-    if (r == 0)
-        return 1;
- 
-
-    ll ans = mul(fact[n], mul(divide(1,fact[r]),divide(1,fact[n-r])));
- 
-    return ans;
-}
-
-void init_fact() {
-    fact[0] = 1;
-    fo(i,1,(ll)1e5 + 10) fact[i] = mul(fact[i-1],i);
-}
-
-
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    //important
-    init_fact();
+    test(t){     // tno[1..t]
     
-    ll m,n,k;
-    read(m);
-    read(n);
-    read(k);
+        ll n,k;
+        read(n);
+        read(k);
 
-    if(m == 1) {
-        ll ans = 0;
-        fo(i,0,n) {
-            ll term = 0;
-            //cnl(term);
-            term = mul(i+1,nCr(n-1,i));
-            //cnl(term);
-            term = mul(term,k);
-            //cnl(term);
-            term = mul(term,binpow(k-1,i));
+        vi hi(n);
 
-            ans = add(ans,term);
+        cinarr(n,hi);
+
+        int ans = 0;
+
+        //if(isDec(hi)) cnl("ff");
+        while(k--){
+            if(isDec(hi)) {
+                ans = -1;
+                break;
+            }
+            else{
+                fo(j,0,n-1){
+                    if(hi[j] < hi[j+1]){
+                        hi[j]++;
+                        ans = j+1;
+                        break;
+                    }
+                }
+            }
         }
-        //cnl(ans);
-        //cnl(binpow(k,n));
-        cnl(divide(ans,binpow(k,n)));
-    }
 
-    //cnl(divide(4,2));
+        cnl(ans);
         
 
-
     
+    }
     return 0;
 }

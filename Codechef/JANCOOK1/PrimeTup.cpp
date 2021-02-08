@@ -1,4 +1,4 @@
-// This is an intellectual property of Diablo Escata ,
+// This is an intellectual property of Diablo Escada ,
 // So please use it with extreme CAUTION .
 
 
@@ -45,103 +45,56 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 998244353 ;
+    const int MOD   = 1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-ll fact[(ll)1e5 + 10];
-
-ll add(ll x, ll y)
-{
-    x += y;
-    while(x >= MOD) x -= MOD;
-    while(x < 0) x += MOD;
-    return x;
-}
-
-ll mul(ll x, ll y)
-{
-    return (x * 1ll * y) % MOD;
-}
-
-ll binpow(ll x, ll y)
-{
-    ll ans = 1;
-    while(y > 0)
-    {
-        if(y % 2 == 1)
-            ans = mul(ans, x);
-        x = mul(x, x);
-        y >>= 1;
+int n;
+vector<bool> is_prime;
+vector<int> ans;
+void sieve() {
+    for (int i = 2; i <= n; i++) {
+    if (is_prime[i] && (long long)i * i <= n) {
+        for (int j = i * i; j <= n; j += i)
+            is_prime[j] = false;
     }
-    return ans;
 }
-
-ll divide(ll x, ll y)    // for modInv of y use divide(1,y)
-{
-    return mul(x, binpow(y, MOD - 2));
 }
-
-
-ll nCr(ll n,ll r)
-{
-    if (n < r)
-        return 0;
-
-    if (r == 0)
-        return 1;
- 
-
-    ll ans = mul(fact[n], mul(divide(1,fact[r]),divide(1,fact[n-r])));
- 
-    return ans;
-}
-
-void init_fact() {
-    fact[0] = 1;
-    fo(i,1,(ll)1e5 + 10) fact[i] = mul(fact[i-1],i);
-}
-
 
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
-    //important
-    init_fact();
-    
-    ll m,n,k;
-    read(m);
-    read(n);
-    read(k);
 
-    if(m == 1) {
-        ll ans = 0;
-        fo(i,0,n) {
-            ll term = 0;
-            //cnl(term);
-            term = mul(i+1,nCr(n-1,i));
-            //cnl(term);
-            term = mul(term,k);
-            //cnl(term);
-            term = mul(term,binpow(k-1,i));
+    is_prime.assign(1e6 + 10,true);
+    ans.assign(1e6 + 10,0);
+    is_prime[0] = is_prime[1] = false;
+    n = 1e6 + 9;
+    sieve();
 
-            ans = add(ans,term);
-        }
-        //cnl(ans);
-        //cnl(binpow(k,n));
-        cnl(divide(ans,binpow(k,n)));
+    ans[0] = 0;
+    ans[1] = 0;
+    ans[2] = 0;
+    ans[3] = 0;
+
+    fo(i,4,1e6 + 11) {
+        if(is_prime[i] && is_prime[i-2]) ans[i] = 1 + ans[i-1];
+        else ans[i] = ans[i-1];
     }
 
-    //cnl(divide(4,2));
-        
-
-
+    // fo(i,0,100){
+    //     if(is_prime[i])cnl(i);
+    // }
+    test(t){     // tno[1..t]
     
+        ll n;
+        read(n);
+        //
+        cnl(ans[n]);
+    }
     return 0;
 }

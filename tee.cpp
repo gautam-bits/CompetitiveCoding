@@ -46,108 +46,69 @@
     typedef vector<vi> vvi;
 
     const int MOD   = 1000000007 ;
-    //const int N     = 100005 ;
+    const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-ll arr[(int)5e5+6];
-ll seg_tree[(int)2e6 + 21];
-bool isOdd[(int)5e5+6];
-ll N,Q;
-
-ll mid(ll x, ll y) {
-    return x + (y-x)/2;
-}
-ll left(ll x){
-    return (x<<1) + 1;
-}
-ll right(ll x){
-    return (x<<1) + 2;
-}
-
-ll query(ll index,ll L,ll R, ll x,ll y){
-    //complete overlap
-    if(L>=x && R<=y) return seg_tree[index];
-
-    //no overlap
-    if(y<L || x>R) return 0;
-
-    //partial overlap
-    ll middle = mid(L,R);
-    ll lans = query(left(index),L,middle,x,y);
-    ll rans = query(right(index),middle+1,R,x,y);
-
-    return lans+rans;
-
-}
-
-void update(ll index,ll L,ll R,ll x){
-    //if we reached segment end
-    if(L == R) {
-        seg_tree[index] = arr[x];
-        return;
-    }
-    // intermidiate node updation(remember to update only 1 node to keep it in logn)
     
-    ll middle = mid(L,R);
-    
-    if(x <= middle){
-        update(left(index),L,middle,x);
-    }
-    else {
-        update(right(index),middle+1,R,x);
-    }
-    seg_tree[index] = seg_tree[left(index)] + seg_tree[right(index)];
-};
-
-
-// approach - segment represents the total no of set bits from [i...j]
-// whenever query comes update arr and if query 3 quety betwenn [x...y]
-
-// rememver queries are 1 indexed
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    read(N);
-    read(Q);
-    mem(arr,0);
-    mem(seg_tree,0);
-    mem(isOdd,0);
-    ll type;
+    test(t){     // tno[1..t]
+    
+        ll n,a,b,c;
+        read(n);
+        read(a);
+        read(b);
+        read(c);
 
-    fo(i,0,Q) {
-        read(type);
-        
-        ll x,y;
-        if(type == 1){
-            read(x);
-            x--;
-            arr[x]++;
-            update(0,0,(ll)5e5 + 20,x);
-            //show1d(3*N,seg_tree);
-        }
-        else if(type == 2){
-            read(x);
-            x--;
-            if(arr[x] > 0) arr[x]--; 
-            update(0,0,(ll)5e5 + 20,x);
-            //show1d(3*N,seg_tree);
+        bool poss = 1;
+        vi anss(n);
+        if(a + b - c > n){
+            cout<<"Case #"<<tno<<": "<<"IMPOSSIBLE"<<endl;
         }
         else {
-            read(x);read(y);
-            x--;
-            y--;
-            cnl(query(0,0,(ll)5e5 + 20,x,y));
+            ll cc = max(a,b);
+            ll dd = min(a,b);
+            ll rem = n - a - b + c;
+
+            ll he = 2;
+            ll idx = 0;
+            fo(i,0,cc-c){
+                anss[idx] = he;
+                he++;
+                idx++;
+            }
+            fo(i,0,rem){
+                anss[idx] = 1;
+                idx++;
+            }
+            fo(i,0,c){
+                anss[idx] = he; 
+                idx++;
+            }
+            
+            fo(i,0,dd-c){
+                he--;
+                anss[idx] = he;
+                idx++;
+            }
+
+            if(b > a){
+                reverse(all(anss));
+            }
+            cout<<"Case #"<<tno<<": ";
+            vshow1d(anss);
         }
 
+
+        // cout<<"Case #"<<tno<<": "<<ans + 1<<endl;
+
     }
-
-
-
     return 0;
 }

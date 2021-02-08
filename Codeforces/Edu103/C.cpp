@@ -1,4 +1,4 @@
-// This is an intellectual property of Diablo Escata ,
+// This is an intellectual property of Diablo Escada ,
 // So please use it with extreme CAUTION .
 
 
@@ -45,103 +45,80 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 998244353 ;
+    const int MOD   = 1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-ll fact[(ll)1e5 + 10];
-
-ll add(ll x, ll y)
-{
-    x += y;
-    while(x >= MOD) x -= MOD;
-    while(x < 0) x += MOD;
-    return x;
-}
-
-ll mul(ll x, ll y)
-{
-    return (x * 1ll * y) % MOD;
-}
-
-ll binpow(ll x, ll y)
-{
-    ll ans = 1;
-    while(y > 0)
-    {
-        if(y % 2 == 1)
-            ans = mul(ans, x);
-        x = mul(x, x);
-        y >>= 1;
-    }
-    return ans;
-}
-
-ll divide(ll x, ll y)    // for modInv of y use divide(1,y)
-{
-    return mul(x, binpow(y, MOD - 2));
-}
-
-
-ll nCr(ll n,ll r)
-{
-    if (n < r)
-        return 0;
-
-    if (r == 0)
-        return 1;
- 
-
-    ll ans = mul(fact[n], mul(divide(1,fact[r]),divide(1,fact[n-r])));
- 
-    return ans;
-}
-
-void init_fact() {
-    fact[0] = 1;
-    fo(i,1,(ll)1e5 + 10) fact[i] = mul(fact[i-1],i);
-}
-
-
+    
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    //important
-    init_fact();
+    test(t){     // tno[1..t]
     
-    ll m,n,k;
-    read(m);
-    read(n);
-    read(k);
+        ll n;
+        read(n);
 
-    if(m == 1) {
-        ll ans = 0;
-        fo(i,0,n) {
-            ll term = 0;
-            //cnl(term);
-            term = mul(i+1,nCr(n-1,i));
-            //cnl(term);
-            term = mul(term,k);
-            //cnl(term);
-            term = mul(term,binpow(k-1,i));
+        vi cc(n);
+        cinarr(n,cc);
 
-            ans = add(ans,term);
+        vi aa(n);
+        cinarr(n,aa);
+
+        vi bb(n);
+        cinarr(n,bb);
+
+        vi end_chains;
+
+        end_chains.pb(0);
+
+        fo(i,2,n){
+            if(aa[i] == bb[i]) end_chains.pb(i-1);
+            else if(aa[i] > bb[i]) {
+                ll temp = aa[i];
+                aa[i] = bb[i];
+                bb[i] = temp;
+            }
         }
-        //cnl(ans);
-        //cnl(binpow(k,n));
-        cnl(divide(ans,binpow(k,n)));
-    }
+        end_chains.pb(n-1);
 
-    //cnl(divide(4,2));
-        
+        vshow1d(end_chains);
+        //vshow1d(bb);
 
+        ll max_len = 0;
+        fo(i,1,end_chains.size()) {
+            
+            ll ch1 = end_chains[i-1];
+            ll ch2 = end_chains[i];
 
+            ll temp = 0;
+
+            temp += abs(bb[ch1+1] - aa[ch1+1]) + 1;
+            cnl(abs(bb[ch1+1] - aa[ch1+1]) + 1);
+            // if(ch2 == n-1) {
+            //     //cnl(cc[ch2]);
+            //     temp += cc[ch2];
+            // }
+            // else temp += abs(bb[ch2+1] - aa[ch2+1] + 1);
+
+            temp += cc[ch2];
+            cnl(cc[ch2]);
+            fo(j,ch1+1,ch2){
+                //cnl("ff");
+                temp += cc[j] - (bb[j+1] - aa[j+1] - 1);
+                cnl(cc[j] - (bb[j+1] - aa[j+1] - 1));
+            }
+            csp("poss ");cnl(temp);
+            max_len = max(max_len,temp);
+        }
+
+        cnl(max_len);
     
+    }
     return 0;
 }
