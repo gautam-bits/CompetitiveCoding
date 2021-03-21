@@ -9,6 +9,8 @@
         "limits": "cpp",
         "valarray": "cpp",
         "type_traits": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "cmath": "cpp",
+        "complex": "cpp"
     }
 }
