@@ -57,12 +57,17 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
+    ll t,n,q;
+    read(t);
+    read(n);
+    read(q);
     
-    test(t){     // tno[1..t]
+    while(t--){     // tno[1..t]
     
-        ll n,q;
-        read(n);
-        read(q);
+        // ll n,q;
+        // read(n);
+        // read(q);
 
         vi arr(n);
 
@@ -72,37 +77,37 @@ int main()
 
         ll temp;
 
-        ll cnt = 0;
-        fo(i,1,11){
-            fo(j,i+1,11){
-                fo(k,j+1,11){
+        ll cnt1 = 0;
+        fo(i,1,n+1){
+            fo(j,i+1,n+1){
+                fo(k,j+1,n+1){
 
                     cout<<i<<" "<<j<<" "<<k<<endl;
                     read(temp);
-                    assert(temp != -1);
-                    ans[cnt] = temp;
-                    cnt++;
+                    if(temp == -1) exit(1);
+                    ans[cnt1] = temp;
+                    cnt1++;
                 }
             }
         }
 
-        ll cnt_meg = 0;
 
-
-
+        ll c2 = 0;
         do {
             bool yes1 = 1,yes2 = 1,yes3 = 1;
 
-            vi idxx(n + 1);
+            vi idxx;
+            idxx.clear();
+            idxx.resize(100);
 
             fo(i,0,n) idxx[arr[i]] = i + 1;
 
             ll cnt = 0;
 
 
-            fo(i,1,11) {
-                fo(j,i+1,11){
-                    fo(k,j+1,11){
+            fo(i,1,n+1) {
+                fo(j,i+1,n+1){
+                    fo(k,j+1,n+1){
 
                         vi tem;
                         tem.clear();
@@ -111,7 +116,7 @@ int main()
                         if(ans[cnt] != j) tem.pb(j);
                         if(ans[cnt] != k) tem.pb(k);
 
-                        assert(tem.size() == 2);
+                        if(tem.size() != 2) exit(1);
 
 
                         if((idxx[ans[cnt]] > idxx[tem[0]] && idxx[ans[cnt]] > idxx[tem[1]] ) || (idxx[ans[cnt]] < idxx[tem[0]] && idxx[ans[cnt]] < idxx[tem[1]] )) {
@@ -123,7 +128,7 @@ int main()
 
 
                         cnt++;
-                        assert(cnt < 120);
+                        if(cnt > 120) exit(1);
                     }
                     if(yes1 == 0) {
                         break;
@@ -134,22 +139,21 @@ int main()
                 }
             }
 
-            if(yes3 == 1 || cnt_meg > 100){
+            if(yes3 == 1){
                 break;
             }
 
-            cnt_meg++;
+            c2++;
+
         } while(next_permutation(all(arr)));
 
         vshow1d(arr);
 
         ll ttt;
         read(ttt);
-        assert(ttt != -1);
+        if(ttt == -1) exit(1);
 
 
-
-        
     
     }
     return 0;

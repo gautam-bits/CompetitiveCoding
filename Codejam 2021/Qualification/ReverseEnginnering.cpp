@@ -37,6 +37,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
+    #define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -51,6 +52,7 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
     
 int main() 
 {
@@ -60,96 +62,71 @@ int main()
     
     test(t){     // tno[1..t]
     
-        ll n,q;
+        ll n;
         read(n);
-        read(q);
 
-        vi arr(n);
+        ll c;
+        read(c);
 
-        fo(i,0,n) arr[i] = i + 1;
+        ll lo = n - 1;
+        ll hi = (n*(n+1))/2 - 1;
 
-        vi ans(300);
 
-        ll temp;
-
-        ll cnt = 0;
-        fo(i,1,11){
-            fo(j,i+1,11){
-                fo(k,j+1,11){
-
-                    cout<<i<<" "<<j<<" "<<k<<endl;
-                    read(temp);
-                    assert(temp != -1);
-                    ans[cnt] = temp;
-                    cnt++;
-                }
-            }
+        if(c < lo || c > hi) {
+            cout<<"Case #"<<tno<<": "<<"IMPOSSIBLE"<<endl;
+            continue;
         }
 
-        ll cnt_meg = 0;
+
+        bool toggle = 0; 
+        //1-> right
+        //0-> left
 
 
+        vi mask(n,1);
+        vi ans(n,-1);
 
-        do {
-            bool yes1 = 1,yes2 = 1,yes3 = 1;
-
-            vi idxx(n + 1);
-
-            fo(i,0,n) idxx[arr[i]] = i + 1;
-
-            ll cnt = 0;
+        ll money = hi - c;
 
 
-            fo(i,1,11) {
-                fo(j,i+1,11){
-                    fo(k,j+1,11){
+        ll idx = n-1;
 
-                        vi tem;
-                        tem.clear();
+        while(money > 0){
+            ll temp = min(money,idx);
+            money -= temp;
+            mask[temp] = 0;
+            idx = min(idx-1,money);
+        }
+        //cnl(hi);
+        //vshow1d(mask);
 
-                        if(ans[cnt] != i) tem.pb(i);
-                        if(ans[cnt] != j) tem.pb(j);
-                        if(ans[cnt] != k) tem.pb(k);
+        ll cnt = 1;
 
-                        assert(tem.size() == 2);
+        ll lef = 0;
+        ll rig = n-1;
 
-
-                        if((idxx[ans[cnt]] > idxx[tem[0]] && idxx[ans[cnt]] > idxx[tem[1]] ) || (idxx[ans[cnt]] < idxx[tem[0]] && idxx[ans[cnt]] < idxx[tem[1]] )) {
-                            yes1 = 0;
-                            yes2 = 0;
-                            yes3 = 0;
-                            break;
-                        }
-
-
-                        cnt++;
-                        assert(cnt < 120);
-                    }
-                    if(yes1 == 0) {
-                        break;
-                    }
-                }
-                if(yes2 == 0){
-                    break;
-                }
+        rfo(i,n-1,1){
+            
+            toggle = toggle ^ mask[i];
+            
+            if(toggle) {
+                ans[rig] = cnt;
+                cnt++;
+                rig--;
+            }
+            else{
+                ans[lef] = cnt;
+                cnt++;
+                lef++;
             }
 
-            if(yes3 == 1 || cnt_meg > 100){
-                break;
-            }
+        }
 
-            cnt_meg++;
-        } while(next_permutation(all(arr)));
-
-        vshow1d(arr);
-
-        ll ttt;
-        read(ttt);
-        assert(ttt != -1);
+        fo(i,0,n) if(ans[i] == -1) ans[i] = cnt;
+        cout<<"Case #"<<tno<<": ";
+        vshow1d(ans);
 
 
-
-        
     
     }
     return 0;

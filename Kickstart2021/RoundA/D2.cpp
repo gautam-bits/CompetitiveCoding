@@ -21,6 +21,7 @@
     #define cnl(x) cout << x << endl
     #define csp(x) cout << x << " "
     #define read(x) cin >> x
+    #define ctc(x) cout << "Case #"<<x<<": "
     #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
     #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
     #define all(v) v.begin(),v.end()
@@ -37,6 +38,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
+    #define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -51,7 +53,52 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+vi parent ;
+vi rank_element;
+vi sz_set;
+ll noOfDisSets;
+
+ll findSet(ll i) {              // find the representative element of i in the forest
+    if(i == parent[i]) {
+        return i;
+    }
+    parent[i] = findSet(parent[i]);
+    return parent[i];
+}
+
+bool isSameSet(ll i,ll j){
+    return findSet(i) == findSet(j);
+}
+
+void unionSet(ll i, ll j) {    // merging sets containing i and j
+    if(!isSameSet(i,j)) {
+        ll x = findSet(i);
+        ll y = findSet(j);
+
+        noOfDisSets--; // if we are merging 2 different sets
+
+        if(rank_element[x] > rank_element[y]){
+            parent[y] = x;
+            sz_set[x] += sz_set[y];  //increasing the size
+        }
+        else {
+            parent[x] = y;
+            sz_set[y] += sz_set[x];  //increasing the size
+            if(rank_element[x] == rank_element[y]) rank_element[y]++;
+        }
+
+    }
+}
+
+ll sizeOfSet(ll i) {    // returns size of set that currently contains i
+    ll x = findSet(i);
+    return sz_set[x];
+}
+
+ll noOfDisjointSets() {
+    return noOfDisSets;
+}
+
 int main() 
 {
     
@@ -60,96 +107,53 @@ int main()
     
     test(t){     // tno[1..t]
     
-        ll n,q;
+        ll n;
         read(n);
-        read(q);
 
-        vi arr(n);
+        vvi arr(n,vi (n,0));
 
-        fo(i,0,n) arr[i] = i + 1;
+        vvi weight(n,vi (n,0));
 
-        vi ans(300);
+        cinarr2d(n,n,arr);
+        cinarr2d(n,n,weight);
 
-        ll temp;
+        vi temp(n,0);
+        ll ans = 0;
 
-        ll cnt = 0;
-        fo(i,1,11){
-            fo(j,i+1,11){
-                fo(k,j+1,11){
+        cinarr(n,temp);
+        cinarr(n,temp);
 
-                    cout<<i<<" "<<j<<" "<<k<<endl;
-                    read(temp);
-                    assert(temp != -1);
-                    ans[cnt] = temp;
-                    cnt++;
+        vector<vpi> mpp(1001);
+
+        fo(i,0,n) {
+            fo(j,0,n){
+                mpp[weight[i][j]].pb({i,j});
+                ans += weight[i][j];
+            }
+        }
+
+
+        //reset global variables
+        parent.assign(2*n,0);
+        rank_element.assign(2*n,0);
+        sz_set.assign(2*n,1);
+        noOfDisSets = 2*n;
+        fo(i,0,2*n)parent[i] = i;
+
+        
+
+        rfo(i,1000,0){
+            for(pi p: mpp[i]) {
+                if(!isSameSet(p.F,p.S+n)) {
+                    ans -= i;
+                    unionSet(p.F,p.S+n);
                 }
             }
         }
 
-        ll cnt_meg = 0;
+        ctc(tno);cnl(ans);
 
 
-
-        do {
-            bool yes1 = 1,yes2 = 1,yes3 = 1;
-
-            vi idxx(n + 1);
-
-            fo(i,0,n) idxx[arr[i]] = i + 1;
-
-            ll cnt = 0;
-
-
-            fo(i,1,11) {
-                fo(j,i+1,11){
-                    fo(k,j+1,11){
-
-                        vi tem;
-                        tem.clear();
-
-                        if(ans[cnt] != i) tem.pb(i);
-                        if(ans[cnt] != j) tem.pb(j);
-                        if(ans[cnt] != k) tem.pb(k);
-
-                        assert(tem.size() == 2);
-
-
-                        if((idxx[ans[cnt]] > idxx[tem[0]] && idxx[ans[cnt]] > idxx[tem[1]] ) || (idxx[ans[cnt]] < idxx[tem[0]] && idxx[ans[cnt]] < idxx[tem[1]] )) {
-                            yes1 = 0;
-                            yes2 = 0;
-                            yes3 = 0;
-                            break;
-                        }
-
-
-                        cnt++;
-                        assert(cnt < 120);
-                    }
-                    if(yes1 == 0) {
-                        break;
-                    }
-                }
-                if(yes2 == 0){
-                    break;
-                }
-            }
-
-            if(yes3 == 1 || cnt_meg > 100){
-                break;
-            }
-
-            cnt_meg++;
-        } while(next_permutation(all(arr)));
-
-        vshow1d(arr);
-
-        ll ttt;
-        read(ttt);
-        assert(ttt != -1);
-
-
-
-        
     
     }
     return 0;

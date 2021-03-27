@@ -37,6 +37,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
+    #define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -60,96 +61,91 @@ int main()
     
     test(t){     // tno[1..t]
     
-        ll n,q;
+        ll n,k;
         read(n);
-        read(q);
+        read(k);
 
         vi arr(n);
 
-        fo(i,0,n) arr[i] = i + 1;
+        cinarr(n,arr);
 
-        vi ans(300);
+        set<ll> indices;
+        set<pi> weight;
+        map<ll,pi> mp;
 
-        ll temp;
 
-        ll cnt = 0;
-        fo(i,1,11){
-            fo(j,i+1,11){
-                fo(k,j+1,11){
-
-                    cout<<i<<" "<<j<<" "<<k<<endl;
-                    read(temp);
-                    assert(temp != -1);
-                    ans[cnt] = temp;
-                    cnt++;
-                }
-            }
+        fo(i,0,n){
+            if(arr[i] == 1) indices.insert(i);
         }
 
-        ll cnt_meg = 0;
+        for(ll x : indices){
+            ll lef = 0;
+            ll rig = 0;
 
+            ll idx = x + 1;
 
-
-        do {
-            bool yes1 = 1,yes2 = 1,yes3 = 1;
-
-            vi idxx(n + 1);
-
-            fo(i,0,n) idxx[arr[i]] = i + 1;
-
-            ll cnt = 0;
-
-
-            fo(i,1,11) {
-                fo(j,i+1,11){
-                    fo(k,j+1,11){
-
-                        vi tem;
-                        tem.clear();
-
-                        if(ans[cnt] != i) tem.pb(i);
-                        if(ans[cnt] != j) tem.pb(j);
-                        if(ans[cnt] != k) tem.pb(k);
-
-                        assert(tem.size() == 2);
-
-
-                        if((idxx[ans[cnt]] > idxx[tem[0]] && idxx[ans[cnt]] > idxx[tem[1]] ) || (idxx[ans[cnt]] < idxx[tem[0]] && idxx[ans[cnt]] < idxx[tem[1]] )) {
-                            yes1 = 0;
-                            yes2 = 0;
-                            yes3 = 0;
-                            break;
-                        }
-
-
-                        cnt++;
-                        assert(cnt < 120);
-                    }
-                    if(yes1 == 0) {
-                        break;
-                    }
-                }
-                if(yes2 == 0){
-                    break;
-                }
+            while(idx <= n-1 && arr[idx] == 0) {
+                rig++;
+                idx++;
             }
 
-            if(yes3 == 1 || cnt_meg > 100){
-                break;
+            idx = x - 1;
+
+            while(idx >= 0 && arr[idx] == 0) {
+                lef++;
+                idx--;
             }
 
-            cnt_meg++;
-        } while(next_permutation(all(arr)));
+            mp[x] = {lef,rig};
+            
+            weight.insert({lef+rig,x});
+        }
 
-        vshow1d(arr);
+        ll ans = 0;
+        while(weight.size() != 0){
+            pi temp = *weight.rbegin();
+            auto itr = weight.end();
+            itr--;
+            weight.erase(itr);
 
-        ll ttt;
-        read(ttt);
-        assert(ttt != -1);
+            ans += max((ll)1,k - temp.F);
+
+            ll le = -1;
+            ll re = -1;
+
+            auto itr2 = ub(all(indices),temp.S);
+            if(itr2 != indices.end()) re = *itr2;
+
+            auto itr3 = lb(all(indices),temp.S);
+            if(itr3 != indices.begin()) {
+                itr3--;
+                le = *itr3;
+            }
+
+            indices.erase(indices.find(temp.S));
+
+            if(le != -1){
+                auto itr4 = weight.find({mp[le].F+mp[le].S,le});
+                weight.erase(itr4);
+                mp[le].S += 1 + mp[temp.S].S;
+                weight.insert({mp[le].F+mp[le].S,le});
+            }
+
+            if(re != -1){
+                auto itr5 = weight.find({mp[re].F+mp[re].S,re});
+                weight.erase(itr5);
+                mp[re].F += 1 + mp[temp.S].F;
+                weight.insert({mp[re].F+mp[re].S,re});
+            }
+
+
+        }
+
+        cnl(ans);
 
 
 
-        
+
     
     }
     return 0;

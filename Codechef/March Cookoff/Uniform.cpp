@@ -37,6 +37,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
+    #define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -44,14 +45,78 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    const ll MOD   = 998244353 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+vi parent ;
+vi rank_element;
+vi sz_set;
+ll noOfDisSets;
+
+ll findSet(ll i) {              // find the representative element of i in the forest
+    if(i == parent[i]) {
+        return i;
+    }
+    parent[i] = findSet(parent[i]);
+    return parent[i];
+}
+
+bool isSameSet(ll i,ll j){
+    return findSet(i) == findSet(j);
+}
+
+void unionSet(ll i, ll j) {    // merging sets containing i and j
+    if(!isSameSet(i,j)) {
+        ll x = findSet(i);
+        ll y = findSet(j);
+
+        noOfDisSets--; // if we are merging 2 different sets
+
+        if(rank_element[x] > rank_element[y]){
+            parent[y] = x;
+            sz_set[x] += sz_set[y];  //increasing the size
+        }
+        else {
+            parent[x] = y;
+            sz_set[y] += sz_set[x];  //increasing the size
+            if(rank_element[x] == rank_element[y]) rank_element[y]++;
+        }
+
+    }
+}
+
+ll sizeOfSet(ll i) {    // returns size of set that currently contains i
+    ll x = findSet(i);
+    return sz_set[x];
+}
+
+ll noOfDisjointSets() {
+    return noOfDisSets;
+}
+
+
+ll mul(ll x, ll y)
+{
+    return (x * 1ll * y) % MOD;
+}
+
+ll binpow(ll x, ll y)
+{
+    ll ans = 1;
+    while(y > 0)
+    {
+        if(y % 2 == 1)
+            ans = mul(ans, x);
+        x = mul(x, x);
+        y >>= 1;
+    }
+    return ans;
+}
+
 int main() 
 {
     
@@ -60,96 +125,45 @@ int main()
     
     test(t){     // tno[1..t]
     
-        ll n,q;
+        ll c,n,m;
+        read(c);
+
         read(n);
-        read(q);
 
-        vi arr(n);
+        read(m);
 
-        fo(i,0,n) arr[i] = i + 1;
+        parent.assign(n,0);
+        rank_element.assign(n,0);
+        sz_set.assign(n,1);
+        noOfDisSets = n;
+        fo(i,0,n)parent[i] = i;
 
-        vi ans(300);
+        fo(i,0,c){
+            ll xx;
+            read(xx);
 
-        ll temp;
+            ll roo = -1;
 
-        ll cnt = 0;
-        fo(i,1,11){
-            fo(j,i+1,11){
-                fo(k,j+1,11){
+            fo(j,0,xx){
+                ll le,re;
+                read(le);
+                read(re);
+                le--;
+                re--;
 
-                    cout<<i<<" "<<j<<" "<<k<<endl;
-                    read(temp);
-                    assert(temp != -1);
-                    ans[cnt] = temp;
-                    cnt++;
+                fo(k,le,re+1){
+                    if(roo == - 1) roo = k;
+                    unionSet(roo,k);
                 }
             }
         }
 
-        ll cnt_meg = 0;
+        cnl(binpow(m,noOfDisjointSets()));
 
 
 
-        do {
-            bool yes1 = 1,yes2 = 1,yes3 = 1;
-
-            vi idxx(n + 1);
-
-            fo(i,0,n) idxx[arr[i]] = i + 1;
-
-            ll cnt = 0;
 
 
-            fo(i,1,11) {
-                fo(j,i+1,11){
-                    fo(k,j+1,11){
-
-                        vi tem;
-                        tem.clear();
-
-                        if(ans[cnt] != i) tem.pb(i);
-                        if(ans[cnt] != j) tem.pb(j);
-                        if(ans[cnt] != k) tem.pb(k);
-
-                        assert(tem.size() == 2);
-
-
-                        if((idxx[ans[cnt]] > idxx[tem[0]] && idxx[ans[cnt]] > idxx[tem[1]] ) || (idxx[ans[cnt]] < idxx[tem[0]] && idxx[ans[cnt]] < idxx[tem[1]] )) {
-                            yes1 = 0;
-                            yes2 = 0;
-                            yes3 = 0;
-                            break;
-                        }
-
-
-                        cnt++;
-                        assert(cnt < 120);
-                    }
-                    if(yes1 == 0) {
-                        break;
-                    }
-                }
-                if(yes2 == 0){
-                    break;
-                }
-            }
-
-            if(yes3 == 1 || cnt_meg > 100){
-                break;
-            }
-
-            cnt_meg++;
-        } while(next_permutation(all(arr)));
-
-        vshow1d(arr);
-
-        ll ttt;
-        read(ttt);
-        assert(ttt != -1);
-
-
-
-        
     
     }
     return 0;

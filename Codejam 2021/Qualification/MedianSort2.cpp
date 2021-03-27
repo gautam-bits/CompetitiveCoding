@@ -51,105 +51,82 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+vector<vvi> ans;
     
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
+    ll t,n,q;
+    read(t);
+    read(n);
+    read(q);
     
-    test(t){     // tno[1..t]
+    while(t--){     // tno[1..t]
     
-        ll n,q;
-        read(n);
-        read(q);
+        // ll n,q;
+        // read(n);
+        // read(q);
 
         vi arr(n);
 
         fo(i,0,n) arr[i] = i + 1;
 
-        vi ans(300);
+        ans.assign(n+1,vvi (n+1,vi (11,0)));
 
         ll temp;
 
-        ll cnt = 0;
-        fo(i,1,11){
-            fo(j,i+1,11){
-                fo(k,j+1,11){
+        ll cnt1 = 0;
+        fo(i,1,n+1){
+            fo(j,i+1,n+1){
+                fo(k,j+1,n+1){
 
                     cout<<i<<" "<<j<<" "<<k<<endl;
                     read(temp);
-                    assert(temp != -1);
-                    ans[cnt] = temp;
-                    cnt++;
+                    if(temp == -1) exit(1);
+                    ans[i][j][k] = temp;
+                    ans[i][k][j] = temp;
+                    ans[j][k][i] = temp;
+                    ans[j][i][k] = temp;
+                    ans[k][i][j] = temp;
+                    ans[k][j][i] = temp;
+                    cnt1++;
                 }
             }
         }
 
-        ll cnt_meg = 0;
 
-
-
+        vi ne(n);
+        ll c2 = 0;
         do {
-            bool yes1 = 1,yes2 = 1,yes3 = 1;
+            bool yes1 = 1;
 
-            vi idxx(n + 1);
+            fo(i,0,n) ne[i] = arr[i];
 
-            fo(i,0,n) idxx[arr[i]] = i + 1;
-
-            ll cnt = 0;
-
-
-            fo(i,1,11) {
-                fo(j,i+1,11){
-                    fo(k,j+1,11){
-
-                        vi tem;
-                        tem.clear();
-
-                        if(ans[cnt] != i) tem.pb(i);
-                        if(ans[cnt] != j) tem.pb(j);
-                        if(ans[cnt] != k) tem.pb(k);
-
-                        assert(tem.size() == 2);
-
-
-                        if((idxx[ans[cnt]] > idxx[tem[0]] && idxx[ans[cnt]] > idxx[tem[1]] ) || (idxx[ans[cnt]] < idxx[tem[0]] && idxx[ans[cnt]] < idxx[tem[1]] )) {
-                            yes1 = 0;
-                            yes2 = 0;
-                            yes3 = 0;
-                            break;
-                        }
-
-
-                        cnt++;
-                        assert(cnt < 120);
-                    }
-                    if(yes1 == 0) {
-                        break;
-                    }
-                }
-                if(yes2 == 0){
+            fo(i,0,n-2) {
+                if(ans[arr[i]][arr[i+1]][arr[i+2]] != arr[i+1]) {
+                    //cout<<"yo"<<ans[arr[i]][arr[i+1]][arr[i+2]]<<arr[i+1]<<endl;
+                    yes1 = 0;
                     break;
                 }
             }
 
-            if(yes3 == 1 || cnt_meg > 100){
+            if(yes1){
                 break;
             }
 
-            cnt_meg++;
         } while(next_permutation(all(arr)));
 
-        vshow1d(arr);
+        vshow1d(ne);
 
         ll ttt;
         read(ttt);
-        assert(ttt != -1);
+        if(ttt == -1) exit(1);
 
 
-
-        
     
     }
     return 0;

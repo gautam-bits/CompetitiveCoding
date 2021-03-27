@@ -37,6 +37,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
+    #define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -51,6 +52,8 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+
     
 int main() 
 {
@@ -60,96 +63,39 @@ int main()
     
     test(t){     // tno[1..t]
     
-        ll n,q;
-        read(n);
-        read(q);
 
-        vi arr(n);
+        ll x,y;
+        string tem,fin = "";
 
-        fo(i,0,n) arr[i] = i + 1;
+        read(x);
+        read(y);
+        read(tem);
 
-        vi ans(300);
+        ll n = tem.size();
+        fin += tem[0];
 
-        ll temp;
+        fo(i,1,n){
+            if(tem[i] !='?' || tem[i-1] != '?') fin += tem[i];
+        }
+        
+        ll ans = 0;
 
-        ll cnt = 0;
-        fo(i,1,11){
-            fo(j,i+1,11){
-                fo(k,j+1,11){
+        ll sz = fin.size();
 
-                    cout<<i<<" "<<j<<" "<<k<<endl;
-                    read(temp);
-                    assert(temp != -1);
-                    ans[cnt] = temp;
-                    cnt++;
-                }
+        fo(i,0,sz-1) {
+            if(fin[i] == 'J' && fin[i+1] == 'C') ans += y;
+            if(fin[i] == 'C' && fin[i+1] == 'J') ans += x;
+        }
+
+        fo(i,1,sz-1){
+            if(fin[i] == '?') {
+                if(fin[i-1] == 'J' && fin[i+1] == 'C') ans += y;
+                if(fin[i-1] == 'C' && fin[i+1] == 'J') ans += x;
             }
         }
 
-        ll cnt_meg = 0;
-
-
-
-        do {
-            bool yes1 = 1,yes2 = 1,yes3 = 1;
-
-            vi idxx(n + 1);
-
-            fo(i,0,n) idxx[arr[i]] = i + 1;
-
-            ll cnt = 0;
-
-
-            fo(i,1,11) {
-                fo(j,i+1,11){
-                    fo(k,j+1,11){
-
-                        vi tem;
-                        tem.clear();
-
-                        if(ans[cnt] != i) tem.pb(i);
-                        if(ans[cnt] != j) tem.pb(j);
-                        if(ans[cnt] != k) tem.pb(k);
-
-                        assert(tem.size() == 2);
-
-
-                        if((idxx[ans[cnt]] > idxx[tem[0]] && idxx[ans[cnt]] > idxx[tem[1]] ) || (idxx[ans[cnt]] < idxx[tem[0]] && idxx[ans[cnt]] < idxx[tem[1]] )) {
-                            yes1 = 0;
-                            yes2 = 0;
-                            yes3 = 0;
-                            break;
-                        }
-
-
-                        cnt++;
-                        assert(cnt < 120);
-                    }
-                    if(yes1 == 0) {
-                        break;
-                    }
-                }
-                if(yes2 == 0){
-                    break;
-                }
-            }
-
-            if(yes3 == 1 || cnt_meg > 100){
-                break;
-            }
-
-            cnt_meg++;
-        } while(next_permutation(all(arr)));
-
-        vshow1d(arr);
-
-        ll ttt;
-        read(ttt);
-        assert(ttt != -1);
-
-
-
-        
+        cout<<"Case #"<<tno<<": ";
+        cnl(ans);
     
     }
     return 0;

@@ -37,6 +37,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
+    #define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -60,96 +61,62 @@ int main()
     
     test(t){     // tno[1..t]
     
-        ll n,q;
+        ll n,k;
         read(n);
-        read(q);
+        read(k);
 
         vi arr(n);
 
-        fo(i,0,n) arr[i] = i + 1;
+        cinarr(n,arr);
 
-        vi ans(300);
+        ll cnt1 = 0;
 
-        ll temp;
+        fo(i,0,n) if(arr[i] == 1) cnt1++;
 
-        ll cnt = 0;
-        fo(i,1,11){
-            fo(j,i+1,11){
-                fo(k,j+1,11){
-
-                    cout<<i<<" "<<j<<" "<<k<<endl;
-                    read(temp);
-                    assert(temp != -1);
-                    ans[cnt] = temp;
-                    cnt++;
-                }
-            }
+        if(cnt1 == 0){
+            cnl(0);
+            continue;
         }
 
-        ll cnt_meg = 0;
+        vi dp(n,0);
 
+        if(arr[0] == 0) dp[0] = 1;
 
-
-        do {
-            bool yes1 = 1,yes2 = 1,yes3 = 1;
-
-            vi idxx(n + 1);
-
-            fo(i,0,n) idxx[arr[i]] = i + 1;
-
-            ll cnt = 0;
-
-
-            fo(i,1,11) {
-                fo(j,i+1,11){
-                    fo(k,j+1,11){
-
-                        vi tem;
-                        tem.clear();
-
-                        if(ans[cnt] != i) tem.pb(i);
-                        if(ans[cnt] != j) tem.pb(j);
-                        if(ans[cnt] != k) tem.pb(k);
-
-                        assert(tem.size() == 2);
-
-
-                        if((idxx[ans[cnt]] > idxx[tem[0]] && idxx[ans[cnt]] > idxx[tem[1]] ) || (idxx[ans[cnt]] < idxx[tem[0]] && idxx[ans[cnt]] < idxx[tem[1]] )) {
-                            yes1 = 0;
-                            yes2 = 0;
-                            yes3 = 0;
-                            break;
-                        }
-
-
-                        cnt++;
-                        assert(cnt < 120);
-                    }
-                    if(yes1 == 0) {
-                        break;
-                    }
-                }
-                if(yes2 == 0){
-                    break;
-                }
+        fo(i,1,n){
+            if(arr[i] == 0){
+                dp[i] = dp[i-1] + 1;
             }
+            else dp[i] = dp[i-1];
+        }
+        //vshow1d(dp);
 
-            if(yes3 == 1 || cnt_meg > 100){
-                break;
-            }
+        vi dp2(n,0);
 
-            cnt_meg++;
-        } while(next_permutation(all(arr)));
+        dp2[k-1] = dp[k-1];
 
-        vshow1d(arr);
+        fo(i,k,n){
+            //csp(i);csp(i-k);csp(dp[i]);cnl(dp[i-k]);
+            dp2[i] = dp[i] - dp[i-k];
+        }
 
-        ll ttt;
-        read(ttt);
-        assert(ttt != -1);
+        //vshow1d(dp);
 
 
+        ll mx = *max_element(dp2.begin() + k - 1,dp2.end());
 
-        
+        ll ans = 0;
+
+        ll tt = k - mx;
+        cnt1 -= tt;
+
+        ans += (tt*(tt+1))/2;
+
+        if(cnt1 == -19) {
+            cnl(0);
+        }
+        else{
+            cnl(ans + cnt1);
+        }
     
     }
     return 0;
