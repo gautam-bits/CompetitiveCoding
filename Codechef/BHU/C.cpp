@@ -37,7 +37,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
-    #define endl "\n" 
+    //#define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -52,39 +52,90 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-
-vi fi;
     
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
-}
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
-
-    int n;
-    cin>>n;
-
-
     
     
-    cnl(fib(n));
+        ll n;
+        read(n);
+
+        vi arr(n);
+        cinarr(n,arr);
+
+        ll q;
+        read(q);
+
+
+        set<ll> st;
+
+        fo(i,0,n) st.insert(i);
+
+        ll x,k;
+
+        ll ans = 0;
+
+        fo(i,0,q) {
+
+            read(x);
+
+            read(k);
+
+            //csp(x);cnl(k);
+
+            x--;
+
+            ll temp = x;
+
+            ll cnt = 0;
+
+            ll te = 2;
+
+            while(k > 0) {
+                if(st.empty()) break;
+                auto itr = st.lb(x);
+                if(itr == st.end()) break;
+                ll idx = *itr;
+                //cnl(idx);
+
+
+                if(arr[idx] > k) {
+                    arr[idx] -= k;
+                    ans += k*(idx - temp);
+                    k = 0;
+                    //csp("k");cnl(k);
+                    
+                }
+
+                else {
+                    ans += (arr[idx])*(idx - temp);
+
+                    k -= arr[idx];
+                    //csp("k");cnl(k);
+                    arr[idx] = 0;
+                    
+                    st.erase(st.find(idx));
+                    //csp("sz");cnl(st.size());
+
+                    
+                }
+                //vshow1d(arr)
+
+
+                cnt++;
+            }
+
+            cnl(ans);
+            ans = 0;
+
+            //vshow1d(arr);
+            //cnl(st.size());
+        }
+    
+
+        //cnl(ans);
     return 0;
 }

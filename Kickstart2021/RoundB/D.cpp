@@ -50,41 +50,123 @@
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
+
+
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
+vvi adjList;
+vector<bool> visited;
+map<pi,pi> mp; // li,ai;
+ll load;
+ll qnode;
 
-vi fi;
+bool dfs(ll node,ll& gcd) {
+
+    visited[node] = 1;
+
+    if(qnode == node){
+        return 1;
+    }
+
+    bool leaf = 1;
+
+    bool pass = 0;
+
+    for(ll child : adjList[node]) if(!visited[child]) {
+
+        leaf = 0;
+
+        bool poss = dfs(child,gcd);
+
+        if(poss) {
+            pass = 1;
+            pi temp = mp[{node,child}];
+
+            if(load >= temp.F) {
+                if(gcd == -1){
+                    gcd = temp.S;
+                }
+                else {
+                    gcd = __gcd(gcd,temp.S);
+                }
+            }
+
+            return 1;
+        }
+
+    }
+
+    return 0;
+
     
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
 }
+
+    
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+    
+    test(t){     // tno[1..t]
+    
+        ll n,q;
+        read(n);
+        read(q);
 
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
+        adjList.clear();
+        adjList.resize(n);
+        visited.assign(n,0);
 
-    int n;
-    cin>>n;
 
+
+
+        fo(i,0,n-1){
+            ll u,v,li,ai;
+            read(u);
+            read(v);
+            read(li);
+            read(ai);
+            u--;
+            v--;
+            adjList[u].pb(v);
+            adjList[v].pb(u);
+            mp[{u,v}] = {li,ai};
+            mp[{v,u}] = {li,ai};
+        }
+
+        //vshow2d(adjList);
+
+
+        cout<<"Case #"<<tno<<": ";
+        fo(i,0,q) {
+            ll ci,wi;
+
+            read(ci);
+            read(wi);
+            ci--;
+            load = wi;
+            qnode = ci;
+
+            ll gc = -1;
+
+            fo(j,0,n) visited[j] = 0;
+
+            bool temp = dfs(0,gc);
+
+            csp(max(gc,(ll)0));
+        }
+
+        cnl("");
+
+        // ll gc = -1;
+
+        // bool temp = dfs(0,gc);
+
+        // cnl(gc);
 
     
-    
-    cnl(fib(n));
+    }
     return 0;
 }

@@ -53,38 +53,132 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
+vvi adjList;
+vi cost;
+vi leav;
+vector<bool> visited;
+map<pi,ll> mp;
 
-vi fi;
-    
-int fib(int n) {
-    if(n <= 2) return 1;
 
-    ll a,b;
+void dfs(ll node,ll height) {
 
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
+    visited[node] = 1;
+    //cnl(adjList[node].size());
+    // if(adjList[node].size() == 0) {
+    //     //cnl("ff");
+        
+    //     leav.pb(node);
+    //     return;
+    // }
 
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
+    bool le = 1;
 
-    fi[n] = a + b;
-    return fi[n];
+    for(ll x : adjList[node]) if(!visited[x]) {
+        le = 0;
+        cost[x] = cost[node] + height*mp[{x,node}];
+        dfs(x,height + 1);
+    }
+
+    if(le) {
+        leav.pb(node);
+    }
+
+
 }
+
+    
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+    
+    test(t){     // tno[1..t]
+    
+        ll n,m;
+        read(n);
+        read(m);
 
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
+        vi val(m);
 
-    int n;
-    cin>>n;
+        cinarr(m,val);
+
+        adjList.clear();
+        adjList.resize(n);
+        cost.assign(n,0);
+        leav.clear();
+        visited.assign(n,0);
+        mp.clear();
+
+
+
+        ll u,v,k;
+
+        fo(i,0,n-1) {
+            read(u);
+            read(v);
+            read(k);
+            u--;
+            v--;
+            adjList[u].pb(v);
+            adjList[v].pb(u);
+            mp[{u,v}] = k;
+            mp[{v,u}] = k;
+            
+        }
+
+        dfs(0,1);
+
+        //vshow2d(adjList);
+
+        vi val2;
+
+        for(ll x : leav) {
+            if(x != 0) {
+                val2.pb(cost[x]);
+            }
+        }
+
+        sort(all(val2));
+        sort(all(val));
+
+        
+
+        ll m2 = val2.size();
+
+        ll idx1 = 0,idx2 = 0;
+
+        ll ans = 0;
+
+        // vshow2d(adjList);
+        
+
+        // vshow1d(val);
+        // vshow1d(val2);
+        // vshow1d(cost);
+
+        while(idx1 < m && idx2 < m2) {
+            if(val[idx1] >= val2[idx2]) {
+                idx1++;
+                idx2++;
+                ans++;
+            }
+
+            else{
+                idx1++;
+            }
+        }
+
+        cnl(ans);
+
+
+
+        
+
+
 
 
     
-    
-    cnl(fib(n));
+    }
     return 0;
 }

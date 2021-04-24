@@ -13,7 +13,7 @@
     #define MP make_pair
     #define F first
     #define S second
-    #define ll long long
+    #define ll int
     #define lb lower_bound
     #define ub upper_bound
     #define bs binary_search
@@ -53,38 +53,56 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
+ll val(ll x) {
+    if(bitcount(x) == 1) return x;
 
-vi fi;
-    
-int fib(int n) {
-    if(n <= 2) return 1;
+    ll ans = 1;
 
-    ll a,b;
+    while(ans < x) ans *= 2;
 
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
+    return ans - x;
 }
+
+    
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
+    ll n;
+    read(n);
 
-    int n;
-    cin>>n;
+    vi arr(n);
+    cinarr(n,arr);
+
+    vi arr2(n);
+
+    fo(i,0,n) {
+        arr2[i] = val(arr[i]);
+    }
+
+    vshow1d(arr2);
+
+    ll mx = *max_element(all(arr));
+
+
+    
+
+
+    ll val ;
+
+
+
+    bitset<2000000> bit;
+    bit.reset();
+
+    bit[0] = 1;
+
+
 
 
     
     
-    cnl(fib(n));
     return 0;
 }

@@ -45,7 +45,7 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    const ll MOD   = 1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
@@ -53,38 +53,134 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-
-vi fi;
-    
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
+ll add(ll x, ll y)
+{
+    x += y;
+    while(x >= MOD) x -= MOD;
+    while(x < 0) x += MOD;
+    return x;
 }
+
+ll mul(ll x, ll y)
+{
+    return (x * 1ll * y) % MOD;
+}
+
+ll binpow(ll x, ll y)
+{
+    ll ans = 1;
+    while(y > 0)
+    {
+        if(y % 2 == 1)
+            ans = mul(ans, x);
+        x = mul(x, x);
+        y >>= 1;
+    }
+    return ans;
+}
+
+
+
+vvi adjList;
+vvi dp;
+
+string str;
+string val;
+
+ll n,m,l;
+
+ll calc(ll node,ll itr) {
+    if(itr == l - 1) {
+        if(val[node] == str[itr]) return 1;
+        return 0;
+    } 
+
+    if(dp[node][itr] != -1) return dp[node][itr];
+
+    ll ans = 0;
+
+    for(ll child : adjList[node]) if(val[node] == str[itr]) {
+        ans = add(ans,calc(child,itr+1));
+    }
+
+    return dp[node][itr] = ans;
+
+
+}
+    
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+    
+    test(t){     // tno[1..t]
+    
+        read(n);
+        read(m);
+        read(l);
+        read(str);
+        read(val);
 
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
 
-    int n;
-    cin>>n;
+        adjList.clear();
+        adjList.resize(n);
+        dp.clear();
+        dp.assign(n,vi(l,-1));
+
+        vi from(m);
+        vi to(m);
+
+        cinarr(m,from);
+        cinarr(m,to);
+
+
+        fo(i,0,m){
+            adjList[from[i]-1].pb(to[i]-1);
+            adjList[to[i]-1].pb(from[i]-1);
+        }
+
+        ll ans = 0;
+
+        fo(i,0,n) {
+            ans = add(ans,calc(i,0));
+        }
+
+        //vshow2d(dp);
+
+        set<char> st;
+
+        fo(i,0,l) st.insert(str[i]);
+
+        if(st.size() == 1) {
+            ll sub = 0;
+
+            fo(i,0,n) {
+                fo(j,i+1,n){
+                    if(val[i] == val[j] && val[i] == str[0]) {
+                        ll tem = 0;
+                        for(ll x : adjList[i]) {
+                            if(x == j) tem++;
+                        }
+
+                        ans = add(ans,mul(-1,binpow(tem,l-1)));
+                    }
+                }
+            }
+        }
+
+
+        cnl(ans);
+
+        
+
+        
+
+
+
 
 
     
-    
-    cnl(fib(n));
+    }
     return 0;
 }

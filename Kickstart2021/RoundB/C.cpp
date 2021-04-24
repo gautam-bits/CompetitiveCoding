@@ -53,38 +53,83 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
+vi segmentedSieve(ll L, ll R) {
+    ll lim = sqrt(R);
+    vector<bool> mark(lim + 1, false);
+    vi primes;
+    for (ll i = 2; i <= lim; ++i) {
+        if (!mark[i]) {
+            primes.emplace_back(i);
+            for (ll j = i * i; j <= lim; j += i)
+                mark[j] = true;
+        }
+    }
 
-vi fi;
+    vector<bool> isPrime(R - L + 1, true);
+    for (ll i : primes)
+        for (ll j = max(i * i, (L + i - 1) / i * i); j <= R; j += i)
+            isPrime[j - L] = false;
+    if (L == 1) {
+        isPrime[0] = false;
+        //cnl("ff");
+    }
+
     
-int fib(int n) {
-    if(n <= 2) return 1;
+    vi ans;
 
-    ll a,b;
+    fo(i,0,R-L+1) {
+        if(isPrime[i]  ) {
+            ans.pb(i+L);
+        }
+    }
 
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
+    return ans;
+    
 
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
 }
+    
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
-
-    int n;
-    cin>>n;
-
 
     
     
-    cnl(fib(n));
+    test(t){     // tno[1..t]
+    
+        ll n;
+        read(n);
+
+        ll ans = 0;
+
+        ll yo = (ll)sqrt(n);
+
+        // cnl(yo);
+        // cnl(max((ll)0,yo-100000));
+
+
+        vi prime = segmentedSieve(max((ll)1,yo-100000),yo+100000);
+
+        ll sz = prime.size();
+
+        //cnl(sz);
+
+        //vshow1d(prime);
+
+        fo(j,0,sz-1) {
+
+            //cnl(prime[j]*prime[j+1]);
+
+            if(prime[j]*prime[j+1] <= n) ans = max(ans,prime[j]*prime[j+1]);
+            else break;
+        }
+
+        cout<<"Case #"<<tno<<": ";cnl(ans);
+
+
+    
+    }
     return 0;
 }

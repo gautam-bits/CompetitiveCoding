@@ -52,39 +52,82 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-
-vi fi;
     
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
-}
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+    
+    test(t){     // tno[1..t]
+    
+        ll n;
+        ll m;
+        read(n);
+        read(m);
 
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
 
-    int n;
-    cin>>n;
+        vvi arr(n, vi (m,0));
+        vvi arr2(n*m);
+
+        ll cnt = 0;
+
+        fo(i,0,n) {
+            fo(j,0,m){
+                ll temp;
+                read(temp);
+                arr[i][j] = temp;
+                arr2[cnt] = {temp,i,j};
+                cnt++;
+            }
+        }
+
+
+
+        sort(all(arr2));
+
+        // fo(i,0,n*m) csp(arr2[i][0]);
+        // cnl("");
+
+        vvi visited(n, vi (m,0));
+        vvi ans(n, vi (m,-1));
+
+
+        fo(i,0,n*m){
+            ans[arr2[i][1]][i] = arr2[i][0];
+            visited[arr2[i][1]][arr2[i][2]] = 1;
+        }
+
+        // vshow2d(visited);
+        // cnl("");
+        // vshow2d(ans);
+        // cnl("");
+
+        // fo(i,0,n){
+        //     fo(j,0,m){
+        //         if(ans[i][j] == -1) {
+        //             fo(k,0,m){
+        //                 if(visited[i][k] == 0) {
+        //                     ans[i][j] = arr[i][k];
+        //                     visited[i][k] = 1;
+        //                     break;
+        //                 }
+        //             }
+
+        //             // vshow2d(visited);
+        //             // cnl("");
+        //             // vshow2d(ans);
+        //             // cnl("");
+        //         }
+        //     }
+        // }
+
+        // // vshow2d(visited);
+        // // cnl("");
+        vshow2d(ans);
 
 
     
-    
-    cnl(fib(n));
+    }
     return 0;
 }

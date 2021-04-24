@@ -52,39 +52,72 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-
-vi fi;
     
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
-}
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
-
-    int n;
-    cin>>n;
-
+    
 
     
+        ll n;
+        read(n);
+        vi arr(n);
+
+        cinarr(n,arr);
+
+        ll sum = 0;
+
+        fo(i,0,n) sum += arr[i];
+
+
+        if(sum % 2 != 0 ) {
+            cnl(0);
+            return 0;
+        }
+
+        sum /= 2;
+
+        vvi dp(n,vi(sum+1,-1));
+
+        fo(i,0,n) dp[i][0] = 1;
+
+        fo(s,1,sum+1) {
+            if(arr[0] == s) dp[0][s] = 1;
+            else dp[0][s] = 0;
+        }
+
+        fo(i,1,n){
+            fo(s,1,sum+1) {
+                if(dp[i-1][s] == 1) {
+                    dp[i][s] = dp[i-1][s];
+                }
+                else if( s >= arr[i]) {
+                    dp[i][s] = dp[i-1][s-arr[i]];
+                }
+            }
+        }
+
+
+        if(dp[n-1][sum] == 1) {
+            cnl(1);
+            
+            while(1) {
+				fo(i,0,n) {
+					if(arr[i] % 2 == 1) {
+						cnl(i+1);
+						return 0;
+					}
+				}
+				fo(i,0,n) arr[i] /= 2;
+			}
+        }
+
+        else {
+            cnl(0);
+        }
     
-    cnl(fib(n));
+    
     return 0;
 }

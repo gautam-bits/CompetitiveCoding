@@ -38,6 +38,7 @@
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
     #define endl "\n" 
+    #define EPS 1e-15
     
     
     typedef vector<ll> vi;
@@ -53,38 +54,122 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
+ll k;
 
-vi fi;
-    
-int fib(int n) {
-    if(n <= 2) return 1;
 
-    ll a,b;
 
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
 
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
+// assume a is base
+double area(double a,double b, double c) {
+    double s = (a + b + c)/2;
+    return sqrt(s*(s-a)*(s-b)*(s-c));
 }
+
+double altitude(double a, double b, double c) {  //(a)(b,c)
+    return (2*area(a,b,c))/a;
+}
+
+double hor(double a, double b, double c, double h) {
+    double alt = altitude(a,b,c);
+    
+    return a*((alt-h)/alt);
+}
+
+double area_rect(double a, double b, double c, double h) {
+    return h*hor(a,b,c,h);
+}
+
+double rati(double a, double b, double c, double h) {
+    double alt = altitude(a,b,c);
+
+    double ans = (alt - h)/alt;
+
+    return ans*ans;
+}
+
+
+double func(double a, double b, double c, double h) {
+
+    double rat = rati(a,b,c,h);
+    double ans = area_rect(a,b,c,h);
+
+    double ans2 = 1.0 - pow(rat,k);
+    ans2 /= (1.0 - rat);
+
+    return ans*ans2;
+
+
+}
+
+double deri(double a, double b, double c, double h) {
+    
+    if(h - EPS < 0) {
+        return (func(a,b,c,h+EPS)- func(a,b,c,h))/EPS;
+    }
+
+    else {
+        return (func(a,b,c,h)- func(a,b,c,h-EPS))/EPS;
+    }
+}
+
+
+double bisection(double a,double b,double c, double x,double y) {
+    x += EPS;
+    y -= EPS;
+    double x2 = x;
+
+    while(y - x >= EPS) {
+
+        x2 = (x + y)/2;
+
+        //csp(x);csp(y);cnl(func(a,b,c,x2));
+
+        if(deri(a,b,c,x2) == 0.0) break;
+
+        else if(deri(a,b,c,x2)*deri(a,b,c,x)  > 0.0) {
+            y = x2;
+        }
+        else {
+            x = x2;
+        }
+    }
+
+
+    return x2;
+}
+
+
+    
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+    
+    test(t){     // tno[1..t]
+    
+        ll x,y,z;
 
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
+        read(x);read(y);read(z);read(k);
 
-    int n;
-    cin>>n;
+        deci(8);
+
+        double mx = 0.0;
+
+        mx = max(mx,func(x,y,z,bisection(x,y,z,0.0,altitude(x,y,z))));
+
+        mx = max(mx,func(y,x,z,bisection(y,x,z,0.0,altitude(y,x,z))));
+
+        mx = max(mx,func(z,y,x,bisection(z,y,x,0.0,altitude(z,y,x))));
+
+        //cnl(func(3,4,5,2));
+
+        cnl(mx);
+
+
 
 
     
-    
-    cnl(fib(n));
+    }
     return 0;
 }

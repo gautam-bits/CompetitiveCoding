@@ -52,39 +52,84 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-
-vi fi;
     
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
-}
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
-
-    int n;
-    cin>>n;
-
-
     
+    test(t){     // tno[1..t]
     
-    cnl(fib(n));
+        ll n;
+        read(n);
+
+        vi arr(n);
+        cinarr(n,arr);
+
+        if(n==2) {
+            if(arr[0] == arr[1]) {
+                cnl("YES");
+            }
+            else {
+                cnl("NO");
+            }
+
+            continue;
+        }
+
+        vi suff(n);
+        vi pre(n);
+
+        pre[0] = arr[0];
+        fo(i,1,n) pre[i] = pre[i-1]^arr[i];
+
+        suff[n-1] = arr[n-1];
+        rfo(i,n-2,0) suff[i] = suff[i+1]^arr[i];
+
+        bool poss = 0;
+
+        fo(i,0,n-1) {
+            if(pre[i] == suff[i+1]) {
+                poss = 1;
+                break;
+            }
+        }
+
+        if(poss) {
+            cnl("YES");
+            continue;
+        }
+
+        // poss is 0;
+
+        vvi mid(n,vi (n,-1));
+
+
+        fo(i,1,n-1) {
+            fo(j,i,n-1) {
+                mid[i][j] = pre[j] ^ pre[i-1];
+            }
+        }
+
+
+        fo(i,1,n-1) {
+            fo(j,i,n-1){
+                if(pre[i-1] == mid[i][j] && pre[i-1] == suff[j+1]) {
+                    poss = 1;
+                    break;
+                }
+            }
+        }
+
+        if(poss) {
+            cnl("YES");
+        }
+        else {
+            cnl("NO");
+        }
+        
+    
+    }
     return 0;
 }

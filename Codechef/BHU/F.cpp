@@ -52,39 +52,71 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-
-vi fi;
     
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
-}
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+    
+    test(t){     // tno[1..t]
+    
+        ll k,n,l,r;
+        read(k);
+        read(n);
+        read(l);
+        read(r);
 
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
 
-    int n;
-    cin>>n;
+        vvi arrays(k,vi (n));
 
+        fo(i,0,k) {
+            fo(j,0,n) read(arrays[i][j]);
+            sort(all(arrays[i]));
+        }
+
+
+        ll lo = -20;
+        ll hi = n + 25;
+        ll mid;
+
+        while(hi - lo > 1) {
+            mid = (lo + hi )/2;  // this many no of operation 
+
+            ll up = -1e17;
+            ll bt = 1e17;
+
+            fo(i,0,k) {
+                ll sum = 0;
+                fo(j,0,n) sum += arrays[i][j];
+
+                ll le = sum;
+                ll re = sum;
+
+                assert(mid >= 0 && mid <= n);
+
+                fo(j,0,mid) le += l - arrays[i][n - j - 1];
+                fo(j,0,mid) re += r - arrays[i][j];
+
+                up = max(le,up);
+                bt = min(re,bt);
+
+
+            }
+
+            if(up <= bt) {
+                hi = mid;
+            }
+
+            else {
+                lo = mid;
+            }
+
+        }
+
+        cnl(hi);
 
     
-    
-    cnl(fib(n));
+    }
     return 0;
 }

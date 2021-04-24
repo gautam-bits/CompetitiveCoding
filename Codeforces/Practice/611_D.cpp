@@ -52,39 +52,60 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-
-vi fi;
     
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
-}
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
-
-    int n;
-    cin>>n;
-
-
     
-    
-    cnl(fib(n));
+    ll n,m;
+    read(n);
+    read(m);
+
+    queue<pi> qu;
+    set<ll> visited;
+
+    ll temp;
+
+    fo(i,0,n) {
+        read(temp);
+        qu.push({temp,0});
+        visited.insert(temp);
+    }
+
+    ll ans = 0;
+    ll cnt = 0;
+    vi arr;
+
+    while(cnt < m) {
+        pi curr = qu.front();
+        qu.pop();
+
+        if(visited.find(curr.F + 1) == visited.end()) {
+            cnt++;
+            arr.pb(curr.F + 1);
+            visited.insert(curr.F + 1);
+            qu.push({curr.F + 1,curr.S + 1});
+            ans += curr.S + 1;
+
+            if(cnt == m) break;
+        }
+        if(visited.find(curr.F - 1) == visited.end()) {
+            cnt++;
+            arr.pb(curr.F - 1);
+            visited.insert(curr.F - 1);
+            qu.push({curr.F - 1,curr.S + 1});
+            ans += curr.S + 1;
+
+            if(cnt == m) break;
+        }
+
+    }
+    cnl(ans);
+    vshow1d(arr);
+
+
+
     return 0;
 }

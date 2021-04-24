@@ -52,39 +52,35 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-
-vi fi;
     
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
-}
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
-
-    int n;
-    cin>>n;
-
-
     
+    test(t){     // tno[1..t]
     
-    cnl(fib(n));
+        ll n;
+        read(n);
+
+        deci(9);
+
+        double degree = 180.0/n;
+        //cnl(degree);
+        double theta = degree*3.1415926535/180.0;
+
+        double ratio = cos(theta)*cos(theta);
+
+        ratio = 1.0/ratio;
+
+        //cnl(cos(theta));
+
+
+        double ans = 1.0 + (((double) 1)/ (ratio - 1));
+
+        cnl(ans);
+    
+    }
     return 0;
 }

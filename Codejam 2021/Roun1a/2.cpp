@@ -52,39 +52,51 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-
-vi fi;
     
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
-}
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
-
-    int n;
-    cin>>n;
-
-
     
+    test(t){     // tno[1..t]
     
-    cnl(fib(n));
+        ll m;
+        read(m);
+
+        ll a,b;
+        vi arr;
+
+        fo(i,0,m) {
+            read(a);
+            read(b);
+            fo(j,0,b) arr.pb(a);
+        }
+
+        ll n = arr.size();
+
+        ll ans = 0;
+
+        fo(i,1,(1<<n) - 1) {
+            
+            ll t_i = i;
+            ll t_i1 = i;
+
+            ll t_sum = 0;
+            ll t_prod = 1;
+
+            fo(j,0,n){
+                if(t_i & 1) t_sum += arr[j];
+                else t_prod *= arr[j];
+
+                t_i >>= 1;
+            }
+
+            if(t_sum == t_prod) ans = max(ans,t_prod);
+            
+        }
+        cout<<"Case #"<<tno<<": "<<ans<<endl;
+    
+    }
     return 0;
 }

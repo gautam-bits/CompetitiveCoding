@@ -46,45 +46,119 @@
     typedef vector<vi> vvi;
 
     const int MOD   = 1000000007 ;
-    const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
+
+    const ll INF = 1e10;
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
 
-vi fi;
-    
-int fib(int n) {
-    if(n <= 2) return 1;
+vvi dp;
+vector<vpi> adjList;
 
-    ll a,b;
+ll N,M,K;
 
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
+ll calculate(ll node,ll k) {
+    if(k == 0){
+        dp[node][k] = 0;
+        return 0;
+    }
 
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
+    if(dp[node][k] != INF) return dp[node][k];
 
-    fi[n] = a + b;
-    return fi[n];
+    ll nn = node - M;
+    ll ss = node + M;
+    ll ee = node + 1;
+    ll ww = node - 1;
+
+    ll ans = INF;
+
+    for(pi x : adjList[node]) {
+        if(dp[x.F][k-1] != INF) {
+            ans = min(ans,dp[x.F][k-1] + x.S);
+        }
+        else {
+            ll te = calculate(x.F,k-1);
+            dp[x.F][k-1] = te;
+            ans = min(ans,dp[x.F][k-1] + x.S);
+        }
+    }
+
+    return ans;
 }
+
+    
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+    
 
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
+    read(N);
+    read(M);
+    read(K);
 
-    int n;
-    cin>>n;
+    
+    adjList.clear();
+    adjList.resize(N*M);
+
+    dp.clear();
+
+    dp.assign(N*M,vi(K+1,INF));
+
+
+    fo(i,0,N){
+        fo(j,0,M-1){
+            ll x = j + i*M;
+            ll y = x + 1;
+            ll val;
+            read(val);
+            adjList[x].pb({y,val});
+            adjList[y].pb({x,val});
+        }
+    }
+
+    fo(i,0,N-1){
+        fo(j,0,M){
+            ll x = j + i*M;
+            ll y = x + M;
+            ll val;
+            read(val);
+            adjList[x].pb({y,val});
+            adjList[y].pb({x,val});
+        }
+    }
+
+    if(K%2 == 1) {
+        
+        fo(i,0,N){
+            fo(j,0,M) {
+                csp(-1);
+            }
+            cnl("");
+        }
+
+        return 0;
+    }
+
+    fo(i,0,N){
+        fo(j,0,M) {
+            ll temp = calculate(j + i*M,K/2);
+            temp *=2;
+            csp(temp);
+        }
+        cnl("");
+    }
+
+
+
+    
 
 
     
     
-    cnl(fib(n));
     return 0;
 }

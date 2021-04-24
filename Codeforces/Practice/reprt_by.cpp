@@ -52,39 +52,114 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+vi parent ;
+vi rank_element;
+vi sz_set;
+ll noOfDisSets;
 
-
-vi fi;
-    
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
+ll findSet(ll i) {              // find the representative element of i in the forest
+    if(i == parent[i]) {
+        return i;
+    }
+    parent[i] = findSet(parent[i]);
+    return parent[i];
 }
+
+bool isSameSet(ll i,ll j){
+    return findSet(i) == findSet(j);
+}
+
+void unionSet(ll i, ll j) {    // merging sets containing i and j
+    if(!isSameSet(i,j)) {
+        ll x = findSet(i);
+        ll y = findSet(j);
+
+        noOfDisSets--; // if we are merging 2 different sets
+
+        if(rank_element[x] > rank_element[y]){
+            parent[y] = x;
+            sz_set[x] += sz_set[y];  //increasing the size
+        }
+        else {
+            parent[x] = y;
+            sz_set[y] += sz_set[x];  //increasing the size
+            if(rank_element[x] == rank_element[y]) rank_element[y]++;
+        }
+
+    }
+}
+
+ll sizeOfSet(ll i) {    // returns size of set that currently contains i
+    ll x = findSet(i);
+    return sz_set[x];
+}
+
+ll noOfDisjointSets() {
+    return noOfDisSets;
+}
+
+
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
+    
+        ll n,x,y;
+        read(n);
+        read(x);
+        read(y);
 
-    int n;
-    cin>>n;
+        parent.assign(n,0);
+        rank_element.assign(n,0);
+        sz_set.assign(n,1);
+        noOfDisSets = n;
+        fo(i,0,n)parent[i] = i;
+
+
+        vpi arr1(x);
+        vpi arr2(y);
+
+        ll ff,jj;
+
+        fo(i,0,x) {
+            read(ff);
+            read(jj);
+            ff--;
+            jj--;
+
+            arr1[i] = {min(ff,jj),max(ff,jj)};
+        }
+
+        fo(i,0,y) {
+            read(ff);
+            read(jj);
+
+            ff--;
+            jj--;
+
+            arr2[i] = {min(ff,jj),max(ff,jj)};
+        }
+
+        sort(all(arr1));
+        sort(all(arr2));
+
+
+        fo(i,0,x){
+            if(binary_search(all(arr2),arr1[i])) {
+                unionSet(arr1[i].F,arr1[i].S);
+            }
+
+
+        }
+
+        fo(i,0,n) csp(sizeOfSet(i));
+
+        cnl("");
 
 
     
     
-    cnl(fib(n));
     return 0;
 }

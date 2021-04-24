@@ -31,7 +31,7 @@
 
     #define vshow1d(arr) {ll n = arr.size(); fo(i,0,n) {csp(arr[i]);}cout<<endl;}
     #define show1d(n,arr) fo(i,0,n) {csp(arr[i]);}cout<<endl;
-    #define vshow2d(arr) {ll n=arr.size();   fo(i,0,n) {ll m = arr[i].size(); fo(j,0,m) csp(arr[i][j]); cout << endl;}}
+    #define vshow2d(arr) {ll n=arr.size();   fo(ii,0,n) {ll m = arr[ii].size(); fo(jj,0,m) csp(arr[ii][jj]); cout << endl;}}
     #define show2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) csp(arr[i][j]); cout << endl;}}
     
     #define mem( a, val ) memset(a, val, sizeof( a ) )
@@ -52,39 +52,65 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-
-vi fi;
     
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
-}
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
-
-    int n;
-    cin>>n;
-
+    
+    ll n,k;
+    read(n);
+    read(k);
 
     
-    
-    cnl(fib(n));
+    vvi help(k, vi(k,0));
+    vi count(k,0);
+
+    vi arr(n,0); // 0 is 'a';
+
+
+    ll mst = 0;
+    fo(i,1,n) {
+        //ll idx = min_element(all(help[arr[i-1]])) - help[arr[i-1]].begin();
+
+        ll idx = -1;
+        ll mn = 1e15;
+        ll cn = 1e15;
+
+        fo(j,0,k) {
+            if(help[arr[i-1]][j] <= mn && count[j] != k) {
+                mn = help[arr[i-1]][j];
+                idx = j;
+            }
+        }
+
+        help[arr[i-1]][idx] ++;
+        count[arr[i-1]]++;
+        arr[i] = idx;
+
+
+        mst++;
+
+        
+
+        if(mst == k*k) {
+
+            
+            // vshow2d(help);
+            // cnl("");
+            fo(j,0,k) count[j] = 0;
+            mst = 0;
+        }
+        
+    }
+
+    //vshow1d(arr);
+
+    fo(i,0,n)cout<<(char)('a' + arr[i]);
+    cout<<endl;
+
+
+
     return 0;
 }

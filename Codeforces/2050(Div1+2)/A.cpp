@@ -52,39 +52,55 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-
-vi fi;
     
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
-}
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
-
-    int n;
-    cin>>n;
-
+    vi arr;
 
     
+
+    fo(i,0,16) {
+        ll temp = 2050;
+        fo(j,0,i) temp *= 10;
+        arr.pb(temp);
+    }
+    //vshow1d(arr);
     
-    cnl(fib(n));
+    test(t){     // tno[1..t]
+    
+        ll n;
+        read(n);
+
+        ll ans = 0;
+
+        //cnl(n);
+        while(n > 0) {
+            auto itr = upper_bound(all(arr),n);
+
+            if(itr == arr.begin()) break;
+
+            itr--;
+
+            n -= *itr;
+
+            //csp(n);cnl(*itr);
+
+            ans++;
+        }
+
+        if(n > 0) {
+            cnl(-1);
+        }
+
+        else {
+            cnl(ans);
+        }
+
+    
+    }
     return 0;
 }

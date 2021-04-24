@@ -53,38 +53,96 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
+bool issquare(ll x) {
+    if(x <= 1) return 1;
+    ll a1 = (ll)sqrt(x);
+    ll a2 = (ll)sqrt(x-1);
 
-vi fi;
-    
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
+    return a1 != a2;
 }
+    
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+    
+    test(t){     // tno[1..t]
+    
+        ll n;
 
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
+        ll x,y;
+        read(x);  //even
+        read(y);  //odd
 
-    int n;
-    cin>>n;
+        n = (ll)sqrt(x+y);
+
+        if(x + y != n*n) {
+            cnl("NO");
+            //cnl(1);
+            continue;
+        }
+
+        ll a,b;
+
+        ll temp = n*n - 2*y;
+        //cnl(temp);
+
+        if(!issquare(temp)) {
+            cnl("NO");
+            //cnl(2);
+            continue;
+        }
+
+        b = n - (ll)sqrt(temp);
+
+        if(b%2 == 1) {
+            cnl("NO");
+            //cnl(3);
+            continue;
+        }
+
+        b /= 2;
+
+        a = n - 1 - b;
+
+        // cnl(a);
+        // cnl(b);
+
+        if(a*a + b*b + 2*a + 1 != x) {
+            cnl("NO");
+            //cnl(4);
+            continue;
+        }
+
+        cnl("YES");
+
+        assert(b > 0);
+
+        cnl(n);
+
+        assert(n > 1);
+
+        ll cnt = 2;
+
+        fo(i,0,b) {
+            csp(1);cnl(cnt);
+            cnt++;
+        }
+
+        fo(i,0,a) {
+            csp(2);cnl(cnt);
+            cnt++;
+        }
+
+
+
+
+
+
 
 
     
-    
-    cnl(fib(n));
+    }
     return 0;
 }

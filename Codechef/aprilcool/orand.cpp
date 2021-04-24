@@ -29,7 +29,7 @@
     #define rfo(i,b,a) for(int i=b;i>=a;i--)
     #define test(t) ll t; cin >> t; fo(tno,1,t+1)
 
-    #define vshow1d(arr) {ll n = arr.size(); fo(i,0,n) {csp(arr[i]);}cout<<endl;}
+    #define vshow1d(arr) {ll n = arr.size(); fo(ii,0,n) {csp(arr[ii]);}cout<<endl;}
     #define show1d(n,arr) fo(i,0,n) {csp(arr[i]);}cout<<endl;
     #define vshow2d(arr) {ll n=arr.size();   fo(i,0,n) {ll m = arr[i].size(); fo(j,0,m) csp(arr[i][j]); cout << endl;}}
     #define show2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) csp(arr[i][j]); cout << endl;}}
@@ -52,39 +52,83 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-
-vi fi;
     
-int fib(int n) {
-    if(n <= 2) return 1;
-
-    ll a,b;
-
-    if(fi[n-1] != -1) a = fi[n-1];
-    else a = fib(n-1);
-
-    if(fi[n-2] != -1) b = fi[n-2];
-    else b = fib(n-2);
-
-    fi[n] = a + b;
-    return fi[n];
-}
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
-    fi.assign(4000,-1);
-    fi[1]=fi[2]=1;
-
-    int n;
-    cin>>n;
-
-
     
+    test(t){     // tno[1..t]
     
-    cnl(fib(n));
+        ll n;
+        ll q;
+        read(n);
+        read(q);
+
+        vi arr(n);
+
+        cinarr(n,arr);
+
+        vi count(35,0);
+
+        fo(i,0,n) {
+            ll temp = arr[i];
+
+            ll idx = 0;
+
+            while(temp > 0) {
+                if(temp&1) count[idx]++;
+                temp >>= 1;
+                idx++;
+            }
+        }
+
+        //vshow1d(count);
+
+        ll ans = 0;
+
+        fo(i,0,n) ans |= arr[i];
+
+        cnl(ans);
+
+        fo(i,0,q) {
+            ll x,v;
+            read(x);
+            read(v);
+
+            x--;
+
+            ll temp = arr[x];
+
+            ll idx = 0;
+
+            while(temp > 0) {
+                if(temp&1) count[idx]--;
+                temp >>= 1;
+                idx++;
+            }
+
+            //vshow1d(count);
+
+            arr[x] = v;
+
+            temp = arr[x];
+            idx = 0;
+
+            while(temp > 0) {
+                if(temp&1) count[idx]++;
+                temp >>= 1;
+                idx++;
+            }
+            ll a2 = 0;
+            fo(j,0,33) if(count[j] > 0){
+                a2 += (1<<j);
+            }
+
+            cnl(a2);
+        }
+    
+    }
     return 0;
 }
