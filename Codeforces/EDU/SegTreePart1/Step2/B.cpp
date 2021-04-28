@@ -58,10 +58,10 @@
 struct data
 {
 	//Use required attributes
-	ll mn;
+	ll sum;
 
 	//Default Values
-	data() : mn(1e9) {};
+	data() : sum(0) {};
 };
 
 struct SegTree
@@ -84,7 +84,7 @@ struct SegTree
 	//Write reqd merge functions
 	void merge(data &cur, data &l, data &r) 
 	{
-		cur.mn = min(l.mn, r.mn);
+		cur.sum = l.sum + r.sum;
 	}
 	
 	//Handle lazy propagation appriopriately
@@ -97,7 +97,7 @@ struct SegTree
 			lazy[node*2] = lazy[node];
 			lazy[node*2 + 1] = lazy[node]; 
 		}
-		st[node].mn = lazy[node];
+		st[node].sum = lazy[node];
 		cLazy[node] = 0;
 	}
 
@@ -105,7 +105,7 @@ struct SegTree
 	{
 		if(L==R)
 		{
-			st[node].mn = array[L];
+			st[node].sum = array[L];
 			return;
 		}
 		ll M=(L + R)/2;
@@ -129,6 +129,27 @@ struct SegTree
 		merge(cur, left, right);
 		return cur;
 	}
+
+    ll find(ll node,ll L,ll R,ll k) {
+
+        //csp(L);cnl(R);
+
+        if(cLazy[node])
+			propagate(node, L, R);
+
+        if(L == R) {
+            return L;
+        }
+
+        ll M = (L + R)/2;
+        ll lsum = st[2*node].sum;
+        //csp(lsum);cnl(k+1);
+        if(lsum < k+1) {
+            return find(node*2+1,M+1,R,k-lsum);
+        }
+
+        else return find(node*2,L,M,k);
+    }
 
 	data pQuery(ll node, ll L, ll R, ll pos)
 	{
@@ -207,15 +228,53 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
     
-        ll n;
+        ll n,m;
         read(n);
+        read(m);
+
+        vi arr(n+1);
+
+        fo(i,1,n+1) read(arr[i]);
+        
 
 		//init
 		//build
-        
+
+        SegTree myseg;
+        myseg.init(n,arr);
+        myseg.build(1,1,n);
+
+        //cnl(m);
+
+        fo(i,0,m) {
+            ll a,b;
+            read(a);
+            read(b);
+
+            if(a == 1) {
+                b++;
+                if(myseg.array[b] == 1) {
+                    myseg.array[b] = 0;
+                    myseg.update(b,0);
+                }
+
+                else {
+                    myseg.array[b] = 1;
+                    myseg.update(b,1);
+                }
+            }
+
+            else {
+
+                //fo(j,1,4*n) csp(myseg.st[j].sum);
+                //cnl("");
+                cnl(myseg.find(1,1,n,b)-1);
+                //cnl("yo");
+            }
+        }
+         
     
-    }
+    
     return 0;
 }

@@ -58,10 +58,13 @@
 struct data
 {
 	//Use required attributes
-	ll mn;
+	ll sum; //sum of whole segmet
+    ll pref; //prefix maximum
+    ll suff; //suffix maximum
+    ll seg; //maximum subsegmetsum 
 
 	//Default Values
-	data() : mn(1e9) {};
+	data() : sum(0),pref(0),suff(0),seg(0) {};
 };
 
 struct SegTree
@@ -84,7 +87,12 @@ struct SegTree
 	//Write reqd merge functions
 	void merge(data &cur, data &l, data &r) 
 	{
-		cur.mn = min(l.mn, r.mn);
+		cur.sum = l.sum + r.sum;
+        cur.pref = max(l.pref,l.sum + r.pref);
+        cur.suff = max(r.suff,r.sum + l.suff);
+        cur.seg = max(l.suff+r.pref,max(l.seg,r.seg));
+
+
 	}
 	
 	//Handle lazy propagation appriopriately
@@ -97,7 +105,11 @@ struct SegTree
 			lazy[node*2] = lazy[node];
 			lazy[node*2 + 1] = lazy[node]; 
 		}
-		st[node].mn = lazy[node];
+		st[node].sum = lazy[node];
+        st[node].pref = max((ll)0,lazy[node]);
+        st[node].suff = max((ll)0,lazy[node]);
+        st[node].seg = max((ll)0,lazy[node]);
+
 		cLazy[node] = 0;
 	}
 
@@ -105,7 +117,10 @@ struct SegTree
 	{
 		if(L==R)
 		{
-			st[node].mn = array[L];
+			st[node].sum = array[L];
+            st[node].pref = max(st[node].pref,array[L]);
+            st[node].suff = max(st[node].suff,array[L]);
+            st[node].seg = max(st[node].seg,array[L]);
 			return;
 		}
 		ll M=(L + R)/2;
@@ -206,16 +221,40 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
     
-    test(t){     // tno[1..t]
-    
-        ll n;
+        ll n,m;
         read(n);
+        read(m);
+        vi arr(n+1);
+
+        fo(i,1,n+1) read(arr[i]);
+
 
 		//init
 		//build
+
+        SegTree myseg;
+        myseg.init(n,arr);
+        myseg.build(1,1,n);
+
+        cnl(myseg.query(1,n).seg);
+
+        fo(i,0,m) {
+            ll a,b;
+            read(a);
+            read(b);
+
+            a++;
+
+
+            
+            myseg.update(a,b);
+
+            cnl(myseg.query(1,n).seg);
+        }
         
     
-    }
+    
     return 0;
 }

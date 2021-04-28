@@ -57,34 +57,62 @@
 
 struct data
 {
-	//Use required attributes
-	ll mn;
+	ll mat_00;
+    ll mat_01;
+    ll mat_10;
+    ll mat_11;
 
-	//Default Values
-	data() : mn(1e9) {};
+    data() : mat_00(1),mat_01(0),mat_10(0),mat_11(1) {};
 };
+
+void printmat(data mat) {
+    csp(mat.mat_00);cnl(mat.mat_01);
+    csp(mat.mat_10);cnl(mat.mat_11);
+    cnl("");
+
+}
+
+void readmat(data& mat) {
+    read(mat.mat_00);
+    read(mat.mat_01);
+    read(mat.mat_10);
+    read(mat.mat_11);
+}
+
+// note matmul is not commutative
+data matmul(data& mat1,data& mat2,ll mod) {
+    data result;
+    result.mat_00 = ((mat1.mat_00*mat2.mat_00)%mod + (mat1.mat_01*mat2.mat_10)%mod)%mod;
+    result.mat_01 = ((mat1.mat_00*mat2.mat_01)%mod + (mat1.mat_01*mat2.mat_11)%mod)%mod;
+    result.mat_10 = ((mat1.mat_10*mat2.mat_00)%mod + (mat1.mat_11*mat2.mat_10)%mod)%mod;
+    result.mat_11 = ((mat1.mat_10*mat2.mat_01)%mod + (mat1.mat_11*mat2.mat_11)%mod)%mod;
+
+    return result;
+}
 
 struct SegTree
 {
 	ll N;
+    ll mod;
 	vector<data> st;
 	vector<bool> cLazy;
-	vector<ll> lazy;
-	vector<ll> array;
+	vector<data> lazy;
+	vector<data> array;
 
-	void init(ll n,vector<ll> arr)
+	void init(ll n,ll md,vector<data> arr)
 	{
 		N = n;
 		array = arr;
+        mod =md;
 		st.resize(4 * N + 5);
 		cLazy.assign(4 * N + 5, false);
-		lazy.assign(4 * N + 5, 0);
+		lazy.assign(4 * N + 5, data());
 	}
 
 	//Write reqd merge functions
 	void merge(data &cur, data &l, data &r) 
 	{
-		cur.mn = min(l.mn, r.mn);
+		cur = matmul(l,r,mod);
 	}
 	
 	//Handle lazy propagation appriopriately
@@ -97,7 +125,7 @@ struct SegTree
 			lazy[node*2] = lazy[node];
 			lazy[node*2 + 1] = lazy[node]; 
 		}
-		st[node].mn = lazy[node];
+		st[node] = lazy[node];
 		cLazy[node] = 0;
 	}
 
@@ -105,7 +133,7 @@ struct SegTree
 	{
 		if(L==R)
 		{
-			st[node].mn = array[L];
+			st[node] = array[L];
 			return;
 		}
 		ll M=(L + R)/2;
@@ -143,7 +171,7 @@ struct SegTree
 			return pQuery(node*2 + 1, M + 1, R, pos);
 	}	
 
-	void Update(ll node, ll L, ll R, ll i, ll j, ll val)
+	void Update(ll node, ll L, ll R, ll i, ll j, data val)
 	{
 		if(cLazy[node])
 			propagate(node, L, R);
@@ -162,7 +190,7 @@ struct SegTree
 		merge(st[node], st[node*2], st[node*2 + 1]);
 	}
 
-	void pUpdate(ll node, ll L, ll R, ll pos, ll val)
+	void pUpdate(ll node, ll L, ll R, ll pos, data val)
 	{
 		if(cLazy[node])
 			propagate(node, L, R);
@@ -191,31 +219,56 @@ struct SegTree
 		return Query(1, 1, N, l, r);
 	}
 
-	void update(ll pos, ll val)
+	void update(ll pos, data val)
 	{
 		pUpdate(1, 1, N, pos, val);
 	}
 
-	void update(ll l, ll r, ll val)
+	void update(ll l, ll r, data val)
 	{
 		Update(1, 1, N, l, r, val);
 	}
 };
+
+
+
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
 
-		//init
-		//build
+    
+    ll r,n,m;
+    read(r);
+    read(n);
+    read(m);
+
+    vector<data> arr(n+1);
+
+    fo(i,1,n+1) readmat(arr[i]);
+
+    //init
+    //build
+
+    SegTree myseg;
+    myseg.init(n,r,arr);
+    myseg.build(1,1,n);
+
+    //printmat(matmul(arr[1],arr[2],20));
+
+    //fo(i,1,4*n+1) printmat(myseg.st[i]);
+
+    fo(i,0,m) {
+        ll a,b;
+        read(a);
+        read(b);
+
+        printmat(myseg.query(a,b));
+    }
         
     
-    }
+    
     return 0;
 }

@@ -58,10 +58,10 @@
 struct data
 {
 	//Use required attributes
-	ll mn;
+	ll sum;
 
 	//Default Values
-	data() : mn(1e9) {};
+	data() : sum(0) {};
 };
 
 struct SegTree
@@ -84,7 +84,7 @@ struct SegTree
 	//Write reqd merge functions
 	void merge(data &cur, data &l, data &r) 
 	{
-		cur.mn = min(l.mn, r.mn);
+		cur.sum = l.sum + r.sum;
 	}
 	
 	//Handle lazy propagation appriopriately
@@ -97,7 +97,9 @@ struct SegTree
 			lazy[node*2] = lazy[node];
 			lazy[node*2 + 1] = lazy[node]; 
 		}
-		st[node].mn = lazy[node];
+
+		if(L&1) st[node].sum = -lazy[node];
+        else st[node].sum = lazy[node];
 		cLazy[node] = 0;
 	}
 
@@ -105,7 +107,8 @@ struct SegTree
 	{
 		if(L==R)
 		{
-			st[node].mn = array[L];
+			if(L&1)st[node].sum = -array[L];
+            else st[node].sum = array[L];
 			return;
 		}
 		ll M=(L + R)/2;
@@ -206,16 +209,43 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
 
-		//init
-		//build
+    
+    ll n;
+    read(n);
+
+    vi arr(n+1);
+    fo(i,1,n+1) read(arr[i]);
+
+    //init
+    //build
+
+    SegTree myseg;
+
+    myseg.init(n,arr);
+    myseg.build(1,1,n);
+
+
+    ll m;
+
+    read(m);
+
+    fo(i,0,m){
+        ll a,b,c;
+        read(a);
+        read(b);
+        read(c);
+
+        if(a == 0) {
+            myseg.update(b,c);
+        }
+        else {
+            if(b&1)cnl(-myseg.query(b,c).sum);
+            else cnl(myseg.query(b,c).sum);
+        }
+    }
         
     
-    }
+    
     return 0;
 }

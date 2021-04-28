@@ -61,7 +61,7 @@ struct data
 	ll mn;
 
 	//Default Values
-	data() : mn(1e9) {};
+	data() : mn(0) {};
 };
 
 struct SegTree
@@ -70,12 +70,12 @@ struct SegTree
 	vector<data> st;
 	vector<bool> cLazy;
 	vector<ll> lazy;
-	vector<ll> array;
+    vector<data> array;
 
-	void init(ll n,vector<ll> arr)
+	void init(ll n,vector<data> arr)
 	{
 		N = n;
-		array = arr;
+        array = arr;
 		st.resize(4 * N + 5);
 		cLazy.assign(4 * N + 5, false);
 		lazy.assign(4 * N + 5, 0);
@@ -84,7 +84,7 @@ struct SegTree
 	//Write reqd merge functions
 	void merge(data &cur, data &l, data &r) 
 	{
-		cur.mn = min(l.mn, r.mn);
+		cur.mn = l.mn +  r.mn;
 	}
 	
 	//Handle lazy propagation appriopriately
@@ -105,7 +105,7 @@ struct SegTree
 	{
 		if(L==R)
 		{
-			st[node].mn = array[L];
+			st[node].mn = array[L].mn;
 			return;
 		}
 		ll M=(L + R)/2;
@@ -207,15 +207,46 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
+    ll n,m;
+    read(n);
+    read(m);
 
-		//init
-		//build
-        
+    vector<data> arr(n+1);
+
+    fo(i,1,n+1) read(arr[i].mn);
+
+    SegTree myseg;
+    myseg.init(n,arr);
+
+    myseg.build(1,1,n);
+
     
+    //myseg.update(1,-4);
+
+    //cnl(myseg.query(1,3).mn);
+
+    fo(i,0,m) {
+        ll idx;
+        ll a;
+        ll b;
+        read(idx);
+        read(a);
+        read(b);
+
+        //sp(idx);csp(a);cnl(b);
+
+        if(idx == 1) {
+            //cnl("tp");
+            a++;
+            myseg.update(a,b);
+        }
+        else{
+            a++;
+            b;
+            cnl(myseg.query(a,b).mn);
+        }
     }
+
+
     return 0;
 }

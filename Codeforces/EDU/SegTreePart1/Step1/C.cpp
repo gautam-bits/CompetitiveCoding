@@ -58,10 +58,12 @@
 struct data
 {
 	//Use required attributes
-	ll mn;
+	ll mn;  // min value
+    ll cnt; //count of min value
+
 
 	//Default Values
-	data() : mn(1e9) {};
+	data() : mn(1e9),cnt(1) {};
 };
 
 struct SegTree
@@ -84,7 +86,19 @@ struct SegTree
 	//Write reqd merge functions
 	void merge(data &cur, data &l, data &r) 
 	{
-		cur.mn = min(l.mn, r.mn);
+		if(l.mn > r.mn) {
+            cur.mn = r.mn;
+            cur.cnt = r.cnt;
+        }
+        else if(r.mn > l.mn) {
+            cur.mn = l.mn;
+            cur.cnt = l.cnt;
+        }
+
+        else{
+            cur.mn = l.mn;
+            cur.cnt = l.cnt + r.cnt;
+        }
 	}
 	
 	//Handle lazy propagation appriopriately
@@ -207,15 +221,45 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
     
         ll n;
+        ll m;
         read(n);
+        read(m);
+
+        vi arr(n+1);
+
+        fo(i,1,n+1) read(arr[i]); 
 
 		//init
 		//build
+
+        SegTree myseg;
+
+        myseg.init(n,arr);
+        myseg.build(1,1,n);
+
+        //cnl(myseg.query(1,n).mn);
+
+        fo(i,0,m){
+            ll a,b,c;
+            read(a);
+            read(b);
+            read(c);
+            b++;
+
+            if(a == 1) {
+                myseg.array[b] = c;
+                myseg.update(b,c);
+            }
+            else{
+                csp(myseg.query(b,c).mn);cnl(myseg.query(b,c).cnt);
+            }
+        }
+
+
         
     
-    }
+    
     return 0;
 }

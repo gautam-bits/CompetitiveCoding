@@ -58,10 +58,10 @@
 struct data
 {
 	//Use required attributes
-	ll mn;
+	ll max;
 
 	//Default Values
-	data() : mn(1e9) {};
+	data() : max(0) {};
 };
 
 struct SegTree
@@ -84,7 +84,7 @@ struct SegTree
 	//Write reqd merge functions
 	void merge(data &cur, data &l, data &r) 
 	{
-		cur.mn = min(l.mn, r.mn);
+		cur.max = max(l.max,r.max);
 	}
 	
 	//Handle lazy propagation appriopriately
@@ -97,7 +97,7 @@ struct SegTree
 			lazy[node*2] = lazy[node];
 			lazy[node*2 + 1] = lazy[node]; 
 		}
-		st[node].mn = lazy[node];
+		st[node].max = lazy[node];
 		cLazy[node] = 0;
 	}
 
@@ -105,7 +105,7 @@ struct SegTree
 	{
 		if(L==R)
 		{
-			st[node].mn = array[L];
+			st[node].max = array[L];
 			return;
 		}
 		ll M=(L + R)/2;
@@ -129,6 +129,35 @@ struct SegTree
 		merge(cur, left, right);
 		return cur;
 	}
+
+    ll find(ll node,ll L,ll R,ll x,ll i) {
+
+        //csp(L);cnl(R);
+
+        if(cLazy[node])
+			propagate(node, L, R);
+
+
+
+        if(L == R) {
+            if(L >= i && st[node].max >= x) return L;
+            else return 0;
+        }
+
+        ll M = (L + R)/2;
+        ll lmax = st[2*node].max;
+
+        ll idx = 0;
+        //(lsum);cnl(k+1);
+        if(lmax >= x && R >= i) {
+            idx = find(node*2,L,M,x,i);
+            //cout<<idx<<endl;
+            if(idx != 0 ) return idx;
+        }
+        //if(node == 1) cnl("yo");
+        return find(node*2 + 1,M+1,R,x,i);
+        
+    }
 
 	data pQuery(ll node, ll L, ll R, ll pos)
 	{
@@ -207,15 +236,47 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
     
-        ll n;
+        ll n,m;
         read(n);
+        read(m);
+
+        vi arr(n+1);
+
+        fo(i,1,n+1) read(arr[i]);
+        
 
 		//init
 		//build
-        
+
+        SegTree myseg;
+        myseg.init(n,arr);
+        myseg.build(1,1,n);
+
+        //cnl(m);
+
+        fo(i,0,m) {
+            ll a,b,c;
+            read(a);
+            read(b);
+            read(c);
+
+            if(a == 1) {
+                b++;
+                myseg.update(b,c);
+            }
+
+            else {
+
+                if(myseg.query(c+1,n).max < b) cnl(-1);
+                //fo(j,1,4*n) csp(myseg.st[j].sum);
+                //cnl("");
+                else cnl(myseg.find(1,1,n,b,c+1)-1);
+                //cnl("yo");
+            }
+        }
+         
     
-    }
+    
     return 0;
 }

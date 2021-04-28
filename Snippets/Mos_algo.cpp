@@ -15,6 +15,8 @@ int BLOCK_SIZE;
 int arr[100500];
 
 
+
+
 pair< pair<int, int>, int> queries[100500];
 
 bool mo_cmp(const pair< pair<int, int>, int> &x,
