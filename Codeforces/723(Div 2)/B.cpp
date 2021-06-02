@@ -58,27 +58,36 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
+
     
     test(t){     // tno[1..t]
     
         ll n;
         read(n);
 
-        vi arr(n);
-        cinarr(n,arr);
+        
+        bool poss = 0;
 
-        map<ll,ll> mp;
+        fo(i,0,1001){
+            ll te = n - i*111;
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+            if(te >= 0 && te % 11 == 0){
+                poss = 1;
+                break;
+            }
         }
 
-        ll ans = 0;
+
+        if(poss) {
+            cnl("YES");
+        }
+
+        else {
+            cnl("NO");
+        }
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
     
     }
     return 0;

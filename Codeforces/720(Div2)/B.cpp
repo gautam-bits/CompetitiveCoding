@@ -67,18 +67,17 @@ int main()
         vi arr(n);
         cinarr(n,arr);
 
-        map<ll,ll> mp;
+        ll idx = min_element(all(arr)) - arr.begin();
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+        cnl(n-1);
+
+        fo(i,idx+1,n){
+            csp(idx+1);csp(i+1);csp(arr[idx]);cnl(arr[idx]+i-idx);
         }
 
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
+        rfo(i,idx-1,0){
+            csp(i+1);csp(idx+1);csp(arr[idx]+idx-i);cnl(arr[idx]);
+        }
     
     }
     return 0;

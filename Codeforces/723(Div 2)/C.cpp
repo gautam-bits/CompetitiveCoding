@@ -59,27 +59,46 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
     
         ll n;
         read(n);
 
-        vi arr(n);
+        vi arr(n,0);
+
         cinarr(n,arr);
 
-        map<ll,ll> mp;
+        vpi dp(n,{0,0});
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+
+
+        if(arr[0] >= 0){
+            dp[0].F = 1;
+            dp[0].S = arr[0];
+        } 
+
+
+        fo(i,1,n){
+            fo(j,0,i){
+                if(dp[j].S + arr[i] >= 0){
+                    if(dp[j].F + 1 > dp[i].F){
+                        dp[i].F = dp[j].F + 1;
+                        dp[i].S = dp[j].S + arr[i];
+                    }
+
+                    else if(dp[j].F + 1 == dp[i].F) {
+                        dp[i].S = max(dp[i].S, dp[j].S + arr[i]);
+                    }
+                }
+            }
         }
 
-        ll ans = 0;
 
+        fo(i,0,n){
+            csp(dp[i].F);cnl(dp[i].S);
+        }
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
+        cnl(dp[n-1].F);
     
-    }
+    
     return 0;
 }

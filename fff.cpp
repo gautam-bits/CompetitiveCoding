@@ -58,27 +58,27 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
+    ll tt = 0;
+    read(tt);
+    ll xx ;
+    read(xx);
     
-    test(t){     // tno[1..t]
+    fo(tno,1,tt+1){     // tno[1..t]
     
-        ll n;
-        read(n);
+        ll w,e;
 
-        vi arr(n);
-        cinarr(n,arr);
+        read(w);
+        read(e);
 
-        map<ll,ll> mp;
+        string ans = "";
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
+        fo(i,0,20) ans += "RSPPSRSPR";
 
-        ll ans = 0;
+        ans = ans.substr(0,60);
+        
 
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
+        cout<<"Case #"<<tno<<": "<<ans<<endl;
     
     }
     return 0;

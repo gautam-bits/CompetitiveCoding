@@ -25,7 +25,7 @@
     #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
     #define all(v) v.begin(),v.end()
 
-    #define fo(i,a,b) for(int i=a;i<b;i++)
+    #define fo(i,a,b) for(ll i=a;i<b;i++)
     #define rfo(i,b,a) for(int i=b;i>=a;i--)
     #define test(t) ll t; cin >> t; fo(tno,1,t+1)
 
@@ -45,13 +45,103 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
-    const int N     = 100005 ;
+    const ll MOD   = 1000000007 ;
+    //const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+vi vec;
+
+ll ans = 0;
+
+ll n;
+
+vector<bool> visited;
+
+vi te;
+
+bool check() {
+
+
+    //return 0;
+    vi ans(n,1);
+    fo(i,1,n){
+        if(te[i] < te[i-1]){
+            ans[i] = 1 + ans[i-1];
+        }
+
+        else {
+            rfo(ii,i-1,0){
+                if(te[ii] > te[i]){
+                    //csp(i);csp(te[ii]);cnl("yo");
+
+                    ans[i] = 1 + ans[ii];
+                    break;
+                }
+            }
+        }
+    }
+
+
+    return ans == vec;
+}
+
+void brute(ll idx,ll mx){
+    //csp(idx);cnl("no");
+
+    if(idx == n){
+
+        //vshow1d(te);
+        if(check()) ans = (ans + 1)%MOD;
+        
+    }
+
+    else if(idx == 0) {
+        fo(i,0,n){
+            te[idx] = i+1;
+            visited[i] = 1;
+            ll tem = mx;
+            mx = max(mx,i+1);
+            brute(idx+1,mx);
+            mx = tem;
+            visited[i] = 0; 
+        }
+    }
+
+    else {
+        if(vec[idx] == 1) {
+            fo(i,mx,n)if(!visited[i]){
+                te[idx] = i+1;
+                visited[i] = 1;
+                ll tem = mx;
+                mx = max(mx,i+1);
+                brute(idx+1,mx);
+                mx = tem;
+                visited[i] = 0;
+
+            }
+        }
+        else {
+
+            fo(i,0,mx)if(!visited[i]){
+                te[idx] = i+1;
+                visited[i] = 1;
+                ll tem = mx;
+                mx = max(mx,(ll)i+1);
+                brute(idx+1,mx);
+                mx = tem;
+                visited[i] = 0;
+
+            }
+
+        }
+    }
+
+
+}
     
 int main() 
 {
@@ -61,24 +151,26 @@ int main()
     
     test(t){     // tno[1..t]
     
-        ll n;
         read(n);
+        ans = 0;
 
-        vi arr(n);
-        cinarr(n,arr);
+        vec.assign(n,0);
+        visited.assign(n,0);
+        te.assign(n,0);
 
-        map<ll,ll> mp;
-
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
-
-        ll ans = 0;
+        cinarr(n,vec);
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
+        brute(0,0);
+        
 
-        cnl(ans);
+
+
+
+
+
+
+        cout<<"Case #"<<tno<<": "<<ans<<endl;
     
     }
     return 0;

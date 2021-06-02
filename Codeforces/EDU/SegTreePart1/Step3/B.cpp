@@ -52,7 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
 // seg tree template taken from https://github.com/Ashishgup1/Competitive-Coding/blob/master/Segment%20Tree.cpp
 
 struct data
@@ -143,6 +142,32 @@ struct SegTree
 			return pQuery(node*2 + 1, M + 1, R, pos);
 	}	
 
+    ll find_kth(ll node,ll L,ll R,ll k) {
+
+        //csp(L);csp(R);csp(k);cnl(st[2*node].sum);
+        if(cLazy[node])
+			propagate(node, L, R);
+
+        
+        if(L == R){
+            return L;
+        }
+
+
+        ll M = (L + R)/2;
+
+        if(st[2*node].sum >= k){
+            return find_kth(2*node,L,M,k);
+        }
+
+        else {
+            return find_kth(2*node+1,M+1,R,k-st[2*node].sum);
+        }
+
+
+        
+    }
+
 	void Update(ll node, ll L, ll R, ll i, ll j, ll val)
 	{
 		if(cLazy[node])
@@ -201,36 +226,50 @@ struct SegTree
 		Update(1, 1, N, l, r, val);
 	}
 };
+
+
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
+    ll n;
+    read(n);
 
-    
-        ll n;
-        read(n);
+    vi arr1(n+1,1);
 
-        vi arr(n+1),temp(n+1,0);
+    vi arr2(n+1);
 
-        fo(i,1,n+1) read(arr[i]);
+    fo(i,1,n+1) read(arr2[i]);
 
-		//init
-		//build
-        SegTree myseg;
-        myseg.init(n,temp);
+    vi ans(n+1);
 
-        myseg.build(1,1,n);
 
-        fo(i,1,n+1) {
-            
-            csp(myseg.query(arr[i]+1,n+1).sum);
-			myseg.update(arr[i],1);
-        }
-        cnl("");
-        
-    
-    
+    SegTree myseg;
+    myseg.init(n,arr1);
+
+    myseg.build(1,1,n);
+
+    //cnl(myseg.query(1,n).sum 3m );
+
+    ///ll idx = myseg.find_kth(1,1,n,4);
+    //cnl(idx);
+
+
+    rfo(i,n,1){
+        //cnl(arr2[i]+1);
+        ll idx = myseg.find_kth(1,1,n,myseg.st[1].sum - arr2[i]);
+        ans[i]= idx;
+        myseg.update(idx,0);
+    }
+
+    fo(i,1,n+1) csp(ans[i]);
+    cnl("");
+
+
+
+
+
     return 0;
 }

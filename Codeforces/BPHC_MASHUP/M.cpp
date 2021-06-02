@@ -58,28 +58,81 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
 
-        vi arr(n);
-        cinarr(n,arr);
+    ll n,p;
+    read(n);
+    read(p);
 
-        map<ll,ll> mp;
+    vector<pi> a1,a2;
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+    fo(i,0,n){
+        ll t1,t2;
+        read(t1);
+        read(t2);
+
+        if(t1 > 0) {
+            a1.pb({t1,t2});
         }
 
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
+        else {
+            a2.pb({-t1,t2});
+        }
     }
+
+    sort(all(a1));
+
+    sort(all(a2));
+
+
+    
+
+
+    ll ans = 0;
+
+
+    rfo(i,a1.size()-2,0){
+        a1[i].S += a1[i+1].S;
+    }
+
+    rfo(i,a2.size()-2,0){
+        a2[i].S += a2[i+1].S;
+    }
+
+    
+
+
+    fo(i,0,a1.size()){
+        if(i == 0) {
+
+            ll te = (a1[i].S + p - 1)/p;
+            ans += 2*a1[i].F*te;
+        }
+
+        else{
+            ll te = (a1[i].S + p - 1)/p;
+            ans += 2*(a1[i].F-a1[i-1].F)*te;
+        }
+    }
+
+    fo(i,0,a2.size()){
+        if(i == 0) {
+
+            ll te = (a2[i].S + p - 1)/p;
+            ans += 2*a2[i].F*te;
+        }
+
+        else{
+            ll te = (a2[i].S + p - 1)/p;
+            ans += 2*(a2[i].F-a2[i-1].F)*te;
+        }
+    }
+
+
+    cnl(ans);
+
+
+
+    
+
     return 0;
 }

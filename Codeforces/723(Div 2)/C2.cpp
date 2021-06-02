@@ -59,27 +59,39 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
     
         ll n;
         read(n);
 
         vi arr(n);
+
         cinarr(n,arr);
 
-        map<ll,ll> mp;
+        multiset<int> st;
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
+        ll curr = 0;
+
+        ll currnegsum = 0;
+
 
         ll ans = 0;
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
+        fo(i,0,n) {
+            curr += arr[i];
+            st.insert(arr[i]);
+
+            while(curr < 0){
+                curr -= *st.begin();
+                st.erase(st.begin());
+            }
+
+            ans = max(ans,(ll)st.size());
+        }
 
         cnl(ans);
+
     
-    }
+    
     return 0;
 }

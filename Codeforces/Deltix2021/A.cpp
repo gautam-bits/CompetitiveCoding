@@ -59,26 +59,57 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
+    test(t){     
     
         ll n;
+        ll m;
         read(n);
+        read(m);
 
-        vi arr(n);
-        cinarr(n,arr);
+        string arr;
+        string arr2="";
+        string temp = "";
 
-        map<ll,ll> mp;
+        fo(i,0,n) arr2 += '0';
+        fo(i,0,n) temp += '0';
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+
+        read(arr);
+
+        m = min(n,m);
+
+        fo(j,0,m) {
+            fo(i,0,n){
+                if(arr[i] == '0') {
+                    if(i-1>=0&&i+1<n){
+                        if(arr[i+1] == '1' && arr[i-1] == '0') arr2[i] = '1';
+                        else if(arr[i+1] == '0' && arr[i-1] == '1') arr2[i] = '1';
+                    }
+
+                    else if(i-1>=0){
+                        if(arr[i-1] == '1') arr2[i] = '1';
+                    }
+
+                    else if(i+1<n){
+                        if(arr[i+1] == '1') arr2[i] = '1';
+                    }
+                }
+                else arr2[i] = '1';
+
+                
+            }
+            arr = arr2;
+            arr2 = temp;
         }
 
-        ll ans = 0;
+        cnl(arr);
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
+        
 
-        cnl(ans);
+
+
+
     
     }
     return 0;

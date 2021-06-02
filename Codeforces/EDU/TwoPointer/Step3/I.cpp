@@ -59,27 +59,65 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
+    ll n,s;
+    read(n);
+    read(s);
 
-        vi arr(n);
-        cinarr(n,arr);
+    ll MXX = 10;
 
-        map<ll,ll> mp;
+    vi arr(n);
+    cinarr(n,arr);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+    fo(i,0,n){
+        fo(j,i,n){
+            ll sum = 0;
+            fo(k,i,j+1){
+                sum += arr[k];
+            }
+
+            if(sum == s) {csp(i);csp(j);cnl(sum);}
         }
-
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
     }
+
+    fo(i,1,n) arr[i] += arr[i-1];
+
+    vvi mat(n,vi(MXX,-1));
+
+    fo(i,0,n){
+        fo(j,0,MXX){
+            if(i==0){
+                if(i+j<n)mat[i][j] = arr[i+j];
+            }
+            else{
+                if(i+j<n)mat[i][j] = arr[i+j]-arr[i-1];
+            }
+            
+        }
+    }
+
+    ll ans = 1e15;
+
+    vshow2d(mat);
+
+
+    fo(i,0,n){
+        fo(j,0,MXX){
+            if(mat[i][j] == s){
+                ans = min(ans,(ll)j+1);
+            }
+        }
+    }
+
+
+    if(ans == 1e15){
+        cnl(-1);
+    }
+
+    else{
+        cnl(ans);
+    }
+
+
+
     return 0;
 }

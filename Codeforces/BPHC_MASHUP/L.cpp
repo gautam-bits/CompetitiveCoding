@@ -63,22 +63,6 @@ int main()
     
         ll n;
         read(n);
-
-        vi arr(n);
-        cinarr(n,arr);
-
-        map<ll,ll> mp;
-
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
-
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
     
     }
     return 0;

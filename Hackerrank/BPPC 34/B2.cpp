@@ -59,27 +59,65 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
+
     
         ll n;
         read(n);
 
-        vi arr(n);
-        cinarr(n,arr);
-
-        map<ll,ll> mp;
+        vi lef(n);
+        vi rig(n);
 
         fo(i,0,n) {
-            mp[arr[i]-i]++;
+            read(lef[i]);
+            read(rig[i]);
         }
 
-        ll ans = 0;
+        map<ll,ll> arr;
+
+        ll maxi = -1;
+
+        fo(i,0,n) { 
+            arr[lef[i]] += 1;
+            arr[rig[i] + 1] -= 1;
+
+            if(rig[i] > maxi) {
+                maxi = rig[i];
+            }
+        }
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
 
-        cnl(ans);
+        ll msum = arr[0];
+        ll idx;
+
+
+        // fo(i,1,maxi+1) {
+        //     arr[i] += arr[i-1];
+
+        //     if(msum < arr[i]) {
+        //         msum = arr[i];
+        //         idx = i;
+        //     }
+        // }
+
+        vpi arr2;
+
+        for(auto el : arr) arr2.pb(el);
+
+        
+
+
+        fo(i,1,arr2.size()) {
+            arr2[i].S += arr2[i-1].S;
+
+            if(msum < arr2[i].S) {
+                msum = arr2[i].S;
+                idx = arr2[i].F;
+            }
+        }
+
+        csp(idx);cnl(msum);
     
-    }
+    
     return 0;
 }

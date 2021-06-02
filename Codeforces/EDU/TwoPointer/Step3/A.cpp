@@ -59,27 +59,65 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
+    ll n,s;
+    read(n);
+    read(s);
 
-        vi arr(n);
-        cinarr(n,arr);
+    ll tot = 0;
 
-        map<ll,ll> mp;
+    vi arr(n);
+    cinarr(n,arr);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+    fo(i,0,n) tot += arr[i];
+
+    ll no = s / tot;
+
+    ll rtrn = no*n;
+
+    ll s2 = s - no*tot;
+
+    ll lef = 0;
+    ll sum = 0;
+    ll ans = 1e3;
+
+    ll idx = -1;
+
+    //cnl(s2);
+
+
+    vi arr2(2*n);
+
+    fo(i,0,2*n) arr2[i] = arr[i%n];
+
+    n *= 2;
+
+
+    fo(rig,0,n){
+        sum += arr2[rig];
+        //csp("sum");cnl(sum);
+        while(sum >= s2){
+
+            //csp("ans");cnl(ans);
+
+            //ans = min(ans,rig-lef+1);
+
+            if(ans > rig-lef+1){
+                ans = rig-lef+1;
+                idx = lef;
+            }
+
+            
+            sum -= arr2[lef];
+            lef++;
         }
-
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
+        //ans = min(ans,rig-lef+1);
     }
+
+    rtrn += ans;
+
+    
+
+    csp(idx%(n/2) + 1);cnl(rtrn);
+
     return 0;
 }

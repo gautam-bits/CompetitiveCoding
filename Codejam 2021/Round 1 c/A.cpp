@@ -62,23 +62,38 @@ int main()
     test(t){     // tno[1..t]
     
         ll n;
+        ll k;
         read(n);
+        read(k);
 
         vi arr(n);
         cinarr(n,arr);
 
-        map<ll,ll> mp;
-
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
 
         ll ans = 0;
 
+        fo(i,1,k+1){
+            fo(j,1,k+1){
+                ll cnt = 0;
+                fo(l,1,k+1){
+                    ll v1 = abs(l-i);
+                    ll v2 = abs(l-j);
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
+                    ll v3 = 1e5;
+                    fo(x,0,n){
+                        v3 = min(v3,abs(arr[x]-l));
+                    }
 
-        cnl(ans);
+                    if((min(v1,v2) < v3) || (v1==v2 && min(v1,v2) < v3)) cnt++;
+                }
+
+                ans = max(ans,cnt);
+            }
+        }
+
+        deci(10);
+
+        cout<<"Case #"<<tno<<": "<<(double)ans/k<<endl;
     
     }
     return 0;

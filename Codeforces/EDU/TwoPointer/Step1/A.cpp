@@ -37,7 +37,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
-    #define endl "\n" 
+    //#define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -65,8 +65,12 @@ int main()
 
     vi a(n),b(n),c(n+m);
 
+
     cinarr(n,a);
     cinarr(m,b);
+
+
+    
 
 
     ll i = 0,j = 0;
@@ -92,6 +96,8 @@ int main()
         c[i+j] = b[j];
         j++;
     }
+
+    assert(i + j == n + m);
 
     vshow1d(c);
 

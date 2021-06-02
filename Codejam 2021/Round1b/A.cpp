@@ -20,7 +20,7 @@
 
     #define cnl(x) cout << x << endl
     #define csp(x) cout << x << " "
-    #define ctc(x) cout << "Case #"<<x<<": "
+#define ctc(x) cout << "Case #"<<x<<": "
     #define read(x) cin >> x
     #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
     #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}

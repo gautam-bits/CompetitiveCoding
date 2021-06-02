@@ -64,22 +64,67 @@ int main()
         ll n;
         read(n);
 
-        vi arr(n);
-        cinarr(n,arr);
+        vi univ(n);
+        cinarr(n,univ);
 
-        map<ll,ll> mp;
+        vi skill(n);
+
+        cinarr(n,skill);
+
+        vi ans(n,0);
+
+        vvi lol(n);
+
+        //vshow1d(univ);
 
         fo(i,0,n) {
-            mp[arr[i]-i]++;
+            lol[univ[i]-1].pb(skill[i]);
         }
 
-        ll ans = 0;
+        fo(i,0,n){
+            sort(all(lol[i]),greater<ll>());
+        }
+
+        fo(i,0,n) {
+            fo(j,1,lol[i].size()) {
+                lol[i][j] += lol[i][j-1];
+            }
+        }
+
+        fo(i,0,n) {
+            fo(k,1,lol[i].size() + 1) {
+                ll no = (lol[i].size()/k)*k;
+
+                ans[k-1] += lol[i][no-1];
+            }
+        }
+
+        vshow1d(ans);
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
     
     }
     return 0;
 }
+
+// 6 3 5 5 
+
+/*
+
+6 5 5 3
+
+k  =1 -> (n/k)*k => 4  (give me the sum of best 4)
+
+6 + 5 + 5 + 3 ( 1-4) O(n)
+
+k = 3 -> 3 -> 6 5 5 
+
+
+arr[i] += arr[i-1]
+
+6 11 16 19 (4) O(1)
+
+sum lol[i].size() 1-n
+O(n);
+
+*/

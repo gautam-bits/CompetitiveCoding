@@ -61,24 +61,18 @@ int main()
     
     test(t){     // tno[1..t]
     
-        ll n;
+        ll n,m,k;
         read(n);
+        read(m);
+        read(k);
 
-        vi arr(n);
-        cinarr(n,arr);
 
-        map<ll,ll> mp;
-
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+        if((n-1) + n*(m-1) == k) {
+            cnl("YES");
         }
-
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
+        else {
+            cnl("NO");
+        }
     
     }
     return 0;

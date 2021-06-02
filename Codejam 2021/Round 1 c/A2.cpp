@@ -62,23 +62,57 @@ int main()
     test(t){     // tno[1..t]
     
         ll n;
+        ll k;
         read(n);
+        read(k);
 
         vi arr(n);
         cinarr(n,arr);
 
-        map<ll,ll> mp;
+        set<ll> s,s2;
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
+        fo(i,0,n) s.insert(arr[i]);
+
+
+        vi temp;
+
+        for(ll x : s) temp.pb(x);
+
+        vi diff;
+
+        fo(i,1,temp.size()) diff.pb(temp[i]-temp[i-1]-1);
+
+        sort(all(diff));
+        reverse(all(diff));
+
+        //vshow1d(diff);
+
+        ll sz = diff.size();
+
+        ll spec1 = *s.begin()-1;
+        ll spec2 = k - *s.rbegin();
 
         ll ans = 0;
 
+        ans = max(ans,spec1+spec2);
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
+        if(diff.size() >= 1){
+            ans = max(ans,max(spec1,spec2)+(diff[0] + 1)/2);
+        }
 
-        cnl(ans);
+        if(diff.size() >= 1) {
+            ans = max(ans,diff[0]);
+        }
+
+        if(diff.size() >= 2) {
+            ans = max(ans,(diff[0] + 1)/2 + (diff[1] + 1)/2);
+
+        }
+
+
+        deci(10);
+        cout<<"Case #"<<tno<<": "<<(double)ans/k<<endl;
+
     
     }
     return 0;

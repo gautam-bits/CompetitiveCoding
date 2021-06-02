@@ -52,6 +52,15 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+bool cmp(vi& count_cards,vi& count_str){
+
+    fo(i,0,26){
+        if(count_cards[i] < count_str[i]) return 0;
+    }
+
+    return 1;
+}
     
 int main() 
 {
@@ -59,27 +68,39 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
+    ll n,m;
+    read(n);
+    read(m);
 
-        vi arr(n);
-        cinarr(n,arr);
+    string str;
+    string cards;
+    read(str);
+    read(cards);
 
-        map<ll,ll> mp;
+    vi count_str(26,0); 
+    vi count_cards(26,0);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+    fo(i,0,m) count_cards[cards[i]-'a']++;
+
+    ll lef = 0;
+    ll ans = 0;
+
+    fo(rig,0,n) {
+        count_str[str[rig]-'a']++;
+
+        while(!cmp(count_cards,count_str)) {  // true when count_cards cannot satisfy count 
+            count_str[str[lef]-'a']--;
+            lef++;
         }
 
-        ll ans = 0;
+        //csp(lef);csp(rig);cnl(rig-lef+1);
 
+        //vshow1d(count_str);
+        //vshow1d(count_cards);
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
+        ans += rig-lef+1;
     }
+
+    cnl(ans);
     return 0;
 }

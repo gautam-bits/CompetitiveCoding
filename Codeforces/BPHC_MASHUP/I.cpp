@@ -52,6 +52,76 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+
+ll solve(vi& arr,ll k){
+
+    //vshow1d(arr);
+    ll n = arr.size();
+
+    ll ans = 0;
+
+    ll curr_cnt = 0;
+
+    fo(i,0,k){
+        if(arr[i] == 1) curr_cnt++;
+    }
+
+    //cnl(curr_cnt);
+
+    if(curr_cnt == 0){
+        arr[k-1] = 1;
+        arr[k-2] = 1;
+
+        ans+=2;
+
+        curr_cnt +=2;
+    }
+
+
+    else if(curr_cnt == 1){
+        if(arr[k-1] == 1){
+            arr[k-2] = 1;
+            ans++;
+        }
+
+        else{
+            arr[k-1] = 1;
+            ans++;
+        }
+
+        curr_cnt +=1;
+    }
+
+
+    fo(i,k,n){
+
+        curr_cnt += arr[i];
+        curr_cnt -= arr[i-k];
+
+        if(curr_cnt >= 2){
+            continue;
+        }
+
+        if(curr_cnt == 1){
+            arr[i] = 1;
+            ans++;
+            curr_cnt++;
+        }
+        
+    }
+
+    //fo(i,0,50) csp(arr[i]);
+
+
+    return ans;
+
+
+
+
+}
+
+
     
 int main() 
 {
@@ -59,27 +129,32 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
-
-        vi arr(n);
-        cinarr(n,arr);
-
-        map<ll,ll> mp;
-
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
-
-        ll ans = 0;
+    ll n,m,k;
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
+    read(n);
+    read(m);
+    read(k);
 
-        cnl(ans);
-    
+
+    vi arr(n,0);
+
+    fo(i,0,m){
+        ll temp;
+        read(temp);
+
+        temp--;
+
+        arr[temp] = 1;
     }
+
+
+    cnl(solve(arr,k));
+
+
+    // fo(i,0,n){
+    //     if(arr[i] == 1) csp(i);
+    // }
     return 0;
+
 }

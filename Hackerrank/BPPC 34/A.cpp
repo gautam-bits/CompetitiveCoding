@@ -64,21 +64,54 @@ int main()
         ll n;
         read(n);
 
-        vi arr(n);
-        cinarr(n,arr);
+        vi arr1(n);
+        vi arr2(n);
+        vi diff1(n);
+        vi diff2(n);
+        vi val1(n);
+        vi val2(n);
 
-        map<ll,ll> mp;
+        vi ans1(n);
+        vi ans2(n);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+        cinarr(n,arr1);
+        cinarr(n,arr2);
+
+        cinarr(n-1,diff1);
+        cinarr(n-1,diff2);
+
+        val1 = arr1;
+        val2 = arr2;
+
+        ll mn = 1e15;
+
+        ll sm1 = 0;
+        ll sm2 = 0;
+
+        fo(i,0,n) sm1 += arr1[i];
+        fo(i,0,n) sm2 += arr2[i];
+
+        rfo(i,n-2,0) arr1[i] += arr1[i+1];
+        rfo(i,n-2,0) arr2[i] += arr2[i+1];
+
+        mn = min(arr1[n-1],arr2[n-1]);
+
+        rfo(i,n-1,0) {
+            if(i == n-1) {
+                ans1[i] = arr1[i];
+                ans2[i] = arr2[i];
+            }
+            else{
+                ans1[i] = min(val1[i] + ans1[i+1],val1[i] + ans2[i+1]+ diff1[i]);
+                ans2[i] = min(val2[i] + ans2[i+1],val2[i] + ans1[i+1]+ diff2[i]);
+            }
         }
 
-        ll ans = 0;
+
+        
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
+        cnl(min(ans1[0],ans2[0]));
     
     }
     return 0;

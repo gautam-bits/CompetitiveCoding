@@ -65,18 +65,18 @@ int main()
         read(n);
 
         vi arr(n);
+
         cinarr(n,arr);
 
-        map<ll,ll> mp;
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
+        ll mn = *min_element(all(arr));
 
         ll ans = 0;
 
+        fo(i,0,n) if(arr[i] == mn) ans++;
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
+
+        ans = n -ans;
 
         cnl(ans);
     

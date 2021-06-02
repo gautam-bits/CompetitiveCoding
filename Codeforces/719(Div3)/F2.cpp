@@ -6,6 +6,12 @@
     
     #include <bits/stdc++.h>
     using namespace std;
+
+    #include <ext/pb_ds/assoc_container.hpp>
+    #include <ext/pb_ds/tree_policy.hpp>
+    using namespace __gnu_pbds;
+    template<typename T>
+    using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ knowledge $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
     
@@ -37,7 +43,8 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
-    #define endl "\n" 
+    //#define endl "\n" 
+
     
     
     typedef vector<ll> vi;
@@ -52,34 +59,73 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+
     
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
 
-        vi arr(n);
-        cinarr(n,arr);
+    ll n,t;
+    read(n);
+    read(t);
 
-        map<ll,ll> mp;
+    map<ll,ll> mp;
+    ordered_set<ll> s;
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+
+    auto ask = [&](ll mid) {
+        if(mp.count(mid)) {
+            return mp[mid] - (ll)s.order_of_key(mid+1);
+        } 
+
+        cout<< "? " <<1<<" "<<mid<<endl;
+        ll ans;
+        read(ans);
+
+        ll nozero = mid - ans;
+
+        mp[mid] = nozero + (ll)s.order_of_key(mid+1);
+
+        return nozero;
+    };
+
+
+
+
+    fo(tno,0,t) {
+        ll k;
+        read(k);
+
+        ll lo = 0;
+        ll hi = n+1;
+
+        while(hi-lo > 1){
+            ll mid = (hi + lo)/2;
+
+            ll ans = ask(mid); // ask returns no of zeros in [1...mid]
+
+            if(ans >= k ){
+                hi = mid;
+            }
+            else {
+                lo = mid;
+            }
         }
 
-        ll ans = 0;
+        cout<<"! "<<hi<<endl;
+
+        s.insert(hi);
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
     }
+
+
+
+    
     return 0;
 }

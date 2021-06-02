@@ -59,27 +59,46 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
     
         ll n;
+        ll s;
         read(n);
+        read(s);
 
-        vi arr(n);
-        cinarr(n,arr);
+        vi weight(n);
+        vi cost(n);
 
-        map<ll,ll> mp;
+        cinarr(n,weight);
+        cinarr(n,cost);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+
+        ll w_sum = 0;
+        ll lef = 0;
+        ll max_cost = 0;
+
+        fo(i,1,n) cost[i] += cost[i-1];
+
+
+        fo(rig,0,n){
+            w_sum += weight[rig];
+
+            while(w_sum > s){
+                w_sum -= weight[lef];
+                lef++;
+            }
+            
+            if(lef == 0) {
+                max_cost = max(max_cost,cost[rig]);
+            }
+
+            else {
+                max_cost = max(max_cost,cost[rig]-cost[lef-1]);
+            }
+
         }
 
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
+        cnl(max_cost);
     
-    }
+    
     return 0;
 }

@@ -59,27 +59,40 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
+    ll n,q;
+    read(n);
+    read(q);
 
-        vi arr(n);
-        cinarr(n,arr);
+    vi arr(n);
+    cinarr(n,arr);
 
-        map<ll,ll> mp;
+    fo(i,0,q){
+        ll query;
+        read(query);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+
+        ll lo = -1;
+        ll hi = n;
+
+        bool found = 0;
+
+        while(hi - lo > 1) {
+            ll mid = (hi + lo) >> 1;
+
+            if(arr[mid] == query) {
+                found = 1;
+                break;
+            }
+            else if(mid == -1 || arr[mid] < query) {
+                lo = mid;
+            }
+            else {
+                hi = mid;
+            }
         }
 
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
+        if(found) cnl("YES");
+        else cnl("NO");
     }
     return 0;
 }

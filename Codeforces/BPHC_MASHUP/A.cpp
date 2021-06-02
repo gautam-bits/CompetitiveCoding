@@ -37,7 +37,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
-    #define endl "\n" 
+    // #define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -59,27 +59,38 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
+    ll n;
 
-        vi arr(n);
-        cinarr(n,arr);
+    read(n);
 
-        map<ll,ll> mp;
+    multiset<ll,greater<ll>> arr;
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
+    fo(i,0,n){
+        ll temp;
+        read(temp);
 
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
+        arr.insert(temp);
     }
+
+    ll ans = 0;
+
+    while(arr.size() > 1) {
+        ll temp = *arr.begin();
+        auto itr = arr.begin();
+        itr++;
+        ll temp2 = *itr;
+
+        arr.erase(arr.begin());
+        arr.erase(itr);
+
+        //csp(temp);cnl(temp2);
+
+        ans += temp2;
+
+        arr.insert(temp-temp2);
+
+    }
+
+    cnl(ans);
     return 0;
 }

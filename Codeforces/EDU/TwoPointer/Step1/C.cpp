@@ -59,27 +59,33 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
+    ll n,m;
+    read(n);
+    read(m);
 
-        vi arr(n);
-        cinarr(n,arr);
+    vi a(n),b(m),ans(m,0);
 
-        map<ll,ll> mp;
+    ll yo = 0;
+    cinarr(n,a);
+    cinarr(m,b);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+    ll idx = 0;
+
+
+    fo(i,0,m){
+        while(idx < n && a[idx] <= b[i]) {
+            if(b[i] == a[idx]) ans[i]++;
+            idx++;
         }
+        if(i>0 && b[i] == b[i-1]) ans[i] = ans[i-1];
 
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
+        yo += ans[i];
     }
+
+    cnl(yo);
+
+    
+
+
     return 0;
 }

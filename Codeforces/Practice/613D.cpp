@@ -52,34 +52,48 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+
+ll dfs(vi arr,ll pos) {
+
+    if(pos < 0) return 0;
+
+    vi on,off;
+
+    for(ll x : arr){
+        if((x>>pos)&1) on.pb(x);
+        else off.pb(x);
+    }
+
+    if(on.size() == 0) {
+        return dfs(off,pos-1) ;
+    }
+    else if(off.size() == 0) {
+        return dfs(on,pos-1);
+    }
+
+    ll temp = ((ll)1)<<pos;
+
+    return temp + min(dfs(off,pos-1),dfs(on,pos-1));
+
+}
     
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
-    test(t){     // tno[1..t]
+
     
         ll n;
         read(n);
 
         vi arr(n);
+
         cinarr(n,arr);
 
-        map<ll,ll> mp;
-
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
-
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
+        cnl(dfs(arr,35));
     
-    }
+    
     return 0;
 }

@@ -53,15 +53,30 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-// seg tree template taken from https://github.com/Ashishgup1/Competitive-Coding/blob/master/Segment%20Tree.cpp
+ll mygcd(ll a , ll b)
+{
+   if(b==0) return a;
+   a%=b;
+   return mygcd(b,a);
+}
+
+ll gc(vi& arr,ll lef,ll rig){
+    ll gcd = arr[lef];
+
+    fo(i,lef+1,rig+1){
+        gcd = mygcd(gcd,arr[i]);
+    }
+
+    return gcd;
+}
 
 struct data
 {
 	//Use required attributes
-	ll sum;
+	ll gc;
 
 	//Default Values
-	data() : sum(0) {};
+	data():  gc(-1) {};
 };
 
 struct SegTree
@@ -84,7 +99,17 @@ struct SegTree
 	//Write reqd merge functions
 	void merge(data &cur, data &l, data &r) 
 	{
-		cur.sum = l.sum + r.sum;
+		if(l.gc == -1){
+            cur.gc = r.gc;
+        }
+
+        else if(r.gc == -1){
+            cur.gc = l.gc;
+        }
+
+        else {
+            cur.gc = mygcd(l.gc,r.gc);
+        }
 	}
 	
 	//Handle lazy propagation appriopriately
@@ -97,7 +122,7 @@ struct SegTree
 			lazy[node*2] = lazy[node];
 			lazy[node*2 + 1] = lazy[node]; 
 		}
-		st[node].sum = lazy[node];
+		st[node].gc = lazy[node];
 		cLazy[node] = 0;
 	}
 
@@ -105,7 +130,7 @@ struct SegTree
 	{
 		if(L==R)
 		{
-			st[node].sum = array[L];
+			st[node].gc = array[L];
 			return;
 		}
 		ll M=(L + R)/2;
@@ -201,36 +226,45 @@ struct SegTree
 		Update(1, 1, N, l, r, val);
 	}
 };
+    
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
+    ll n;
+    read(n);
 
-    
-        ll n;
-        read(n);
+    vi arr(n+1);
 
-        vi arr(n+1),temp(n+1,0);
 
-        fo(i,1,n+1) read(arr[i]);
+    fo(i,1,n+1) read(arr[i]);
 
-		//init
-		//build
-        SegTree myseg;
-        myseg.init(n,temp);
+    SegTree myseg;
+    myseg.init(n,arr);
+    myseg.build(1,1,n);
 
-        myseg.build(1,1,n);
+    ll lef = 1;
+    ll gcd = 0;
+    ll ans = 1e10;
 
-        fo(i,1,n+1) {
+
+    fo(rig,1,n+1){
+        if(gcd == 0) gcd = arr[rig];
+        else gcd = mygcd(gcd,arr[rig]);
+        while(gcd == 1){
+            ans = min(ans,rig-lef+1);
             
-            csp(myseg.query(arr[i]+1,n+1).sum);
-			myseg.update(arr[i],1);
+            lef++;
+
+            gcd = myseg.query(lef,rig).gc;
         }
-        cnl("");
-        
-    
-    
+        //ans = min(ans,rig-lef+1);
+    }
+
+    if(ans == 1e10) cnl(-1);
+    else cnl(ans);
+
     return 0;
 }

@@ -45,13 +45,39 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    ll MOD   = (ll)1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+ll add(ll x, ll y)
+{
+    x += y;
+    while(x >= MOD) x -= MOD;
+    while(x < 0) x += MOD;
+    return x;
+}
+
+ll mul(ll x, ll y)
+{
+    return (x * 1ll * y) % MOD;
+}
+
+ll binpow(ll x, ll y)
+{
+    ll ans = 1;
+    while(y > 0)
+    {
+        if(y % 2 == 1)
+            ans = mul(ans, x);
+        x = mul(x, x);
+        y >>= 1;
+    }
+    return ans;
+}
     
 int main() 
 {
@@ -62,23 +88,42 @@ int main()
     test(t){     // tno[1..t]
     
         ll n;
+        ll k;
         read(n);
+        read(k);
 
-        vi arr(n);
-        cinarr(n,arr);
+        string str;
+        read(str);
 
-        map<ll,ll> mp;
+        string str2 = str.substr(0,(n+1)/2);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
+        string str3 = str.substr(0,(n)/2);
+
+        reverse(all(str3));
+
+        string str4 = str.substr((n+1)/2);
+
+        assert(str3.size() == str4.size());
+
+        assert(str3.size() == (n/2));
 
         ll ans = 0;
 
+        fo(i,0,(n+1)/2) {
+            ll temp = (ll)(str2[i] - 'a');
+            //cnl(str2[i]);
+            //cnl(temp);
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
+            ans += mul(temp,binpow(k,((n+1)/2) - i - 1));
+        }
 
-        cnl(ans);
+        //csp(str4);cnl(str3);
+
+        if(str3 < str4) ans++;
+
+        cout<<"Case #"<<tno<<": "<<ans<<endl;
+
+
     
     }
     return 0;

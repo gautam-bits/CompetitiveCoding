@@ -61,24 +61,22 @@ int main()
     
     test(t){     // tno[1..t]
     
-        ll n;
-        read(n);
+        ll a,b,d;
 
-        vi arr(n);
-        cinarr(n,arr);
+        read(a);
+        read(b);
+        read(d);
 
-        map<ll,ll> mp;
+        ll x = min(a,b);
+        ll y = max(a,b);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+        if(x + d*x >= y) {
+            cnl("YES");
+        }
+        else {
+            cnl("NO");
         }
 
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
     
     }
     return 0;

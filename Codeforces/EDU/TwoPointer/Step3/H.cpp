@@ -25,7 +25,7 @@
     #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
     #define all(v) v.begin(),v.end()
 
-    #define fo(i,a,b) for(int i=a;i<b;i++)
+    #define fo(i,a,b) for(ll i=a;i<b;i++)
     #define rfo(i,b,a) for(int i=b;i>=a;i--)
     #define test(t) ll t; cin >> t; fo(tno,1,t+1)
 
@@ -59,27 +59,60 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
+    ll n,m,s,A,B;
+    read(n);
+    read(m);
+    read(s);
+    read(A);
+    read(B);
 
-        vi arr(n);
-        cinarr(n,arr);
+    vi arr_n(n);
+    vi arr_m(m);
 
-        map<ll,ll> mp;
+    cinarr(n,arr_n);
+    cinarr(m,arr_m);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+
+    sort(all(arr_n),greater<ll>());
+    sort(all(arr_m),greater<ll>());
+
+    fo(i,1,n) arr_n[i] += arr_n[i-1];
+    fo(i,1,m) arr_m[i] += arr_m[i-1];
+
+
+    // (i+1)*A + (j+1)*B <= c 
+
+
+    ll j;
+
+    ll ans = 0;
+
+    ///vshow1d(arr_n);
+    //vshow1d(arr_m);
+
+    fo(i,0,n+1){
+
+        if(i*A <= s) {
+            j = (s-(i*A))/B;
+
+            i = min(i,n);
+            j = min(j,m);
+
+            ll a1=0,a2=0;
+
+            if(i>0) a1 = arr_n[i-1];
+            if(j>0) a2 = arr_m[j-1];
+
+            ans = max(ans,a1+a2);
         }
-
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
     }
+
+    cnl(ans);
+
+
+
+
+
+
     return 0;
 }

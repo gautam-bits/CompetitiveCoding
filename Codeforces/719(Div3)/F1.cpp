@@ -6,6 +6,12 @@
     
     #include <bits/stdc++.h>
     using namespace std;
+
+    #include <ext/pb_ds/assoc_container.hpp>
+    #include <ext/pb_ds/tree_policy.hpp>
+    using namespace __gnu_pbds;
+    template<typename T>
+    using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ knowledge $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
     
@@ -37,7 +43,8 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
-    #define endl "\n" 
+    //#define endl "\n" 
+
     
     
     typedef vector<ll> vi;
@@ -52,34 +59,48 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+ll ask(ll l,ll r){
+    cout<<"? "<<l<<" "<<r<<endl;
+    ll ans;
+    read(ans);
+
+    return ans;
+}
     
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
 
-        vi arr(n);
-        cinarr(n,arr);
+    ll n,t;
+    read(n);
+    read(t);
 
-        map<ll,ll> mp;
+    ll k;
+    read(k);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+    ll lo = 0;
+    ll hi = n+1;
+
+    while(hi-lo > 1){
+        ll mid = (hi + lo)/2;
+
+        ll ans = ask(1,mid);
+
+        if(mid-ans >= k ){
+            hi = mid;
         }
-
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
+        else {
+            lo = mid;
+        }
     }
+
+    cout<<"! "<<hi<<endl;
+
+    
     return 0;
 }

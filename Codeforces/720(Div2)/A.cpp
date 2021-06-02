@@ -61,25 +61,21 @@ int main()
     
     test(t){     // tno[1..t]
     
-        ll n;
-        read(n);
+        ll a,b;
+        read(a);
+        read(b);
 
-        vi arr(n);
-        cinarr(n,arr);
+        if(b == 1) {
+            cnl("NO");
 
-        map<ll,ll> mp;
-
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
         }
 
-        ll ans = 0;
+        else {
+            cnl("YES");
 
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
+            csp(a);csp((1000*b-1)*a);cnl(1000*a*b);
+        }
+     
     }
     return 0;
 }

@@ -52,6 +52,18 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+string calc(vi temp){
+
+    assert(temp.size() > 0);
+    string ans = "";
+
+    fo(i,0,temp.size()) {
+        ans += to_string(temp[i]) + ".";
+    }
+
+    return ans.substr(0,ans.size()-1);
+}
     
 int main() 
 {
@@ -65,20 +77,78 @@ int main()
         read(n);
 
         vi arr(n);
+
         cinarr(n,arr);
 
-        map<ll,ll> mp;
+        vvi stk(n,vi());
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+        vvi answer(n,vi());
+
+        vi levels(n,-1);
+
+        stack<vi> st;
+
+        
+        ll level = -1;
+
+        fo(i,0,n){
+
+            if(i == 0){
+                
+                vi temp;
+                temp.pb(arr[i]);
+                answer[i] = temp;
+                st.push(temp);
+            }
+
+            else {
+                if(arr[i] == 1){
+
+                    
+                    vi temp = st.top();
+                    temp.pb(arr[i]);
+                    answer[i] = temp;
+
+                    
+                    st.push(temp);
+                }
+
+                else{
+                    
+
+
+                    vi temp;
+
+                    while(st.size() > 0 && st.top()[st.top().size()-1] != arr[i]-1){
+                        st.pop();
+                    }
+
+                    
+                        temp = st.top();
+                        temp.pop_back();
+                        st.pop();
+                    
+                    temp.pb(arr[i]);
+                    answer[i] = temp;
+
+                    st.push(temp);
+
+                    
+
+                  
+                    
+
+                    
+                
+                }
+            }
+
+
         }
 
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
+        fo(i,0,n){
+            cnl(calc(answer[i]));
+        }
     
     }
     return 0;

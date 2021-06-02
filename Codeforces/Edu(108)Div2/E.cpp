@@ -37,7 +37,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
-    #define endl "\n" 
+    //#define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -59,27 +59,71 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
+    ll n;
+    read(n);
 
-        vi arr(n);
-        cinarr(n,arr);
+    vector<bool> visited(n,0);
 
-        map<ll,ll> mp;
+    map<double,ll> mp;
+    vpi mp2(n);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+    multiset<double> myset;
+
+    fo(i,0,n) {
+        //cnl("yo");
+        ll a,b,c,d;
+        read(a);
+        read(b);
+        read(c);
+        read(d);
+
+        double s1 = (((double)c/(double)d) +1.0)/((double)a/(double)b);
+        double s2 = (((double)c/(double)d))/(((double)a/(double)b) + 1.0);
+
+        mp[s1] = i;
+        mp[s2] = i;
+
+        assert(s1 != s2);
+
+        mp2[i] = {s1,s2};
+
+        myset.insert(s1);
+        myset.insert(s2);
+    }
+
+    //for(double x : myset) cnl(x);
+
+    fo(i,0,1) {
+        double curr = *myset.begin();
+
+        
+        auto itr = myset.begin();
+        itr++;
+        double c2 = *itr;
+
+
+        if(curr == c2) {
+            csp("ans");csp(mp[c2]+1);cnl(mp[curr] + 1);
+
+            // myset.erase(myset.find(mp2[mp[c2]].F));
+            // myset.erase(myset.find(mp2[mp[c2]].S));
+            // myset.erase(myset.find(mp2[mp[curr]].F));
+            // myset.erase(myset.find(mp2[mp[curr]].S));
+
+
         }
 
-        ll ans = 0;
+        else {
+            myset.erase(myset.begin());
+        }
 
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
+        for(double x : myset) cnl(x);
     }
+
+
+
+
+
+
     return 0;
 }

@@ -50,35 +50,125 @@
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
+
+    const ll MAXN = 1e6 + 10;
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
+
+
+int spf[MAXN];
+ 
+void sieve()
+{
+    spf[1] = 1;
+    for (int i=2; i<MAXN; i++)
+ 
+        // marking smallest prime factor for every
+        // number to be itself.
+        spf[i] = i;
+ 
+    // separately marking spf for every even
+    // number as 2
+    for (int i=4; i<MAXN; i+=2)
+        spf[i] = 2;
+ 
+    for (int i=3; i*i<MAXN; i++)
+    {
+        // checking if i is prime
+        if (spf[i] == i)
+        {
+            // marking SPF for all numbers divisible by i
+            for (int j=i*i; j<MAXN; j+=i)
+ 
+                // marking spf[j] if it is not
+                // previously marked
+                if (spf[j]==j)
+                    spf[j] = i;
+        }
+    }
+}
+ 
+// A O(log n) function returning primefactorization
+// by dividing by smallest prime factor at every step
+vector<int> getFactorization(int x)
+{
+    vector<int> ret;
+    while (x != 1)
+    {
+        ret.push_back(spf[x]);
+        x = x / spf[x];
+    }
+    return ret;
+}
 int main() 
 {
     
+
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
+    sieve();
     
     test(t){     // tno[1..t]
     
-        ll n;
+        int n;
         read(n);
 
-        vi arr(n);
-        cinarr(n,arr);
+        vector<int> dp(n+1,1);
 
-        map<ll,ll> mp;
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+        dp[0] = 0;
+        dp[1] = 0;
+        dp[2] = 1;
+
+
+        //vshow1d(getFactorization(103));
+
+
+        fo(i,3,n+1){
+            vector<int> fac = getFactorization(i);
+
+            int mx = 0;
+
+            
+
+            for(int fc : fac) if(i !=n || (i == n && fc != 2)){
+
+                // if(i == 9) {
+                //     csp(fc);csp((i-fc)/fc);cnl(dp[(i-fc)/fc]);
+                // }
+                
+                mx = max(mx,dp[(i-fc)/fc]);
+
+
+            }
+
+            dp[i] = 1 + mx;
+
+            for(int fc : fac) dp[i] = max(dp[i],dp[i/fc]);
         }
 
-        ll ans = 0;
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
 
-        cnl(ans);
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        cout<<"Case #"<<tno<<": "<<dp[n]<<endl;
     
     }
     return 0;

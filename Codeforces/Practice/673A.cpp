@@ -65,20 +65,72 @@ int main()
         read(n);
 
         vi arr(n);
+
         cinarr(n,arr);
 
-        map<ll,ll> mp;
+        vvi value(n,vi());
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+
+        fo(i,0,n){
+            value[arr[i]-1].pb(i);
         }
 
-        ll ans = 0;
+        ll minans = 1e15;
+        ll ans = -1;
+
+        vi answer(n,1e15);
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
+        fo(i,0,n) {
+            if(value[i].size() > 0) {
+                ll mx = 0;
 
-        cnl(ans);
+                mx = max(mx,value[i][0] + 1);
+
+                fo(j,1,value[i].size()){
+                    mx = max(mx,value[i][j]-value[i][j-1]);
+                }
+
+                mx = max(mx,n - *value[i].rbegin());
+
+                // if(mx < minans) {
+                //     minans = mx;
+                //     ans = i+1;
+                // }
+
+                answer[mx-1] = min(answer[mx-1],(ll)i+1);
+            }
+        }
+
+        // csp(minans);cnl(ans);
+
+        fo(i,0,n) if(answer[i] == 1e15) answer[i] = -1;
+
+
+        ll idx = 0;
+
+        fo(i,0,n) {
+            if(answer[i] == -1){
+                idx++;
+            }
+            else{
+                break;
+            }
+        }
+
+        fo(i,idx+1,n) {
+            if(answer[i] == -1) answer[i] = answer[i-1];
+            else answer[i] = min(answer[i],answer[i-1]);
+        }
+
+
+
+        // fo(i,0,minans-1) csp(-1);
+        // fo(i,minans-1,n) csp(ans);
+        // cnl("");
+
+
+        vshow1d(answer);
     
     }
     return 0;

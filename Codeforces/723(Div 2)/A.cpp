@@ -64,21 +64,33 @@ int main()
         ll n;
         read(n);
 
+        n*= 2;
+
         vi arr(n);
+
         cinarr(n,arr);
 
-        map<ll,ll> mp;
+        vi ans(n,0);
+
+        sort(all(arr));
+
+        ll lef = 0;
+
+        ll rig = n-1;
+
 
         fo(i,0,n) {
-            mp[arr[i]-i]++;
+            ans[i] = arr[rig];
+            ans[i+1] = arr[lef];
+            rig--;
+            lef++;
+            i++;
         }
 
-        ll ans = 0;
+
+        vshow1d(ans);
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
     
     }
     return 0;

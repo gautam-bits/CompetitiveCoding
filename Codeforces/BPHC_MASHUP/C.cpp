@@ -59,27 +59,56 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
+
     
-        ll n;
+        ll n,k;
         read(n);
+        read(k);
 
         vi arr(n);
+
         cinarr(n,arr);
 
-        map<ll,ll> mp;
-
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
+        ll ti = 0;
 
         ll ans = 0;
 
+        vi vec;
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
+
+        fo(i,0,k){
+            vec.pb(arr[i]);
+        }
+
+        ll itr = k;
+
+        
+
+        while(vec.size() > 0) {
+            ll sz = min(k,(ll)vec.size());
+
+            auto mn = min_element(vec.begin(),vec.begin() + sz);
+
+            ti += *mn;
+
+
+            vec.erase(mn);
+
+            ans += ti;
+
+
+            if(itr < n){
+                vec.pb(arr[itr]);
+                itr++;
+            }
+
+
+        }
 
         cnl(ans);
+
+
     
-    }
+    
     return 0;
 }

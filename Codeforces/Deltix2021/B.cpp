@@ -65,20 +65,21 @@ int main()
         read(n);
 
         vi arr(n);
+
         cinarr(n,arr);
 
-        map<ll,ll> mp;
+        ll nn = n/2;
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+        cnl(6*nn);
+
+        fo(i,1,nn+1){
+            csp(2);csp(2*i-1);cnl(2*i);
+            csp(1);csp(2*i-1);cnl(2*i);
+            csp(2);csp(2*i-1);cnl(2*i);
+            csp(1);csp(2*i-1);cnl(2*i);
+            csp(2);csp(2*i-1);cnl(2*i);
+            csp(1);csp(2*i-1);cnl(2*i);
         }
-
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
     
     }
     return 0;

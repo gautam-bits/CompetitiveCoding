@@ -58,28 +58,45 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
-    test(t){     // tno[1..t]
+
     
         ll n;
+        ll c;
         read(n);
+        read(c);
 
-        vi arr(n);
-        cinarr(n,arr);
+        string str;
+        read(str);
 
-        map<ll,ll> mp;
-
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
-
+        ll lef = 0;
+        ll tot = 0;
+        ll acnt = 0;
+        ll bcnt = 0;
         ll ans = 0;
 
+        fo(rig,0,n){
+            if(str[rig] == 'a') acnt++;
+            else if(str[rig] == 'b'){
+                bcnt++;
+                tot += acnt;
+            }
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
+            while(tot > c){
+                if(str[lef] == 'a'){
+                    acnt--;
+                    tot -= bcnt;
+                }
+                else if(str[lef] == 'b'){
+                    bcnt--;
+                }
+                lef++;
+            }
+
+            ans = max(ans,rig-lef+1);
+        }
 
         cnl(ans);
     
-    }
+    
     return 0;
 }

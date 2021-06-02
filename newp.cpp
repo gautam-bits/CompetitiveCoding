@@ -6,6 +6,12 @@
     
     #include <bits/stdc++.h>
     using namespace std;
+
+    #include <ext/pb_ds/assoc_container.hpp>
+    #include <ext/pb_ds/tree_policy.hpp>
+    using namespace __gnu_pbds;
+    template<typename T>
+    using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ knowledge $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
     
@@ -38,6 +44,7 @@
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
     #define endl "\n" 
+
     
     
     typedef vector<ll> vi;
@@ -58,28 +65,10 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
+    ll t;
+    read(t);
+    cnl(t);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
-
-        vi arr(n);
-        cinarr(n,arr);
-
-        map<ll,ll> mp;
-
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
-
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
-    }
     return 0;
 }

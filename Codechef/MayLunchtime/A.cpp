@@ -58,27 +58,50 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
+    int n;
+    n = 1e7 + 10;
+    vector<bool> is_prime(n+1, true);
+    is_prime[0] = is_prime[1] = false;
+    for (int i = 2; i <= n; i++) {
+        if (is_prime[i] && (long long)i * i <= n) {
+            for (int j = i * i; j <= n; j += i)
+                is_prime[j] = false;
+        }
+    }
+
+    vi primes;
+
+    fo(i,2,n+1){
+        if(is_prime[i]) primes.pb(i);
+    }
+
+
+    //fo(i,0,100) csp(primes[i]);
     
     test(t){     // tno[1..t]
     
-        ll n;
-        read(n);
+        ll nn;
+        read(nn);
 
-        vi arr(n);
-        cinarr(n,arr);
+        if(nn == 2) cnl(1);
+        else if(nn == 3) cnl(2);
+        else if(nn == 4) cnl(2);
+        else if(nn == 5) cnl(3);
 
-        map<ll,ll> mp;
+        else {
+            ll ce = (nn + 2)/2;
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+            auto itr1 = lb(all(primes),ce);
+            auto itr2 = ub(all(primes),nn);
+            
+
+            ll ans = (itr2 - itr1) + 1;
+
+            cnl(ans);
+
+
         }
-
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
     
     }
     return 0;

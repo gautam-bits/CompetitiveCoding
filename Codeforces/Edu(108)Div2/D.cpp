@@ -52,6 +52,43 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+vvi dp;
+ll prod;
+vi a,b;
+
+ll calc(ll i,ll j) {
+
+    //return 5;
+    if(dp[i][j] != -1) {
+        return dp[i][j];
+    }
+
+    if(i == j) {
+        dp[i][j] = prod;
+        return prod;
+    }
+
+    if(j == i + 1) {
+        ll ans = prod - a[j]*b[j] - a[i]*b[i] + a[j]*b[i] + a[i]*b[j];
+        dp[i][j] = ans;
+        return ans;
+    }
+
+    ll a1;
+
+    if(dp[i+1][j-1] != -1) {
+        a1 = dp[i+1][j-1];
+    }
+
+    else a1 = calc(i+1,j-1);
+
+    ll ans = a1 - a[j]*b[j] - a[i]*b[i] + a[j]*b[i] + a[i]*b[j];
+
+    dp[i][j] = ans;
+
+    return ans;
+}
     
 int main() 
 {
@@ -59,27 +96,33 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
+    ll n;
+    read(n);
 
-        vi arr(n);
-        cinarr(n,arr);
+    a.assign(n,0);
+    b.assign(n,0);
+    prod = 0;
+    //dp.clear();
+    dp.assign(n,vi(n,-1));
 
-        map<ll,ll> mp;
+    cinarr(n,a);
+    cinarr(n,b);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+    fo(i,0,n) prod += a[i]*b[i];
+
+    ll fin = -1;
+
+
+    fo(i,0,n){
+        fo(j,i,n) {
+            fin = max(fin,calc(i,j));
         }
-
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
     }
+
+    cnl(fin);
+
+
+
+
     return 0;
 }

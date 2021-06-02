@@ -37,7 +37,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
-    #define endl "\n" 
+    //#define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -52,33 +52,70 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+ll ask(ll i,ll j) {
+    cout<<"M "<<i<<" "<<j<<endl;
+    ll temp;
+    read(temp);
+    return temp;
+}
+
+void ask2(ll i,ll j) {
+    cout<<"S "<<i<<" "<<j<<endl;
+    ll temp;
+    read(temp);
+    assert(temp == 1);
+}
     
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
+
+    // double xx = 1e8;
+
+    // double yy = 0.0;
+
+    // fo(i,1,101) yy += 1.0/i;
+
+    // cnl(xx*yy);
+
+
+    ll tt,n;
+    read(tt);
+    read(n);
     
-    test(t){     // tno[1..t]
+    while(tt--){     // tno[1..t]
     
-        ll n;
-        read(n);
 
-        vi arr(n);
-        cinarr(n,arr);
 
-        map<ll,ll> mp;
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+        fo(i,0,n-1) {
+            ll ans = ask(i+1,n);
+
+
+
+            if(ans > i+1)ask2(i+1,ans);
+
+
         }
 
-        ll ans = 0;
+        cout<<"D"<<endl;
+        ll te;
+        read(te);
+
+        assert(te == 1);
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
 
-        cnl(ans);
+
+
+
+
+
+
     
     }
     return 0;

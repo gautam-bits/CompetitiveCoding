@@ -59,27 +59,37 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
+    vi arr1(6);
+    vi arr2(6);
+
+    cinarr(6,arr1);
+    cinarr(6,arr2);
+
+    double ans = 0.0;
+
+    ll a33 = 0;
+
+    ll yo1 = 0;
+    ll yo2 = 0;
+
+
+   fo(i,0,6) {
+       fo(j,0,6){
+           if(arr1[i] >  arr2[j]){
+               yo1++;
+               yo2++;
+           }
+
+           else if(arr1[i] < arr2[j]){
+               yo2++;
+           } 
+       }
+   }
+
+   deci(5);
+
+   cnl(((double)yo1)/yo2);
+
     
-        ll n;
-        read(n);
-
-        vi arr(n);
-        cinarr(n,arr);
-
-        map<ll,ll> mp;
-
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
-
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
-    }
     return 0;
 }

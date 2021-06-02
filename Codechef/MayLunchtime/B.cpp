@@ -52,6 +52,32 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+// {low idx,answer}
+pi kadane(vi& arr,ll st,ll end) {
+    ll mx = -1e15;
+    ll curr = 0;
+
+    ll lo = st;
+
+    ll lo2 = st;
+
+    fo(i,st,end+1) {
+        curr = curr + arr[i];
+
+        if(curr >= mx) {
+            mx = curr;
+            lo2 = lo;
+        }
+
+        if(curr < 0) {
+            curr = 0;
+            lo = i + 1;
+        }
+    }
+
+    return {lo2,mx};
+}
     
 int main() 
 {
@@ -62,21 +88,56 @@ int main()
     test(t){     // tno[1..t]
     
         ll n;
+        ll k;
         read(n);
+        read(k);
 
         vi arr(n);
         cinarr(n,arr);
 
-        map<ll,ll> mp;
-
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
-
         ll ans = 0;
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
+        vi posi(n,0);
+
+        fo(i,0,n) if(arr[i] >= 0) posi[i] = 1;
+        fo(i,1,n) posi[i] += posi[i-1];
+
+        //vshow1d(posi);
+
+
+        ll end = n-1;
+
+        fo(i,0,k) {
+
+            ll lo = (ll)(lb(all(posi),k-i)-posi.begin());
+
+            //ll lo = k - i;
+
+            if(lo <= end) {
+                pi temp = kadane(arr,lo,end);
+                ans += temp.S*(k-i);
+                end = temp.F - 1;
+
+                //csp(lo);csp(end);cnl(temp.S);
+            }
+
+            else{
+
+                lo = k-i-1;
+
+                pi temp = kadane(arr,lo,end);
+                ans += temp.S*(k-i);
+                end = temp.F - 1;
+
+               //csp(lo);csp(end);cnl(temp.S);
+
+            }
+
+
+
+        }
+
 
         cnl(ans);
     

@@ -52,6 +52,36 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+vvi adjList;
+
+vi visited;
+
+vpi limits;
+
+vi val;
+
+vpi valnodes;
+
+ll ans;
+
+void dfs(ll node) {
+    visited[node] = 1;
+
+    for(ll ch : adjList[node]) if(!visited[ch]) {
+        dfs(ch);
+
+        ll aa = valnodes[ch].F + abs(limits[node].F-limits[ch].F);
+        ll bb = valnodes[ch].S + abs(limits[node].F-limits[ch].S);
+        ll cc = valnodes[ch].F + abs(limits[node].S-limits[ch].F);
+        ll dd = valnodes[ch].S + abs(limits[node].S-limits[ch].S);
+
+        valnodes[node].F += max(aa,bb);
+        valnodes[node].S += max(cc,dd);
+    }
+    
+}
+
     
 int main() 
 {
@@ -64,21 +94,57 @@ int main()
         ll n;
         read(n);
 
-        vi arr(n);
-        cinarr(n,arr);
+        adjList.assign(n,vi());
 
-        map<ll,ll> mp;
+        visited.assign(n,0);
 
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
+        limits.assign(n,pi());
+
+        val.assign(n,0);
+
+        valnodes.assign(n,pi());
+
+        ans = 0;
+
+
+        ll l,r;
+
+        fo(i,0,n){
+            read(l);
+            read(r);
+            limits[i].F = l;
+            limits[i].S = r;
         }
 
-        ll ans = 0;
+        ll u,v;
+
+        fo(i,0,n-1) {
+            read(u);
+            read(v);
+
+            u--;
+            v--;
+
+            adjList[u].pb(v);
+            adjList[v].pb(u);
+        }
+
+        ll rtrn = 0;
 
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
 
-        cnl(ans);
+        dfs(0);
+
+        rtrn = max(valnodes[0].F,valnodes[0].S);
+
+        cnl(rtrn);
+
+        
+
+
+
+
+
     
     }
     return 0;

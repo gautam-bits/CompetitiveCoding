@@ -67,18 +67,50 @@ int main()
         vi arr(n);
         cinarr(n,arr);
 
-        map<ll,ll> mp;
+        ll aa = 0 , bb = 0 , cc = 0;
+
+        vi temp1;
+        vi temp2;
+
 
         fo(i,0,n) {
-            mp[arr[i]-i]++;
+            if(arr[i] > 0) {
+                aa++;
+                temp2.pb(arr[i]);
+            }
+            else if(arr[i] < 0) {
+                bb++;
+                temp1.pb(arr[i]);
+            }
+            else {
+                cc++;
+                temp1.pb(arr[i]);
+
+            }
         }
 
-        ll ans = 0;
+        if(aa == 0) {
+            cnl(bb+cc);
+        }
 
+        else{
+            
 
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
+            temp1.pb(*min_element(all(temp2)));
+            sort(all(temp1));
 
-        cnl(ans);
+            ll mn = 1e9;
+
+            fo(i,1,temp1.size()) mn = min(mn,temp1[i] - temp1[i-1]);
+
+            if(mn >= *min_element(all(temp2))) {
+                cnl(bb + cc + 1);
+            }
+
+            else {
+                cnl(bb+cc);
+            }
+         }
     
     }
     return 0;
