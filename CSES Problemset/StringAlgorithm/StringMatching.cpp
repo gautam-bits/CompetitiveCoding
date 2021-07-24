@@ -52,23 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
@@ -76,36 +59,65 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    read(n);
+    string text;
+    string pattern;
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    read(text);
+    read(pattern);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+    ll T = text.size();
+    ll P = pattern.size();
+    ll pat_hash = 0;
+    ll text_hash = 0;
+
+    if(P > T) {
+        cnl(0);
+        return 0;
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    ll prime = 31;
+    ll mod = 1e9+7;
+    ll hash_pow = 1;
+    ll ans = 0;
 
-    dfs(0,ans1,0,mxlvl);
+    fo(i,0,P-1) hash_pow = (hash_pow * prime) % mod;
 
-    visited.assign(n,0);
 
-    mxlvl = 0;
-    ll n2 = ans1;
+    fo(i,0,P) {
+        pat_hash = (pat_hash * prime + (pattern[i] - 'a')) % mod;
+        text_hash = (text_hash * prime + (text[i] - 'a')) % mod;
+    }
 
-    dfs(n2,ans2,0,mxlvl);
+    fo(i,0,T-P+1) {
+        if(pat_hash == text_hash) {
 
-    cnl(mxlvl);
+            bool poss = 1;
+
+            // fo(j,0,P) {
+            //     if(text[i+j] != pattern[j]) {
+            //         poss = 0;
+            //         break;
+            //     }
+            // }
+
+            ans++;
+        }
+
+        if(i < T-P) {
+
+            text_hash = ((text_hash - (text[i] - 'a') * hash_pow ) * prime + (text[i+P] - 'a') ) % mod;
+
+            if(text_hash < 0) text_hash += mod;
+
+
+        }
+    }
+
+    cnl(ans);
+
+
+
+
 
 
     return 0;

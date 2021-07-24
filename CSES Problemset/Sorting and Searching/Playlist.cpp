@@ -1,3 +1,7 @@
+// This is an intellectual property of Diablo Escada ,
+// So please use it with extreme CAUTION .
+
+
 //-------We can be heroes , just for one day!!.---------//
     
     #include <bits/stdc++.h>
@@ -10,20 +14,40 @@
     #define F first
     #define S second
     #define ll long long
+    #define lb lower_bound
+    #define ub upper_bound
+    #define bs binary_search
+
+    #define cnl(x) cout << x << endl
+    #define csp(x) cout << x << " "
+    #define read(x) cin >> x
+    #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
+    #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
+    #define all(v) v.begin(),v.end()
+
     #define fo(i,a,b) for(int i=a;i<b;i++)
     #define rfo(i,b,a) for(int i=b;i>=a;i--)
-    #define deb(x) cout<<#x<<' '<<x<<endl;
+    #define test(t) ll t; cin >> t; fo(tno,1,t+1)
+
+    #define vshow1d(arr) {ll n = arr.size(); fo(i,0,n) {csp(arr[i]);}cout<<endl;}
+    #define show1d(n,arr) fo(i,0,n) {csp(arr[i]);}cout<<endl;
+    #define vshow2d(arr) {ll n=arr.size();   fo(i,0,n) {ll m = arr[i].size(); fo(j,0,m) csp(arr[i][j]); cout << endl;}}
+    #define show2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) csp(arr[i][j]); cout << endl;}}
+    
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
     #define endl "\n" 
     
     
-    typedef vector<int> vi;
-    typedef pair<int,int> pi;
-    
-    const int MOD =  1000000007 ;
-    const int MAX = 2e4 + 7;
+    typedef vector<ll> vi;
+    typedef pair<ll,ll> pi;
+    typedef vector<pi> vpi;
+    typedef vector<vi> vvi;
+
+    const int MOD   = 1000000007 ;
+    const int N     = 100005 ;
+    const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
@@ -35,20 +59,28 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll t;
-    t = 1;
     
-    while(t--)
-    {
-        ll n;
-        cin>>n;
-        ll a[n];
+    ll n;
+    read(n);
+    vi arr(n);
+    cinarr(n,arr);
 
-        fo(i,0,n) cin>>a[i];
+    multiset<ll> s;
 
-        
-    
-    
+    ll l = 0;
+    ll r = 0;
+    ll ans = 0;
+
+    while(r < n) {
+        s.insert(arr[r]);
+
+        while(s.count(arr[r]) > 1) {
+            s.erase(s.find(arr[l]));
+            l++;
+        }
+        ans = max(ans,r-l+1);
+        r++;
     }
+    cnl(ans);
     return 0;
 }

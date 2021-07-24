@@ -52,61 +52,109 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
+vi parent ;
+vi rank_element;
+vi sz_set;
+ll noOfDisSets;
+
+ll findSet(ll i) {              // find the representative element of i in the forest
+    if(i == parent[i]) {
+        return i;
+    }
+    parent[i] = findSet(parent[i]);
+    return parent[i];
+}
+
+bool isSameSet(ll i,ll j){
+    return findSet(i) == findSet(j);
+}
+
+void unionSet(ll i, ll j) {    // merging sets containing i and j
+    if(!isSameSet(i,j)) {
+        ll x = findSet(i);
+        ll y = findSet(j);
+
+        noOfDisSets--; // if we are merging 2 different sets
+
+        if(rank_element[x] > rank_element[y]){
+            parent[y] = x;
+            sz_set[x] += sz_set[y];  //increasing the size
+        }
+        else {
+            parent[x] = y;
+            sz_set[y] += sz_set[x];  //increasing the size
+            if(rank_element[x] == rank_element[y]) rank_element[y]++;
+        }
+
+    }
+}
+
+ll sizeOfSet(ll i) {    // returns size of set that currently contains i
+    ll x = findSet(i);
+    return sz_set[x];
+}
+
+ll noOfDisjointSets() {
+    return noOfDisSets;
+}
+
+// remember set is [0...n-1] 
+/*
+################################################################
+NOTE - IF DATA IS NOT IN 0-N-1 RANGE USE A MAP <DATA,INT[0..N-1]>
+################################################################
+*/
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    read(n);
+    
+    
+        ll n;
+        ll m;
+        read(n);
+        read(m);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
-    }
-
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
+        //reset global variables
+        parent.assign(n,0);
+        rank_element.assign(n,0);
+        sz_set.assign(n,1);
+        noOfDisSets = n;
+        fo(i,0,n)parent[i] = i;
 
 
+        //start from here
+
+        fo(i,0,m) {
+            ll u,v;
+            read(u);
+            read(v);
+
+            u--;
+            v--;
+
+            unionSet(u,v);
+        }
+
+        cnl(noOfDisjointSets()-1);
+
+        ll cnt = 0;
+
+        fo(i,1,n){
+            if(!isSameSet(i,i-1)){
+                cnt++;
+                csp(i);cnl(i+1);
+                unionSet(i,i-1);
+            }
+        }
+
+        //assert(cnt == noOfDisjointSets()-1);
+
+
+    
+    
     return 0;
 }

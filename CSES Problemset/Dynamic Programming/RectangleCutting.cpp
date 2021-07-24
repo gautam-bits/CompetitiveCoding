@@ -52,23 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
@@ -76,37 +59,49 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    read(n);
+    ll a,b;
+    read(a);
+    read(b);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    ll mx = max(a,b);
+    ll mn = min(a,b);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+    //i < j;
+    //return dp[mn][mx]
+
+    vvi dp(mx+1,vi(mx+1,1e16));
+
+    fo(i,0,mx+1){
+        dp[0][i] = 0;
+        dp[i][0] = 0;
+        if(i > 0) dp[i][i] = 0;
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    
 
-    dfs(0,ans1,0,mxlvl);
 
-    visited.assign(n,0);
+    fo(i,1,mx + 1) {
+        fo(j,i,mx+1){
+            
+            fo(k,1,i){
+                dp[i][j] = min(dp[i][j],1 + dp[i-k][j] + dp[k][j]); 
+            }
 
-    mxlvl = 0;
-    ll n2 = ans1;
+            fo(k,1,j) {
+                dp[i][j] = min(dp[i][j], 1 + dp[i][j-k] + dp[i][k]);
+            }
 
-    dfs(n2,ans2,0,mxlvl);
+            dp[j][i] = dp[i][j];
 
-    cnl(mxlvl);
+        }
+    }
 
+    //vshow2d(dp);
+
+    cnl(dp[mn][mx]);
+
+
+    
 
     return 0;
 }

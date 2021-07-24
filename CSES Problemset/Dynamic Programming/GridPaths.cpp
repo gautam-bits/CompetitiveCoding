@@ -45,67 +45,58 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    const ll MOD   = 1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
     
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    
     ll n;
     read(n);
+    vector<vector<char>> grid(n,vector<char>(n,0));
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    cinarr2d(n,n,grid);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+
+    vvi answer(n,vi(n,0));
+
+    rfo(i,n-1,0){
+        rfo(j,n-1,0) {
+            if(i == n-1) {
+                if(j == n-1) {
+                    if(grid[i][j] == '.') {
+                        answer[i][j] = 1;
+                    } 
+                }
+                else {
+                    if(grid[i][j] == '.') {
+                        answer[i][j] = answer[i][j+1];
+                    }
+                }
+            }
+            else {
+                if(j == n-1) {
+                    if(grid[i][j] == '.') {
+                        answer[i][j] = answer[i+1][j];
+                    } 
+                }
+                else {
+                    if(grid[i][j] == '.') {
+                        answer[i][j] = (answer[i][j+1] + answer[i+1][j])%MOD;
+                    }
+                }
+            }
+        }
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    //vshow2d(answer);
 
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
+    cnl(answer[0][0]);
 
 
     return 0;

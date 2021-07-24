@@ -46,7 +46,6 @@
     typedef vector<vi> vvi;
 
     const int MOD   = 1000000007 ;
-    const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
@@ -55,19 +54,19 @@
 
 // seg tree template taken from https://github.com/Ashishgup1/Competitive-Coding/blob/master/Segment%20Tree.cpp
 
-struct dat
+struct data
 {
 	//Use required attributes
-	ll mn;
+	ll mx;
 
 	//Default Values
-	dat() : mn(1e9) {};
+	data() : mx(0) {};
 };
 
 struct SegTree
 {
 	ll N;
-	vector<dat> st;
+	vector<data> st;
 	vector<bool> cLazy;
 	vector<ll> lazy;
 	vector<ll> array;
@@ -82,9 +81,9 @@ struct SegTree
 	}
 
 	//Write reqd merge functions
-	void merge(dat &cur, dat &l, dat &r) 
+	void merge(data &cur, data &l, data &r) 
 	{
-		cur.mn = min(l.mn, r.mn);
+		cur.mx = max(l.mx, r.mx);
 	}
 	
 	//Handle lazy propagation appriopriately
@@ -97,7 +96,7 @@ struct SegTree
 			lazy[node*2] = lazy[node];
 			lazy[node*2 + 1] = lazy[node]; 
 		}
-		st[node].mn = lazy[node];
+		st[node].mx = lazy[node];
 		cLazy[node] = 0;
 	}
 
@@ -105,7 +104,7 @@ struct SegTree
 	{
 		if(L==R)
 		{
-			st[node].mn = array[L];
+			st[node].mx = array[L];
 			return;
 		}
 		ll M=(L + R)/2;
@@ -114,23 +113,37 @@ struct SegTree
 		merge(st[node], st[node*2], st[node*2+1]);
 	}
 
-	dat Query(ll node, ll L, ll R, ll i, ll j)
+	data Query(ll node, ll L, ll R, ll i, ll j)
 	{
 		if(cLazy[node])
 			propagate(node, L, R);
 		if(j<L || i>R)
-			return dat();
+			return data();
 		if(i<=L && R<=j)
 			return st[node];
 		ll M = (L + R)/2;
-		dat left=Query(node*2, L, M, i, j);
-		dat right=Query(node*2 + 1, M + 1, R, i, j);
-		dat cur;
+		data left=Query(node*2, L, M, i, j);
+		data right=Query(node*2 + 1, M + 1, R, i, j);
+		data cur;
 		merge(cur, left, right);
 		return cur;
 	}
 
-	dat pQuery(ll node, ll L, ll R, ll pos)
+    int dfs(int L,int R,int val) {
+        if(L == R) {
+            return L;
+        }
+
+        ll M = (L + R)/2;
+
+        data lef = query(L,M);
+
+        if(lef.mx >= val) return dfs(L,M,val);
+        return dfs(M+1,R,val);
+
+    }
+
+	data pQuery(ll node, ll L, ll R, ll pos)
 	{
 		if(cLazy[node])
 			propagate(node, L, R);
@@ -181,12 +194,14 @@ struct SegTree
 		merge(st[node], st[node*2], st[node*2 + 1]);
 	}
 
-	dat query(ll pos)
+    
+
+	data query(ll pos)
 	{
 		return pQuery(1, 1, N, pos);
 	}
 
-	dat query(ll l, ll r)
+	data query(ll l, ll r)
 	{
 		return Query(1, 1, N, l, r);
 	}
@@ -207,15 +222,44 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
+    ll n,m;
+    read(n);
+    read(m);
 
-		//init
-		//build
-        
-    
+    vi arr(n+1);
+    fo(i,1,n+1) read(arr[i]);
+
+    SegTree myseg;
+
+    myseg.init(n,arr);
+    myseg.build(1,1,n);
+
+    vi ans(m);
+
+    fo(i,0,m) {
+        ll qu;
+        read(qu);
+
+        ll temp = myseg.query(1,n).mx;
+
+        if(qu > temp) {
+            ans[i] = 0;
+        }
+
+        else {
+            ans[i] = myseg.dfs(1,n,qu);
+            ll rem = myseg.query(ans[i],ans[i]).mx - qu;
+            myseg.update(ans[i],rem);
+        }
+
+        //cnl(myseg.dfs(1,n,qu));
     }
+
+    vshow1d(ans);
+
+
+
+
+
     return 0;
 }

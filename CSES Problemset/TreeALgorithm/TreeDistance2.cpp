@@ -55,20 +55,38 @@
 
 vvi adjList;
 vi visited;
+vi cnt;
+vi ans;
+vi dist;
 
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
+ll dfs1(ll node,ll di) {
     visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
+    dist[node] = di;
+    cnt[node] = 1;
 
     for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
+        cnt[node] += dfs1(ch,di+1);
     }
 
+    return cnt[node];
 }
+
+
+void dfs2(ll node){
+    visited[node] = 1;
+    
+    ll n = visited.size();
+
+    for(ll ch : adjList[node]) if(!visited[ch]) {
+        ans[ch] = ans[node] - 2*cnt[ch] + n;
+        dfs2(ch);
+    }
+}
+
+
+
+
+
     
 int main() 
 {
@@ -81,6 +99,9 @@ int main()
 
     adjList.assign(n,vi());
     visited.assign(n,0);
+    cnt.assign(n,0);
+    ans.assign(n,0);
+    dist.assign(n,0);
 
     fo(i,0,n-1) {
         ll a,b;
@@ -92,21 +113,17 @@ int main()
         adjList[b].pb(a);
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    ll temp = dfs1(0,0);
 
-    dfs(0,ans1,0,mxlvl);
+    // vshow1d(cnt);
+    // vshow1d(dist);
+
+    fo(i,0,n) ans[0] += dist[i];
 
     visited.assign(n,0);
+    dfs2(0);
 
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
+    vshow1d(ans);
 
     return 0;
 }

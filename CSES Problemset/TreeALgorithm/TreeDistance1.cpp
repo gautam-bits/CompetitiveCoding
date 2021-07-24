@@ -69,6 +69,15 @@ void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
     }
 
 }
+
+void dfs2(ll node,vi& dist,ll lvl){
+    visited[node] = 1;
+    dist[node] = lvl;
+
+    for(ll ch : adjList[node]) if(!visited[ch]) {
+        dfs2(ch,dist,lvl+1);
+    }
+}
     
 int main() 
 {
@@ -105,7 +114,21 @@ int main()
 
     dfs(n2,ans2,0,mxlvl);
 
-    cnl(mxlvl);
+    vi dist1(n,0);
+    vi dist2(n,0);
+
+    visited.assign(n,0);
+    dfs2(ans1,dist1,0);
+
+    visited.assign(n,0);
+    dfs2(ans2,dist2,0);
+
+    fo(i,0,n) csp(max(dist1[i],dist2[i]));
+    cnl("");
+
+
+
+
 
 
     return 0;

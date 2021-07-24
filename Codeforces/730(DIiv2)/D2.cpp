@@ -37,7 +37,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
-    #define endl "\n" 
+    // #define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -53,20 +53,76 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
+ll query(ll q) {
+    cnl(q);
 
+    ll r;
+    read(r);
 
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
+    return r;
+}
+
+ll opp(ll x,ll k) {
+    vi temp;
+
+    while(x > 0) {
+        temp.push_back(x%k);
+        x /= k;
+    }
+    ll sz = temp.size();
+    fo(i,0,sz) {
+        temp[i] = (k - temp[i])%k;
     }
 
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
+    ll ans = 0;
+    ll curr = 1;
+
+    fo(i,0,sz) {
+        ans += curr*temp[i];
+        curr *= k;
     }
+
+    return ans;
+
+}
+
+ll xr(ll x,ll y,ll k) {
+
+    vi temp1(40,0);
+    vi temp2(40,0);
+
+    ll idx1 = 0;
+    while(x > 0) {
+        temp1[idx1] = (x%k);
+        x /= k;
+        idx1++;
+    }
+
+    ll idx2 = 0;
+    while(y > 0) {
+        temp2[idx2] = (y%k);
+        y /= k;
+        idx2++;
+    }
+
+    fo(i,0,40) temp1[i] += temp2[i];
+
+    ll sz = temp1.size();
+    fo(i,0,sz) {
+        temp1[i] %= k;
+    }
+
+    ll ans = 0;
+    ll curr = 1;
+
+    fo(i,0,sz) {
+        ans += curr*temp1[i];
+        curr *= k;
+    }
+
+    return ans;
+
+
 
 }
     
@@ -75,38 +131,46 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
+    // cnl(opp(1,3));
+    // cnl(xr(opp(1,3),0,3));
     
-    ll n;
-    read(n);
+    test(t){     // tno[1..t]
+    
+        ll n,k;
+        read(n);
+        read(k);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+        ll curr = 0;
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+        fo(i,0,n) {
+
+            if(i == 0) {
+                ll ans = query(0);
+                if(ans == 1) {
+                    break;
+                }
+                // curr = xr(curr,0,k);
+            }
+            else {
+
+                ll send = xr(curr,i,k);
+
+                ll yo = opp(i,k);
+                ll ans = query(send);
+                if(ans == 1) {
+                    break;
+                }
+
+                curr = xr(curr,send,k);
+            }
+
+        }
+
+
+
+
+    
     }
-
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
     return 0;
 }

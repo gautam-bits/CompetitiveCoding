@@ -61,7 +61,7 @@ struct dat
 	ll mn;
 
 	//Default Values
-	dat() : mn(1e9) {};
+	dat() : mn(0) {};
 };
 
 struct SegTree
@@ -97,7 +97,7 @@ struct SegTree
 			lazy[node*2] = lazy[node];
 			lazy[node*2 + 1] = lazy[node]; 
 		}
-		st[node].mn = lazy[node];
+		st[node].mn += lazy[node];
 		cLazy[node] = 0;
 	}
 
@@ -152,7 +152,7 @@ struct SegTree
 		if(i<=L && R<=j)
 		{
 			cLazy[node] = 1;
-			lazy[node] = val;
+			lazy[node] += val;
 			propagate(node, L, R);
 			return;
 		}
@@ -207,15 +207,42 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
         ll n;
+        ll q;
         read(n);
+        read(q);
+
+        vi arr(n+1);
+        fo(i,1,n+1) read(arr[i]);
+
 
 		//init
 		//build
+
+        SegTree myseg;
+        myseg.init(n,arr);
+        myseg.build(1,1,n);
+
+
+        fo(i,0,q) {
+            ll sw;
+            read(sw);
+
+            if(sw == 1) {
+                ll a,b,u;
+                read(a);
+                read(b);
+                read(u);
+
+                myseg.update(a,b,u);
+            }
+            else {
+                ll k;
+                read(k);
+                cnl(myseg.query(k).mn);
+            }
+        }
         
     
-    }
     return 0;
 }

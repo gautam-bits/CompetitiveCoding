@@ -53,22 +53,67 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
+const int ALPHABET_SIZE = 26; 
 
+struct node {
+	node *p[ALPHABET_SIZE];
+	int count;
+    bool isEndOfWord;
+	node() {
+		count=0;
+        isEndOfWord = 0;
+		fo(i,0,ALPHABET_SIZE) p[i] = NULL;
+	}
+};
 
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
+class trie {
+    
+public:
+
+    node *root;
+	
+    trie(){
+        root = new node();
     }
 
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
+    void insert(string s){
+        node *x = root;
+        int length = s.size();
+        for (int i = 0; i < length; i++) {
+            if (x->p[s[i] - 'A'] == NULL) {
+                x->p[s[i] - 'A'] = new node();
+            }
+            x = x->p[s[i] - 'A'];
+        }
+        x->count++;
+    }
+	
+    void erase(string s){
+        node *x = root;
+        int length = s.size();
+        for (int i = 0; i < length; i++) {
+            x = x->p[s[i] - 'A'];
+        }
+        x->count--;
     }
 
-}
+    // int dfs(node* curr,int k,int depth,int& ans) {
+
+    //     for(int i = 0 ; i < ALPHABET_SIZE ; i++) {
+    //         if(curr->p[i] != NULL) {
+    //             curr->count += dfs(curr->p[i],k,depth + 1,ans);
+    //         }
+    //     }
+
+    //     int temp = (curr->count)/k;
+    //     ans += depth*temp;
+
+    //     return curr->count - k*temp;
+    // }
+	
+};
+
+
     
 int main() 
 {
@@ -76,37 +121,14 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    read(n);
+    test(t){     // tno[1..t]
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+        trie*tr = new trie();
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+
+
+
+    
     }
-
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
     return 0;
 }

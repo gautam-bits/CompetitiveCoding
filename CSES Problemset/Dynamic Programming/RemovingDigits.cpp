@@ -53,21 +53,13 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
+vi nos(ll n) {
+    vi ans;
+    while(n > 0) {
+        ans.pb(n%10);
+        n/=10;
     }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
+    return ans;
 }
     
 int main() 
@@ -75,38 +67,14 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
+
     ll n;
     read(n);
-
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
-    }
-
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
+    vi dp(n+15,1e15);
+    dp[0] = 0;
+    fo(i,1,10) dp[i] = 1;
+    fo(i,10,n+1) for(ll x : nos(i)) dp[i] = min(dp[i],dp[i-x]+1);
+    cnl(dp[n]);
+    
     return 0;
 }

@@ -13,7 +13,7 @@
     #define MP make_pair
     #define F first
     #define S second
-    #define ll long long
+    #define ll int
     #define lb lower_bound
     #define ub upper_bound
     #define bs binary_search
@@ -45,7 +45,7 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    const ll MOD   = 1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
@@ -53,21 +53,30 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
+ll n;
+ll k;
+string str;
+unordered_map<string,bool> mp;
+vi dp;
 
+ll calc(ll idx) {
+    if(idx == n) return 1;
 
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
+    if(dp[idx] != -1) return dp[idx];
+
+    ll ans = 0;
+
+    string st = "";
+
+    fo(i,idx,n) {
+        st += str[i];
+
+        if(mp.find(st) != mp.end()) {
+            ans = (ans + calc(i+1))%MOD;
+        }
     }
 
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
+    return dp[idx] = ans;
 }
     
 int main() 
@@ -75,37 +84,44 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
+    // freopen("input.txt","r",stdin);
+    // freopen("output.txt","w",stdout);
+
+    read(str);
+
+    n = str.size();
+
+    read(k);
     
-    ll n;
-    read(n);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    vector<string> vec(k);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
-    }
+    dp.assign(n+1,-1);
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    dp[n] = 1;
 
-    dfs(0,ans1,0,mxlvl);
+    fo(i,0,k) read(vec[i]);
 
-    visited.assign(n,0);
+    for(string s : vec) mp[s] = 1;
 
-    mxlvl = 0;
-    ll n2 = ans1;
+    calc(0);
 
-    dfs(n2,ans2,0,mxlvl);
+    // vshow1d(dp);
 
-    cnl(mxlvl);
+    cnl(dp[0]);
+
+
+
+
+    
+
+
+
+
+
+
+
 
 
     return 0;

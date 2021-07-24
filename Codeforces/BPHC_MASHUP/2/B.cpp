@@ -53,21 +53,12 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
+bool islow(char x) {
+    return x >= 'a' && x <= 'z';
+}
 
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
+bool isch(char x) {
+    return (x >= 'a' && x <= 'z') ||(x >= 'A' && x <= 'Z');
 }
     
 int main() 
@@ -76,37 +67,22 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    read(n);
+    test(t){     // tno[1..t]
+    
+        string s;
+        read(s);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+        ll n = s.size();
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+        ll poss = 1;
+
+        fo(i,0,n){
+            if(!islow(s[i])) poss++;
+        }
+
+        if(poss <= 7) cnl("YES");
+        else cnl("NO");
+    
     }
-
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
     return 0;
 }

@@ -53,21 +53,19 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
+int calc(int i, int j,string& A,string& B,vector<vector<int>>& dp) {
 
+    int n = A.size();
+    int m = B.size();
+    
+    if(i == n) return m - j;
+    if(j == m) return n - i;
 
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
+    if(dp[i][j] != -1) return dp[i][j];
 
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
+    if(A[i] == B[j]) return dp[i][j] = calc(i+1,j+1,A,B,dp);
 
+    return dp[i][j] = min({calc(i+1,j,A,B,dp),calc(i,j+1,A,B,dp),calc(i+1,j+1,A,B,dp)}) + 1;
 }
     
 int main() 
@@ -76,37 +74,14 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    read(n);
+    string A,B;
+    read(A);
+    read(B);
+    int n = A.size();
+    int m = B.size();
+    
+    vector<vector<int>> dp(n,vector<int>(m,-1));
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
-    }
-
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
+    cnl(calc(0,0,A,B,dp));
     return 0;
 }

@@ -45,68 +45,90 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    const ll MOD   = 1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
+ll add(ll x, ll y)
+{
+    x += y;
+    while(x >= MOD) x -= MOD;
+    while(x < 0) x += MOD;
+    return x;
 }
-    
+
+ll mul(ll x, ll y)
+{
+    return (x * 1ll * y) % MOD;
+}
+
+ll binpow(ll x, ll y)
+{
+    ll ans = 1;
+    while(y > 0)
+    {
+        if(y % 2 == 1)
+            ans = mul(ans, x);
+        x = mul(x, x);
+        y >>= 1;
+    }
+    return ans;
+}
+
+ll divide(ll x, ll y)
+{
+    return mul(x, binpow(y, MOD - 2));
+}
+
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    read(n);
+    test(t){     // tno[1..t]
+    
+        ll n;
+        read(n);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+        vi arr1(n);
+        vi arr2(n);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+        map<ll,ll> mp;
+
+        set<int> s;
+
+        cinarr(n,arr1);
+        cinarr(n,arr2);
+
+        fo(i,0,n) {
+            mp[arr1[i]] = arr2[i];
+            s.insert(i+1);
+        }
+
+        ll ans = 0;
+
+        while(!s.empty()) {
+            ans++;
+            ll temp = *s.begin();
+            s.erase(s.begin());
+
+            ll curr = mp[temp];
+
+            while(curr != temp) {
+                s.erase(s.find(curr));
+                curr = mp[curr];
+            }
+
+        }
+
+        cnl(binpow(2,ans));
+
+
+    
     }
-
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
     return 0;
 }

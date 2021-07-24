@@ -6,12 +6,6 @@
     
     #include <bits/stdc++.h>
     using namespace std;
-
-    #include <ext/pb_ds/assoc_container.hpp>
-    #include <ext/pb_ds/tree_policy.hpp>
-    using namespace __gnu_pbds;
-    template<typename T>
-    using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ knowledge $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
     
@@ -44,7 +38,6 @@
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
     #define endl "\n" 
-
     
     
     typedef vector<ll> vi;
@@ -52,23 +45,136 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    const ll MOD   = 1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+vi val;
+vector<vpi> adjList;
+vpi dp; // first for val without taking , second for val
+vi visited;  
+vpi ways;
+
+void dfs(ll node,ll parent) {
+
+  bool leaf = 1;
+
+
+  ll v1 = 0;
+  ll t1 = 1;
+  ll a4 = 0;
+
+  ll a3 = INT_MAX;
+  for(pi ch : adjList[node]) if(ch.F != parent) {
+      leaf = 0;
+      dfs(ch.F,node);
+      // v1 += min(dp[ch.F].F,dp[ch.F].S);
+      t1 *= (ways[ch.F].F + ways[ch.F].S);
+      if(dp[ch.F].F < dp[ch.F].S) {
+        v1 += dp[ch.F].F;
+        ways[node].F += ways[ch.F].F;
+      } 
+      else if(dp[ch.F].F > dp[ch.F].S) {
+        v1 += dp[ch.F].S;
+        ways[node].F *= ways[ch.F].S;
+      }
+      else {
+        v1 += dp[ch.F].S;
+        ways[node].F *= ways[ch.F].S + ways[ch.F].F;
+      } 
+  }
+
+  // csp("n");csp(node);cnl(t1);
+
+
+  dp[node].F = v1 + val[node];
+
+  for(pi ch : adjList[node]) if(ch.F != parent) {    
+    a3 = min(a3,v1 - min(dp[ch.F].F,dp[ch.F].S) + ch.second + dp[ch.F].F - val[ch.F]); 
+  }
+
+  for(pi ch : adjList[node]) if(ch.F != parent) {    
+    // a3 = min(a3,v1 - min(dp[ch.F].F,dp[ch.F].S) + ch.second + dp[ch.F].F - val[ch.F]); 
+
+    if(v1 - min(dp[ch.F].F,dp[ch.F].S) + ch.second + dp[ch.F].F - val[ch.F] == a3) {
+      a4 += (t1/((ways[ch.F].F + ways[ch.F].S)))*(ways[ch.F].F);
+    }
+  }
+
+
+  dp[node].S = a3;
+  ways[node].S = a4;
+
+  if(leaf) {
+    dp[node].F = val[node];
+    dp[node].S = val[node];
+    ways[node] = {1,0};
+  }
+
+}
     
 int main() 
 {
     
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+  ios_base::sync_with_stdio(false);
+  cin.tie(NULL);
+  
+  ll n;
+  read(n);
 
-    ll t;
-    read(t);
-    cnl(t);
-    
-    return 0;
+  val.assign(n,0);
+  adjList.assign(n,vpi());
+  dp.assign(n,{-1,-1});
+  visited.assign(n,0);
+  ways.assign(n,{1,1});
+
+  cinarr(n,val);
+
+  fo(i,0,n-1) {
+    ll u,v,w;
+
+    read(u);
+    read(v);
+    read(w);
+
+    u--;
+    v--;
+
+    adjList[u].push_back({v,w});
+    adjList[v].push_back({u,w});
+  }
+
+
+
+  dfs(0,-1);
+
+  // fo(i,0,n) {
+  //   csp(ways[i].F);cnl(ways[i].S);
+  // }
+
+  // cnl(ways[0].F);
+  // cnl(ways[])
+
+  // cnl(min(dp[0].F,dp[0].S));
+
+
+  if(dp[0].F < dp[0].S) {
+    csp(dp[0].F);cnl(ways[0].F);
+  }
+  else if(dp[0].F > dp[0].S) {
+    csp(dp[0].S);cnl(ways[0].S);
+  }
+  else {
+    csp(dp[0].S);cnl(ways[0].S + ways[0].F);
+  }
+
+
+
+
+  
+  return 0;
 }

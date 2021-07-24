@@ -55,19 +55,19 @@
 
 vvi adjList;
 vi visited;
+vi col;
+ll ans;
 
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
+void dfs(ll node,ll parent){
     visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
     for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
+        dfs(ch,node);
     }
 
+    if(parent != -1 && col[node] == 0 && col[parent] == 0){
+        ans++;
+        col[node] = col[parent] = 1;
+    }
 }
     
 int main() 
@@ -75,12 +75,15 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
+
     ll n;
     read(n);
 
     adjList.assign(n,vi());
     visited.assign(n,0);
+    col.assign(n,0);
+    ans = 0;
+
 
     fo(i,0,n-1) {
         ll a,b;
@@ -92,21 +95,13 @@ int main()
         adjList[b].pb(a);
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    dfs(0,-1);
 
-    dfs(0,ans1,0,mxlvl);
+    // ll cnt = 0;
+    // fo(i,0,n) cnt += col[i];
 
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
+    cnl(ans);
+    
+    
     return 0;
 }

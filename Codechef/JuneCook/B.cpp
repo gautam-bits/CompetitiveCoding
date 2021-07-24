@@ -52,23 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
@@ -76,37 +59,35 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    read(n);
+    
+        ll n;
+        ll q;
+        read(n);
+        read(q);
+        vi arr(n);
+        cinarr(n,arr);
+        sort(all(arr));
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+        fo(i,0,q){
+            ll temp;
+            read(temp);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
-    }
+            if(bs(all(arr),temp)) {
+                cnl(0);
+                continue;
+            }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+            ll idx = lb(all(arr),temp) - arr.begin();
 
-    dfs(0,ans1,0,mxlvl);
+            if((n-idx)&1) {
+                cnl("NEGATIVE");
+            }
+            else {
+                cnl("POSITIVE");
+            }
 
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
+        }
+    
+    
     return 0;
 }

@@ -13,7 +13,7 @@
     #define MP make_pair
     #define F first
     #define S second
-    #define ll long long
+    #define ll int
     #define lb lower_bound
     #define ub upper_bound
     #define bs binary_search
@@ -37,7 +37,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
-    #define endl "\n" 
+    // #define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -52,23 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
@@ -76,36 +59,69 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
+    ll n,a,b;
     read(n);
+    read(a);
+    read(b);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    // cnl(a);
+// 
+    ll sz = 6*n + 1;
+    vector<vector<double>> dp(n+1,vector<double>(sz,0.0));
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+    // cnl(a);
+    fo(i,1,n+1) {
+        if(i == 1) {
+            fo(j,1,7) dp[i][j] = 1.0/6.0;
+            // cnl(a);
+        }
+        else {
+            fo(j,1,6*n + 1) {
+                fo(k,1,7) if(j + k < 6*n + 1) {
+                    dp[i][j+k] += dp[i-1][j]/6.0;
+                }
+                
+            }
+        }
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    // vshow2d(dp);
 
-    dfs(0,ans1,0,mxlvl);
+    double ans = 0.0;
+    cout<<fixed<<setprecision(6);
+    fo(i,a,b+1) ans += dp[n][i];
 
-    visited.assign(n,0);
+    cnl(ans);
 
-    mxlvl = 0;
-    ll n2 = ans1;
 
-    dfs(n2,ans2,0,mxlvl);
+    // ll sz = 6*n + 1;
+    // vector<vector<ll>> dp(n+1,vector<ll>(sz,0));
 
-    cnl(mxlvl);
+    // // cnl(a);
+    // fo(i,1,n+1) {
+    //     if(i == 1) {
+    //         fo(j,1,7) dp[i][j] = 1;
+    //         // cnl(a);
+    //     }
+    //     else {
+    //         fo(j,1,6*n + 1) {
+    //             fo(k,1,7) if(j + k < 6*n + 1) {
+    //                 dp[i][j+k] += dp[i-1][j];
+    //             }
+                
+    //         }
+    //     }
+    // }
+
+    // vshow2d(dp);
+
+    // ll ans = 0;
+    // cout<<fixed<<setprecision(6);
+    // fo(i,a,b+1) ans += dp[n][i];
+
+    // cnl(ans);
+
+
 
 
     return 0;

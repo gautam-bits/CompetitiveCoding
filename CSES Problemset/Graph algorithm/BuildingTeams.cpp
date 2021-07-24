@@ -52,23 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
@@ -76,36 +59,78 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
+    ll n,m;
     read(n);
+    read(m);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    vvi adjList(n,vi());
+    vector<int> group(n,-2);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+
+
+    auto addEdge = [&] () {
+        ll u,v;
+        read(u);
+        read(v);
+        u--;
+        v--;
+        adjList[u].pb(v);
+        adjList[v].pb(u);
+    };
+
+    fo(i,0,m) addEdge();
+
+
+
+    auto bfs = [&] (ll curr) {
+
+        bool found  = 0;
+
+        queue<ll> q;
+        q.push(curr);
+        group[curr] = 1;
+
+        while(!q.empty()) {
+            ll curr = q.front();
+            q.pop();
+
+            for(ll child : adjList[curr]) {
+                if(group[child] == -2){
+                    if(group[curr] == 1){
+                        group[child] = 2;
+                    }
+                    else group[child] = 1;
+
+                    q.push(child);
+                }
+                else {
+                    if(group[child] + group[curr] != 3){
+                        return 0;
+                    }
+                }
+            }
+            
+
+        }
+
+        return 1;
+    };
+
+    
+
+    fo(i,0,n){
+        if(group[i] == -2) {
+            bool exists = bfs(i);
+
+            if(!exists) {
+                cnl("IMPOSSIBLE");
+                return 0;
+            }
+        }
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
+    
+    vshow1d(group);
 
 
     return 0;

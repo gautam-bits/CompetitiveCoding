@@ -55,19 +55,17 @@
 
 vvi adjList;
 vi visited;
+vi dist;
 
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
+void dfs(ll node) {
     visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
+    for(ll ch : adjList[node]) {
+        if(!visited[ch]) dfs(ch);
     }
 
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
+    for(ll ch : adjList[node]) {
+        dist[node] = max(dist[node],1+dist[ch]);
     }
-
 }
     
 int main() 
@@ -75,38 +73,36 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
+
     ll n;
+    ll m;
     read(n);
+    read(m);
 
     adjList.assign(n,vi());
     visited.assign(n,0);
+    dist.assign(n,0);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+    fo(i,0,m) {
+        ll u;
+        ll v;
+        read(u);
+        read(v);
+        u--;
+        v--;
+        adjList[u].pb(v);
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    // vshow2d(adjList);
 
-    dfs(0,ans1,0,mxlvl);
+    fo(i,0,n) if(!visited[i]) dfs(i);
 
-    visited.assign(n,0);
+    // vshow1d(dist);
 
-    mxlvl = 0;
-    ll n2 = ans1;
+    ll ans = *max_element(all(dist));
 
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
+    cnl(ans);
+    
+    
     return 0;
 }

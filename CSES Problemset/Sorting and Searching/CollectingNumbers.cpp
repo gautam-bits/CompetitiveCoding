@@ -52,23 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
@@ -78,35 +61,30 @@ int main()
     
     ll n;
     read(n);
+    vi arr(n);
+    cinarr(n,arr);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    set<int> s;
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+    for(ll x : arr) {
+        if(s.empty()) s.insert(x);
+        else {
+            auto itr = s.lb(x);
+
+            if(itr == s.begin()) {
+                s.insert(x);
+            }
+            else {
+                itr--;
+                s.erase(itr);
+                s.insert(x);
+            }
+        }
+
+        for(ll xx : s) csp(xx);
+        cnl("");
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
+    cnl(s.size());
     return 0;
 }

@@ -52,23 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
@@ -76,36 +59,88 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
+    ll n,m;
     read(n);
+    read(m);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    vvi adjList(n,vi());
+    vector<int> parent(n,-2);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+
+
+    auto addEdge = [&] () {
+        ll u,v;
+        read(u);
+        read(v);
+        u--;
+        v--;
+        adjList[u].pb(v);
+        adjList[v].pb(u);
+    };
+
+    fo(i,0,m) addEdge();
+
+
+
+    auto bfs = [&] () {
+
+        bool found  = 0;
+
+        queue<ll> q;
+        q.push(0);
+        parent[0] = -1;
+
+        while(!q.empty()) {
+            ll curr = q.front();
+            q.pop();
+
+            for(ll child : adjList[curr]) if(parent[child] == -2) {
+                q.push(child);
+                parent[child] = curr;
+                if(child == n-1){
+                    return 1;
+                }
+            } 
+
+
+        }
+
+        return 0;
+    };
+
+    bool exists = bfs();
+
+    if(!exists) {
+        cnl("IMPOSSIBLE");
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    else {
+        // cnl("YO");
 
-    dfs(0,ans1,0,mxlvl);
+        ll curr = n-1;
+        ll cnt = 0;
+        vi ans;
 
-    visited.assign(n,0);
+        while(parent[curr] != -1) {
+            cnt++;
+            ans.pb(curr+1);
 
-    mxlvl = 0;
-    ll n2 = ans1;
+            curr = parent[curr];
 
-    dfs(n2,ans2,0,mxlvl);
+        }
 
-    cnl(mxlvl);
+        ans.pb(1);
+
+        reverse(all(ans));
+
+        cnl(ans.size());
+        vshow1d(ans);
+    }
+
+
+
+
+
 
 
     return 0;

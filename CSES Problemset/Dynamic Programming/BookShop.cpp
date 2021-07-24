@@ -13,7 +13,7 @@
     #define MP make_pair
     #define F first
     #define S second
-    #define ll long long
+    #define ll int
     #define lb lower_bound
     #define ub upper_bound
     #define bs binary_search
@@ -52,23 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
@@ -76,37 +59,36 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
+    ll n,x;
     read(n);
+    read(x);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    vi h(n);
+    vi s(n);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+    cinarr(n,h);
+    cinarr(n,s);
+
+    vvi dp(n,vi(x+1,0));
+
+    fo(j,0,x+1) {
+        if(h[0] <= j) {
+            dp[0][j] = s[0];
+        }
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    fo(i,1,n){
+        fo(j,0,x+1) {
+            dp[i][j] = dp[i-1][j];
 
-    dfs(0,ans1,0,mxlvl);
+            if(h[i] <= j) {
+                dp[i][j] = max(dp[i][j],dp[i-1][j-h[i]]+s[i]);
+            }
+        }
+    }
 
-    visited.assign(n,0);
+    // vshow2d(dp);
 
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
+    cnl(dp[n-1][x]);
     return 0;
 }

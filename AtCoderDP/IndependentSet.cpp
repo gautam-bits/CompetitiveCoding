@@ -45,7 +45,7 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    const ll MOD   = 1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
@@ -55,20 +55,26 @@
 
 vvi adjList;
 vi visited;
+vpi ans;
 
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
+void dfs(ll node) {
     visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
+
+    for(ll ch : adjList[node]) if(!visited[ch]) {
+        dfs(ch);
+        visited[ch] = 0;
     }
 
     for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
+        ans[node].F = (ans[node].F * ((ans[ch].F + ans[ch].S)%MOD))%MOD;
+        ans[node].S = (ans[node].S * ans[ch].F)% MOD;
     }
 
+
+
 }
+
+
     
 int main() 
 {
@@ -77,35 +83,29 @@ int main()
     cin.tie(NULL);
     
     ll n;
+
     read(n);
 
     adjList.assign(n,vi());
     visited.assign(n,0);
+    ans.assign(n,{1,1});
 
     fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+        ll u,v;
+        read(u);
+        read(v);
+        u--;
+        v--;
+
+        adjList[u].pb(v);
+        adjList[v].pb(u);
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    dfs(0);
 
-    dfs(0,ans1,0,mxlvl);
+    ll val = (ans[0].F + ans[0].S)%MOD;
 
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
+    cnl(val);
 
 
     return 0;

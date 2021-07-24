@@ -13,7 +13,7 @@
     #define MP make_pair
     #define F first
     #define S second
-    #define ll long long
+    #define ll int
     #define lb lower_bound
     #define ub upper_bound
     #define bs binary_search
@@ -45,68 +45,47 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    const ll MOD   = 1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
-    ll n;
-    read(n);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    ll n = 1000000;
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+    vvi dp(n+4,vi(2,0));
+
+    dp[n+1][0] = 1;
+    dp[n+1][1] = 1;
+
+    rfo(i,n,2) {
+        ll a = (dp[i+1][1] + dp[i+1][0])%MOD;
+        ll b = dp[i+1][0];
+        ll c = (2*dp[i+1][0])%MOD;
+        ll d = dp[i+1][1];
+
+        dp[i][0] = ((a+b)%MOD+c)%MOD;
+        dp[i][1] = (a+d)%MOD;
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    // cnl((dp[n-2+2][0] + dp[n-2+2][1])%MOD);
+    
+    test(t){     // tno[1..t]
+    
+        ll q;
+        read(q);
 
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
+        ll ans = (dp[n-q+2][0] + dp[n-q+2][1])%MOD;
+        cnl(ans);
+    
+    }
     return 0;
 }

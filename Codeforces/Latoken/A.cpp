@@ -52,23 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
@@ -76,37 +59,93 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    read(n);
+    test(t){     // tno[1..t]
+    
+        ll n;
+        ll m;
+        read(n);
+        read(m);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+        vector<vector<char>> grid(n,vector<char> (m));
+        vector<vector<char>> grid2(n,vector<char> (m));
+        vector<vector<char>> grid3(n,vector<char> (m));
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+        fo(i,0,n){
+            fo(j,0,m){
+                if((i+j)&1) grid2[i][j] = 'R';
+                else grid2[i][j] = 'W';
+            }
+        }
+
+        fo(i,0,n){
+            fo(j,0,m){
+                if((i+j)&1) grid3[i][j] = 'W';
+                else grid3[i][j] = 'R';
+            }
+        }
+
+
+        cinarr2d(n,m,grid);
+
+        bool poss = 1;
+
+        // vshow2d(grid2);
+        // vshow2d(grid3);
+
+
+        fo(i,0,n){
+            fo(j,0,m){
+                if(grid[i][j] != '.') {
+                    if(grid[i][j] != grid2[i][j]) {
+                        poss = 0;
+                    }
+                }
+            }
+        }
+
+        if(poss) {
+            cnl("YES");
+            fo(i,0,n){
+                fo(j,0,m){
+                    cout<<grid2[i][j];
+                }
+                cout<<endl;
+            }
+
+            continue;
+
+        }
+
+        poss = 1;
+
+        fo(i,0,n){
+            fo(j,0,m){
+                if(grid[i][j] != '.') {
+                    if(grid[i][j] != grid3[i][j]) {
+                        poss = 0;
+                    }
+                }
+            }
+        }
+
+        if(poss) {
+            cnl("YES");
+            fo(i,0,n){
+                fo(j,0,m){
+                    cout<<grid3[i][j];
+                }
+                cout<<endl;
+            }
+
+            continue;
+
+        }
+
+        cnl("NO");
+
+
+
+    
     }
-
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
     return 0;
 }

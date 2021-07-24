@@ -13,7 +13,7 @@
     #define MP make_pair
     #define F first
     #define S second
-    #define ll long long
+    #define ll int
     #define lb lower_bound
     #define ub upper_bound
     #define bs binary_search
@@ -45,68 +45,55 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    const ll MOD   = 1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
-    ll n;
+
+    ll n,m;
     read(n);
+    read(m);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    vi arr(n);
+    cinarr(n,arr);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+    vvi dp(n,vi(m+2,0));
+
+    fo(j,1,m+1) {
+        if(arr[0] == 0) dp[0][j] = 1;
+        else {
+            dp[0][arr[0]] = 1;
+        }
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
 
 
+    fo(i,1,n) {
+        fo(j,1,m+1){
+            if(arr[i] == 0) {
+                dp[i][j] = ((dp[i-1][j+1] + dp[i-1][j-1])%MOD + dp[i-1][j])%MOD;
+            }
+            else {
+                dp[i][arr[i]] = ((dp[i-1][arr[i]-1] + dp[i-1][arr[i]+1])%MOD + dp[i-1][arr[i]])%MOD;
+            }
+        }
+    }
+
+    ll ans = 0;
+
+    fo(j,1,m+1) ans =(ans + dp[n-1][j])%MOD;
+
+    cnl(ans);
+    
+    
     return 0;
 }

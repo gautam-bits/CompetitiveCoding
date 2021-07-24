@@ -58,10 +58,10 @@
 struct dat
 {
 	//Use required attributes
-	ll mn;
+	ll mx;
 
 	//Default Values
-	dat() : mn(1e9) {};
+	dat() : mx(0) {};
 };
 
 struct SegTree
@@ -84,7 +84,7 @@ struct SegTree
 	//Write reqd merge functions
 	void merge(dat &cur, dat &l, dat &r) 
 	{
-		cur.mn = min(l.mn, r.mn);
+		cur.mx = max(l.mx, r.mx);
 	}
 	
 	//Handle lazy propagation appriopriately
@@ -97,7 +97,7 @@ struct SegTree
 			lazy[node*2] = lazy[node];
 			lazy[node*2 + 1] = lazy[node]; 
 		}
-		st[node].mn = lazy[node];
+		st[node].mx = lazy[node];
 		cLazy[node] = 0;
 	}
 
@@ -105,7 +105,7 @@ struct SegTree
 	{
 		if(L==R)
 		{
-			st[node].mn = array[L];
+			st[node].mx = array[L];
 			return;
 		}
 		ll M=(L + R)/2;
@@ -207,15 +207,31 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
     
         ll n;
         read(n);
 
-		//init
-		//build
+		vi pos(n+1,0);
+		vi arr(n+1,0);
+
+		SegTree myseg;
+		myseg.init(n,arr);
+		myseg.build(1,1,n);
+
+		fo(i,1,n+1) read(pos[i]);
+		fo(i,1,n+1) read(arr[i]);
+
+		ll ans = 0;
+
+		fo(i,1,n+1) {
+			ll temp = myseg.query(1,pos[i]).mx;
+			ll curr = arr[i] + temp;
+			ans = max(ans,curr);
+			myseg.update(pos[i],curr);
+		}
         
+
+        cnl(ans);
     
-    }
     return 0;
 }

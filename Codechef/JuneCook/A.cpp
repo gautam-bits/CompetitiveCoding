@@ -53,22 +53,28 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
+vector<int> printDivisors(int n)
+{
+    // Vector to store half of the divisors
+    vector<int> v;
+    for (int i = 1; i <= sqrt(n); i++) {
+        if (n % i == 0) {
+ 
+            // check if divisors are equal
+            if (n / i == i)
+                v.pb(i);
+            else {
+                v.pb(i);
+ 
+                // push the second divisor in the vector
+                v.push_back(n / i);
+            }
+        }
     }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
+ 
+    return v;
 }
+ 
     
 int main() 
 {
@@ -76,37 +82,76 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    read(n);
+    test(t){     // tno[1..t]
+    
+        int n;
+        read(n);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+        string str;
+        read(str);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+        ll idx = -1;
+
+
+        ll cnt = 0;
+
+        fo(i,0,n){
+            if(str[i] == '1') {
+                cnt++;
+            }
+        }
+
+        vector<int> divi = printDivisors(n);
+
+
+
+        int ans = 1e7;
+
+
+        for(int di : divi){
+
+            vector<int> tee(di);
+
+            fo(i,0,di){
+                for(int j = i ; j < n ; j+= di){
+                    if(str[j] == '1') tee[i]++;
+                }
+            }
+            
+            ll temp = n/di;
+
+
+            fo(i,0,di) {
+                int yoo = temp - tee[i] + cnt - tee[i];
+                ans = min(ans,yoo);
+            }
+
+            // string te = "";
+
+            // fo(i,0,temp){
+            //     te += '1';
+            //     fo(j,0,di-1){
+            //         te += '0';
+            //     }
+            // }
+
+            // int to = 0;
+
+            // fo(i,0,n){
+            //     if(tee[i] != te[i]) to++;
+            // }
+
+            // ans = min(ans,to);
+
+
+        }
+
+        cnl(ans);
+
+
+
+        
+    
     }
-
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
-
-
     return 0;
 }

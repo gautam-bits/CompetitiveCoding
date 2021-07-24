@@ -13,7 +13,7 @@
     #define MP make_pair
     #define F first
     #define S second
-    #define ll long long
+    #define ll int
     #define lb lower_bound
     #define ub upper_bound
     #define bs binary_search
@@ -52,23 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
@@ -79,34 +62,37 @@ int main()
     ll n;
     read(n);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    vi arr(n);
+    cinarr(n,arr);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+    ll mx = 1e6 + 5;
+
+    vector<bool> val(mx,0);
+
+    
+
+    fo(i,0,n) {
+        vector<bool> temp = val;
+        
+        fo(j,1,mx) {
+            if(val[j]) temp[j+arr[i]] = 1;
+        }
+
+        temp[arr[i]] = 1;
+
+        val = temp;
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    vi ans;
 
-    dfs(0,ans1,0,mxlvl);
+    fo(i,1,mx) {
+        if(val[i]) ans.push_back(i);
+    }
 
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
+    cnl(ans.size());
+    vshow1d(ans);
 
 
+    
     return 0;
 }

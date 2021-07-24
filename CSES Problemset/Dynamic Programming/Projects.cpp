@@ -52,23 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
@@ -76,37 +59,47 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    read(n);
+    int n;
+    cin>>n;
+    set<int> points;
+    map<int,int> idx;
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    vector<int> a(n),b(n),c(n);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+    for(int i = 0 ; i < n ; i++) {
+        cin>>a[i]>>b[i]>>c[i];
+        b[i]++;
+        points.insert(a[i]);
+        points.insert(b[i]);
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    int curr = 0;
 
-    dfs(0,ans1,0,mxlvl);
+    for(int x : points) {
+        idx[x] = curr;
+        curr++;
+    }
 
-    visited.assign(n,0);
+    int sz = curr;
 
-    mxlvl = 0;
-    ll n2 = ans1;
+    vector<vector<pair<int,int>>> proj(sz);
+    for(int i = 0 ; i < n ; i++) {
+        proj[idx[b[i]]].push_back({idx[a[i]],c[i]});
+    }
 
-    dfs(n2,ans2,0,mxlvl);
+    vector<long long> dp(sz,0);
 
-    cnl(mxlvl);
+    for(int i = 0 ; i < sz ; i++) {
+        if(i > 0) dp[i] = dp[i-1];
+        for(auto p : proj[i]) {
+            dp[i] = max(dp[i],dp[p.first]+p.second);
+        }
+    }
 
+    cout<<*dp.rbegin()<<endl;
 
+    
     return 0;
 }
+
+

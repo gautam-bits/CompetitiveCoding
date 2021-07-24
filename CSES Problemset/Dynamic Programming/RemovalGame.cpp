@@ -50,24 +50,44 @@
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
+
+    const ll INF = 1e18;
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
+ll n;
+vi arr;
+vi pref;
+vvi dp;
 
 
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
+ll sums(ll i,ll j) {
+    if(i == 0) return pref[j];
+    else return pref[j] - pref[i-1];
+}
+
+ll calculate(ll i,ll j) {
+
+    if(dp[i][j] != INF) return dp[i][j];
+
+    if(i == j) {
+        dp[i][j] = arr[i];
+        return dp[i][j];
     }
 
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
+    ll lef,rig;
 
+    if(dp[i+1][j] != INF) lef = dp[i+1][j];
+    lef = calculate(i+1,j);
+
+    if(dp[i][j-1] != INF) lef = dp[i][j-1];
+    rig = calculate(i,j-1);
+
+    ll ans1 = arr[i] + (sums(i+1,j)-lef);
+    ll ans2 = arr[j] + (sums(i,j-1)-rig);
+
+    dp[i][j] = max(ans1,ans2);
+    return dp[i][j];
 }
     
 int main() 
@@ -75,38 +95,20 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
-    ll n;
+
     read(n);
+    arr.assign(n,0);
+    pref.assign(n,0);
+    dp.assign(n,vi(n,INF));
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    cinarr(n,arr);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
-    }
+    pref[0] = arr[0];
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
+    fo(i,1,n) pref[i] = arr[i] + pref[i-1];
 
 
+    cnl(calculate(0,n-1));
+    
     return 0;
 }

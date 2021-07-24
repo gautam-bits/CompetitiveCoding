@@ -29,15 +29,15 @@
     #define rfo(i,b,a) for(int i=b;i>=a;i--)
     #define test(t) ll t; cin >> t; fo(tno,1,t+1)
 
-    #define vshow1d(arr) {ll n = arr.size(); fo(i,0,n) {csp(arr[i]);}cout<<endl;}
+    #define vshow1d(arr) {ll nn = arr.size(); fo(ii,0,nn) {csp(arr[ii]);}cout<<endl;}
     #define show1d(n,arr) fo(i,0,n) {csp(arr[i]);}cout<<endl;
-    #define vshow2d(arr) {ll n=arr.size();   fo(i,0,n) {ll m = arr[i].size(); fo(j,0,m) csp(arr[i][j]); cout << endl;}}
+    #define vshow2d(arr) {ll nn=arr.size();   fo(ii,0,nn) {ll m = arr[ii].size(); fo(j,0,m) csp(arr[ii][j]); cout << endl;}}
     #define show2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) csp(arr[i][j]); cout << endl;}}
     
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
-    #define endl "\n" 
+    //#define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -53,21 +53,11 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
+vi query(ll node,ll n){
+    cout<<"? "<<node+1<<endl;
+    vi vec(n);
+    cinarr(n,vec);
+    return vec;
 }
     
 int main() 
@@ -75,38 +65,88 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
+
     ll n;
     read(n);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    vvi adjlist(n);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+    set<ll> visited;
+
+    queue<ll> q;
+
+    q.push(0);
+    visited.insert(0);
+
+    ll cnt = 1;
+
+
+    while(cnt < n) {
+        ll curr = q.front();
+        q.pop();
+
+        
+        vi vec = query(curr,n);
+
+        vvi vec1(n);
+
+        fo(i,0,n){
+            if(visited.size() == 0 || visited.find(i) == visited.end()) {
+                vec1[vec[i]].pb(i);
+            }
+            
+        }
+
+        
+
+        // if(curr == 2) {
+        //     vshow1d(vec1);
+        //     vshow1d(vec2);
+        // }
+
+        vshow2d(vec1);
+
+        fo(i,1,n){
+            cnl("gy");
+            if(vec1[i].size() == 0){
+                cnl("gyf");
+                break;
+            }
+            else if(vec1[i].size() > 1) {
+                for(ll x : vec1[i]){
+                    adjlist[vec1[i-1][0]].pb(x);
+                    q.push(x);
+                    visited.insert(x);
+                    cnt++;
+                }
+                break;
+            }
+            else {
+                
+                adjlist[vec1[i-1][0]].pb(vec1[i][0]);
+                visited.insert(vec1[i][0]);
+                cnt++;
+                
+            }
+        }
+
+        
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
+    cout<<"!"<<endl;
 
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
+    fo(i,0,n){
+        cout<<"yp"<<endl;
+        fo(j,0,adjlist[i].size()) {
+            cout<<i+1<<" "<<adjlist[i][j]+1<<endl;
+        }
+    }
 
 
+
+
+
+    
+    
     return 0;
 }

@@ -52,23 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-
-
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
-    visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
-    }
-
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
-    }
-
-}
     
 int main() 
 {
@@ -76,36 +59,64 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
+    ll x;
     ll n;
+    read(x);
     read(n);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
+    vi arr(n);
+    cinarr(n,arr);
 
-    fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+    multiset<ll> s1,s2; // s1 = boundries s2 = diffrences
+
+    s1.insert(0);
+    s1.insert(x);
+    s2.insert(x);
+
+
+    // csp("s1");
+    // for(ll x : s1) csp(x);
+    // cnl("");
+    // csp("s2");  
+    // for(ll x : s2) csp(x);
+    // cnl("");  
+
+    
+
+    vi ans(n,0);
+
+    fo(i,0,n) {
+
+        auto itr1 = s1.lb(arr[i]);
+        auto itr2 = itr1;
+        itr2--;
+
+        ll rmv = *itr1 - *itr2;
+        ll add1 = *itr1 - arr[i];
+        ll add2 = arr[i] - *itr2;
+
+        // csp("rmv");cnl(rmv);
+        // csp("add1");cnl(add1);
+        // csp("add2");cnl(add2);
+
+        s2.erase(s2.find(rmv));
+        s2.insert(add1);
+        s2.insert(add2);
+        s1.insert(arr[i]);
+
+        ans[i] = *s2.rbegin();
+
+
+        // csp("s1");
+        // for(ll x : s1) csp(x);
+        // cnl("");  
+        // csp("s2");
+        // for(ll x : s2) csp(x);
+        // cnl("");        
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
 
-    dfs(0,ans1,0,mxlvl);
-
-    visited.assign(n,0);
-
-    mxlvl = 0;
-    ll n2 = ans1;
-
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
+    vshow1d(ans);
 
 
     return 0;

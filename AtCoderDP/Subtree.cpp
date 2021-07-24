@@ -55,19 +55,36 @@
 
 vvi adjList;
 vi visited;
+vi val;
+vi ans;
 
 
-void dfs(ll node,ll& ans,ll lvl,ll& mxlvl){
+void dfs1(ll node) {
     visited[node] = 1;
-    if(lvl > mxlvl) {
-        mxlvl = lvl;
-        ans = node;
+    val[node] = 1;
+    for(ll x : adjList[node]) if(!visited[x]) {
+        dfs1(x);
+        val[node] += val[x];
+    }
+}
+
+void dfs2(ll node,ll par) {
+    visited[node] = 1;
+    if(par != -1) {
+        // cout<<node<<" "<<par<<" "<<ans[par]<<" "<<val[node]<<endl;
+        ans[node] *= ans[par]/(val[node] + 1) + 1;
     }
 
-    for(ll ch : adjList[node]) if(!visited[ch]) {
-        dfs(ch,ans,lvl+1,mxlvl);
+    for(ll x : adjList[node]) if(!visited[x]) {
+        ans[node] *= (val[x] + 1);
+        visited[x] = 0;
     }
 
+    for(ll x : adjList[node]) if(!visited[x]) {
+        dfs2(x,node);
+    }
+
+    
 }
     
 int main() 
@@ -77,35 +94,37 @@ int main()
     cin.tie(NULL);
     
     ll n;
+    ll m;
+
     read(n);
+    read(m);
 
     adjList.assign(n,vi());
     visited.assign(n,0);
+    val.assign(n,0);
+    ans.assign(n,1);
 
     fo(i,0,n-1) {
-        ll a,b;
-        read(a);
-        read(b);
-        a--;
-        b--;
-        adjList[a].pb(b);
-        adjList[b].pb(a);
+        ll u,v;
+        read(u);
+        read(v);
+        u--;
+        v--;
+
+        adjList[u].pb(v);
+        adjList[v].pb(u);
     }
 
-    ll ans1 = 0;
-    ll ans2 = 0;
-    ll mxlvl = 0;
-
-    dfs(0,ans1,0,mxlvl);
-
+    dfs1(0);
     visited.assign(n,0);
+    dfs2(0,-1);
 
-    mxlvl = 0;
-    ll n2 = ans1;
+    fo(i,0,n) {
+        // ans[i] %= m;
+        cnl(ans[i]);
+    }
 
-    dfs(n2,ans2,0,mxlvl);
-
-    cnl(mxlvl);
+    
 
 
     return 0;

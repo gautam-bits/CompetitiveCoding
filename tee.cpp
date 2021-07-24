@@ -1,57 +1,7 @@
-// This is an intellectual property of Diablo Escada ,
-// So please use it with extreme CAUTION .
-
-
-//-------We can be heroes , just for one day!!.---------//
-    
     #include <bits/stdc++.h>
     using namespace std;
     
-//*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ knowledge $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
-    #define pb push_back
-    #define MP make_pair
-    #define F first
-    #define S second
-    #define ll long long
-    #define lb lower_bound
-    #define ub upper_bound
-    #define bs binary_search
 
-    #define cnl(x) cout << x << endl
-    #define csp(x) cout << x << " "
-    #define read(x) cin >> x
-    #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
-    #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
-    #define all(v) v.begin(),v.end()
-
-    #define fo(i,a,b) for(int i=a;i<b;i++)
-    #define rfo(i,b,a) for(int i=b;i>=a;i--)
-    #define test(t) ll t; cin >> t; fo(tno,1,t+1)
-
-    #define vshow1d(arr) {ll n = arr.size(); fo(i,0,n) {csp(arr[i]);}cout<<endl;}
-    #define show1d(n,arr) fo(i,0,n) {csp(arr[i]);}cout<<endl;
-    #define vshow2d(arr) {ll n=arr.size();   fo(i,0,n) {ll m = arr[i].size(); fo(j,0,m) csp(arr[i][j]); cout << endl;}}
-    #define show2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) csp(arr[i][j]); cout << endl;}}
-    
-    #define mem( a, val ) memset(a, val, sizeof( a ) )
-    #define deci( x ) cout<<fixed<<setprecision( x )
-    #define bitcount( x ) __builtin_popcountll( x )
-    #define endl "\n" 
-    
-    
-    typedef vector<ll> vi;
-    typedef pair<ll,ll> pi;
-    typedef vector<pi> vpi;
-    typedef vector<vi> vvi;
-
-    const int MOD   = 1000000007 ;
-    const int N     = 100005 ;
-    const int MAX   = 2e4 + 7;
-    const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
-    const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
-    
-//*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
     
 int main() 
 {
@@ -59,27 +9,60 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    test(t){     // tno[1..t]
-    
-        ll n;
-        read(n);
+    int n;
+	int p;
+    cin>>n;
+	cin>>p;
+    set<int> points;
+    map<int,int> idx;
 
-        vi arr(n);
-        cinarr(n,arr);
+    vector<int> a(n),b(n),c(n);
 
-        map<ll,ll> mp;
-
-        fo(i,0,n) {
-            mp[arr[i]-i]++;
-        }
-
-        ll ans = 0;
-
-
-        for(auto el : mp) ans += (el.S*(el.S - 1))/2;
-
-        cnl(ans);
-    
+    for(int i = 0 ; i < n ; i++) {
+        cin>>a[i]>>b[i]>>c[i];
+        b[i]++;
+        points.insert(a[i]);
+        points.insert(b[i]);
     }
+
+    int curr = 0;
+
+    for(int x : points) {
+        idx[x] = curr;
+        curr++;
+    }
+
+    int sz = curr;
+
+    vector<vector<pair<int,int>>> proj(sz);
+    for(int i = 0 ; i < n ; i++) {
+        proj[idx[b[i]]].push_back({idx[a[i]],c[i]});
+    }
+
+    vector<vector<long long>> dp(sz,vector<long long> (p+1,INT_MIN));
+
+
+	for(int i = 0 ; i < sz ; i++) dp[i][0] = 0;
+	
+
+	for(int i = 0 ; i < sz ; i++) {
+		for(int x = 1 ; x < p + 1 ; x++) {
+			if(i > 0) dp[i][x] = dp[i-1][x];
+			for(auto pr : proj[i]) {
+				dp[i][x] = max(dp[i][x],dp[pr.first][x-1] + pr.second);
+			}
+		}
+	}  
+
+	if(dp[sz-1][p] < 0 ) {
+		cout<<"IMPOSSIBLE"<<endl;
+		return 0;
+	}
+
+    cout<<dp[sz-1][p]<<endl;
+
+    
     return 0;
 }
+
+
