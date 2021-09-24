@@ -52,20 +52,24 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+
+
 class DSU {
+public:
     vi parent ;
     vi rank_element;
     vi sz_set;
     ll noOfDisSets;
 
-    DSU(int n) {
+    DSU(ll n) {
+        //reset global variables
         parent.assign(n,0);
         rank_element.assign(n,0);
         sz_set.assign(n,1);
         noOfDisSets = n;
         fo(i,0,n)parent[i] = i;
     }
-
+ 
     ll findSet(ll i) {              // find the representative element of i in the forest
         if(i == parent[i]) {
             return i;
@@ -109,12 +113,23 @@ class DSU {
 
 };
 
-// remember set is [0...n-1] 
-/*
-################################################################
-NOTE - IF DATA IS NOT IN 0-N-1 RANGE USE A MAP <DATA,INT[0..N-1]>
-################################################################
-*/
+
+
+
+
+pi dd(vi& a,vi& b,vi& val) {
+    vi aa;
+    vi bb;
+    for(ll x : a)aa.pb(val[x]);
+    for(ll x : b)bb.pb(val[x]);
+    sort(all(aa));
+    sort(all(bb));
+
+    
+
+}
+
+    
 int main() 
 {
     
@@ -123,13 +138,126 @@ int main()
     
     test(t){     // tno[1..t]
     
-        ll n;
+        ll n,m;
         read(n);
+        read(m);
+
+        vi val(n);
+        cinarr(n,val);
+
+
+        // answe
+        vpi finaledges; 
+        ll answ = 0;
+        ll ansk = n - 1; //doubt
+
+
+        DSU mydsu(n);
+
+        fo(i,0,m){
+            ll u,v;
+            read(u);
+            read(v);
+            u--;
+            v--;
+
+            if(!mydsu.isSameSet(u,v)) {
+                finaledges.push_back({u+1,v+1});
+                mydsu.unionSet(u,v);
+            }
+        }
+
+
+        // cout<<(mydsu.noOfDisjointSets())<<endl;
+
+        //map of val to idx
+        map<ll,ll> valtidx;
+
+        map<ll,vi> grps;
+
+
+        fo(i,0,n) {
+            ll p = mydsu.findSet(i);
+            grps[p].push_back(i);
+        }
+
+        vvi temp;
+
+        for(auto el : grps) temp.pb(el.second);
+
+        sort(all(temp),[&] (vi& a,vi& b) -> bool {
+            vi aa;
+            vi bb;
+            for(ll x : a)aa.pb(val[x]);
+            for(ll x : b)bb.pb(val[x]);
+            sort(all(aa));
+            sort(all(bb));
+            return aa < bb;
+        });
+
+
+
+
+
+        bool st = 1;
+        
+
+        for(auto& el : grps) {
+            if(st) {
+                for(auto x : el.S) {
+                    valtidx[val[x]] = x;
+                }
+                st = 0;
+            }
+            else {
+                ll mn = 1e15;
+                ll mni = -1;
+                ll mni2 = -1;
+
+                for(auto x : el.S) {
+                    ll v = val[x];
+
+                    auto itr = valtidx.upper_bound(v);
+
+                    if(itr != valtidx.end()) {
+                        ll cc = abs(itr->first - v);
+                        if(cc < mn) {
+                            mn = cc;
+                            mni = itr->second;
+                            mni2 = x;
+                        }
+                    }
+
+                    if(itr != valtidx.begin()) {
+                        itr--;
+                        ll cc = abs(itr->first - v);
+                        if(cc < mn) {
+                            mn = cc;
+                            mni = itr->second;
+                            mni2 = x;
+                        }
+                    }
+                }
+
+                answ += mn;
+                finaledges.push_back({mni+1,mni2+1});
+
+                for(auto x : el.S) {
+                    valtidx[val[x]] = x;
+                }
+                
+            }
+        }
+
+        csp(answ);cnl(ansk);
+
+        for(auto x : finaledges) {
+            csp(x.F);cnl(x.S);
+        }
 
         
 
 
-        //start from here
     
     }
     return 0;

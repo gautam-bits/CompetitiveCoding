@@ -53,36 +53,24 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
 
+vector<vector<vector<int>>> dp;
 
-void dfs1(ll node) {
-    visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
+int solve(string& num,int n,int x,bool tight) {
+    if(n==0) {
+        if(x == 0) return 1;
+        else return 0;
     }
-}
+    if(dp[n][x][tight] != -1) return dp[n][x][tight];
 
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
+    int ubb = tight ? num[num.size() - n] -'0': 9;
 
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
+    int ans = 0;
+    for(int dig = 0 ; dig <=ubb;dig++){
+        ans += solve(num,n-1,x-dig,tight&(dig==ubb));
     }
+    return dp[n][x][tight] =  ans;
 
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
-    }
-    
 }
     
 int main() 
@@ -90,40 +78,17 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
+    int r = 15;
+    int l = 9;
+    int sum = 5;
+
+    string mx = to_string(r);
+    string mn = to_string(l-1);
+    dp.assign(20,vector<vector<int>>(200,vector<int>(2,-1)));
     
-    ll n;
-    ll m;
+    int ans = solve(mx,mx.size(),sum,1) - solve(mn,mn.size(),sum,1);
 
-    read(n);
-    read(m);
-
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
-
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
-        u--;
-        v--;
-
-        adjList[u].pb(v);
-        adjList[v].pb(u);
-    }
-
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
-
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
-    }
-
-    
-
-
+    cout<<ans<<endl;
     return 0;
 }

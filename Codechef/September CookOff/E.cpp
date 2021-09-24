@@ -29,7 +29,7 @@
     #define rfo(i,b,a) for(int i=b;i>=a;i--)
     #define test(t) ll t; cin >> t; fo(tno,1,t+1)
 
-    #define vshow1d(arr) {ll n = arr.size(); fo(i,0,n) {csp(arr[i]);}cout<<endl;}
+    #define vshow1d(arr) {ll n = arr.size(); fo(ii,0,n) {csp(arr[ii]);}cout<<endl;}
     #define show1d(n,arr) fo(i,0,n) {csp(arr[i]);}cout<<endl;
     #define vshow2d(arr) {ll n=arr.size();   fo(i,0,n) {ll m = arr[i].size(); fo(j,0,m) csp(arr[i][j]); cout << endl;}}
     #define show2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) csp(arr[i][j]); cout << endl;}}
@@ -52,69 +52,25 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-class DSU {
-    vi parent ;
-    vi rank_element;
-    vi sz_set;
-    ll noOfDisSets;
 
-    DSU(int n) {
-        parent.assign(n,0);
-        rank_element.assign(n,0);
-        sz_set.assign(n,1);
-        noOfDisSets = n;
-        fo(i,0,n)parent[i] = i;
+vi primeFactors(ll n) {
+    vi ans;
+    if(n%2 == 0) {   
+        ans.pb(2);
+        while (n % 2 == 0) n/=2;
     }
 
-    ll findSet(ll i) {              // find the representative element of i in the forest
-        if(i == parent[i]) {
-            return i;
+    for (int i = 3; i <= sqrt(n); i = i + 2) {
+        if(n%i == 0) {
+            ans.pb(i);
+            while (n % i == 0) n /= i;
         }
-        parent[i] = findSet(parent[i]);
-        return parent[i];
+            
     }
-
-    bool isSameSet(ll i,ll j){
-        return findSet(i) == findSet(j);
-    }
-
-    void unionSet(ll i, ll j) {    // merging sets containing i and j
-        if(!isSameSet(i,j)) {
-            ll x = findSet(i);
-            ll y = findSet(j);
-
-            noOfDisSets--; // if we are merging 2 different sets
-
-            if(rank_element[x] > rank_element[y]){
-                parent[y] = x;
-                sz_set[x] += sz_set[y];  //increasing the size
-            }
-            else {
-                parent[x] = y;
-                sz_set[y] += sz_set[x];  //increasing the size
-                if(rank_element[x] == rank_element[y]) rank_element[y]++;
-            }
-
-        }
-    }
-
-    ll sizeOfSet(ll i) {    // returns size of set that currently contains i
-        ll x = findSet(i);
-        return sz_set[x];
-    }
-
-    ll noOfDisjointSets() {
-        return noOfDisSets;
-    }
-
-};
-
-// remember set is [0...n-1] 
-/*
-################################################################
-NOTE - IF DATA IS NOT IN 0-N-1 RANGE USE A MAP <DATA,INT[0..N-1]>
-################################################################
-*/
+    if (n > 2) ans.pb(n);
+    return ans;
+}
+    
 int main() 
 {
     
@@ -126,10 +82,75 @@ int main()
         ll n;
         read(n);
 
+        ll k = (n+1)/2;
+
+        vi arr(n);
+        cinarr(n,arr);
+
+        vi arr2;
+        for(ll x : arr) if(x%2 == 0) arr2.pb(x/2);
+        ll n2 = arr2.size();
+        sort(all(arr2));
         
 
+        if(arr2.size() < k) {
+            cnl("NO");
+        }
 
-        //start from here
+        else if(arr2[0] == 1) {
+            cnl("YES");
+        }
+        else {
+        
+            bool ye = 0;
+            ll cc  = 0;
+            ll cc2 = 0;
+            unordered_set<ll> vis;
+            unordered_set<ll> vis2;
+
+            int itr = 0;
+            while(cc < 100 && cc2 < n && itr < 100000){
+                ll id = rand()%n2;
+                ll el = arr2[id];
+
+                if(vis2.find(el) == vis2.end()) {
+                    vis2.insert(el);
+                    cc2++;
+                }
+                else {
+                    continue;
+                }
+
+                vi pr = primeFactors(el);
+
+                // vshow1d(pr);
+
+                for(ll p : pr) if(vis.find(p) == vis.end()) {
+                    vis.insert(p);
+                    cc++;
+                    ll cnt = 0;
+                    for(ll x : arr2) {
+                        if(x%p == 0) cnt++;
+                        itr++;
+                    }
+
+                    if(cnt+1<=k) {
+                        ye = 1;
+                        break;
+                    }
+                }
+                if(ye == 1) {
+                    break;
+                }
+            }
+
+            if(ye) {
+                cnl("YES");
+            }
+            else {
+                cnl("NO");
+            }
+        }       
     
     }
     return 0;

@@ -37,7 +37,7 @@
     #define mem( a, val ) memset(a, val, sizeof( a ) )
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
-    #define endl "\n" 
+    // #define endl "\n" 
     
     
     typedef vector<ll> vi;
@@ -53,37 +53,38 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
+const ll INF = 1e16;
 
+vector<ll> dijkstra(int s,vector<vector<pair<ll,ll>>>& adj) {
+    ll n = adj.size();
+    vector<ll> d;
+    d.assign(n, INF);;
 
-void dfs1(ll node) {
-    visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
+    d[s] = 0;
+    using pii = pair<ll, ll>;
+    priority_queue<pii, vector<pii>, greater<pii>> q;
+    q.push({0, s});
+    while (!q.empty()) {
+        ll v = q.top().second;
+        ll d_v = q.top().first;
+        q.pop();
+        if (d_v != d[v])
+            continue;
+
+        for (auto edge : adj[v]) {
+            ll to = edge.first;
+            ll len = edge.second;
+
+            if (d[v] + len < d[to]) {
+                d[to] = d[v] + len;
+                q.push({d[to], to});
+            }
+        }
     }
+
+    return d;
 }
 
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
-    }
-    
-}
     
 int main() 
 {
@@ -91,39 +92,36 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    ll m;
+    ll n,m;
+    cin>>n>>m;
 
-    read(n);
-    read(m);
+    vector<vector<pair<ll,ll>>> adj1(n),adj2(n);
+    vector<vector<ll>> edges; //assert edges[i].size() == 3
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
-
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
+    for(int i = 0 ; i < m ; i++) {
+        ll u,v,w;
+        cin>>u>>v>>w;
         u--;
         v--;
-
-        adjList[u].pb(v);
-        adjList[v].pb(u);
+        adj1[u].push_back({v,w});
+        adj2[v].push_back({u,w});
+        edges.push_back({u,v,w});
     }
 
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
+    vector<ll> d1 = dijkstra(0,adj1);
+    vector<ll> d2 = dijkstra(n-1,adj2);
 
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
+    ll ans = INF;
+
+    for(auto edge : edges) {
+        ll a = d1[edge[0]];
+        ll d = d2[edge[1]];
+        ll e = edge[2]/2;
+
+        ans = min(ans,a+e+d);
     }
 
+    cout<<ans<<endl;
     
-
-
     return 0;
 }

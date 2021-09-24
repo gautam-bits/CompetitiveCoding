@@ -1,85 +1,124 @@
-// This is an intellectual property of Diablo Escada ,
-// So please use it with extreme CAUTION .
+#include<bits/stdc++.h>
+using namespace std;
 
+class Node {
+public:
+    int age;
+    Node* left;
+    Node* right;
 
-//-------We can be heroes , just for one day!!.---------//
-    
-    #include <bits/stdc++.h>
-    using namespace std;
-    
-//*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ knowledge $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
-    #define pb push_back
-    #define MP make_pair
-    #define F first
-    #define S second
-    #define ll long long
-    #define lb lower_bound
-    #define ub upper_bound
-    #define bs binary_search
-
-    #define cnl(x) cout << x << endl
-    #define csp(x) cout << x << " "
-    #define read(x) cin >> x
-    #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
-    #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
-    #define all(v) v.begin(),v.end()
-
-    #define fo(i,a,b) for(int i=a;i<b;i++)
-    #define rfo(i,b,a) for(int i=b;i>=a;i--)
-    #define test(t) ll t; cin >> t; fo(tno,1,t+1)
-
-    #define vshow1d(arr) {ll n = arr.size(); fo(i,0,n) {csp(arr[i]);}cout<<endl;}
-    #define show1d(n,arr) fo(i,0,n) {csp(arr[i]);}cout<<endl;
-    #define vshow2d(arr) {ll n=arr.size();   fo(i,0,n) {ll m = arr[i].size(); fo(j,0,m) csp(arr[i][j]); cout << endl;}}
-    #define show2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) csp(arr[i][j]); cout << endl;}}
-    
-    #define mem( a, val ) memset(a, val, sizeof( a ) )
-    #define deci( x ) cout<<fixed<<setprecision( x )
-    #define bitcount( x ) __builtin_popcountll( x )
-    #define endl "\n" 
-    
-    
-    typedef vector<ll> vi;
-    typedef pair<ll,ll> pi;
-    typedef vector<pi> vpi;
-    typedef vector<vi> vvi;
-
-    const int MOD   = 1000000007 ;
-    const int N     = 100005 ;
-    const int MAX   = 2e4 + 7;
-    const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
-    const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
-    
-//*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-    
-int main() 
-{
-    
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-
-    ll tt = 0;
-    read(tt);
-    ll xx ;
-    read(xx);
-    
-    fo(tno,1,tt+1){     // tno[1..t]
-    
-        ll w,e;
-
-        read(w);
-        read(e);
-
-        string ans = "";
-
-        fo(i,0,20) ans += "RSPPSRSPR";
-
-        ans = ans.substr(0,60);
-        
-
-        cout<<"Case #"<<tno<<": "<<ans<<endl;
-    
+    Node(int aa) {
+        age = aa;
     }
-    return 0;
+};
+
+
+double calculate(Node* root) {
+    if(root == NULL) return 0.0;
+    
+    map<int,vector<int>> mp; 
+    
+    
+    queue<pair<Node*,int>> q;
+
+    q.push({root,0});
+
+
+    while(!q.empty()) {
+        pair<Node*,int> curr = q.front();
+        q.pop();
+        mp[curr.second].push_back(curr.first->age);
+
+        if(curr.first->left) {
+            q.push({curr.first->left,curr.second+1});
+        }
+        if(curr.first->right) {
+            q.push({curr.first->right,curr.second+1});
+        }
+    }
+
+    vector<int> mm;
+
+    
+
+
+    for(auto x : mp) {
+        vector<int> te = x.second;
+        int sz = te.size();
+        int mn = *min_element(te.begin(),te.end());
+        if(te[0] == mn) mm.push_back(te[0]);
+        else if(te[sz-1] == mn) mm.push_back(te[sz-1]);
+        else return -1.0;
+    }
+
+    double ans = 0.0;
+
+    for(int x : mm) ans += x;
+
+    int sss = mm.size();
+
+    ans = ans/sss;
+
+    ans = ans*10;
+
+    int bbb = (int)(ans + 0.5);
+
+    double a2 = ((double)bbb)/10.0;
+
+    return a2;
+
+    
+    
+    
+}
+
+
+int circularArray(int n, vector<int> endNode) {
+    int m = endNode.size();
+    map<int, int> count;
+    int start = endNode[0], end = endNode[m - 1];
+
+    for (int i = 0 ; i < m ; i++)
+        count[endNode[i]]++;
+
+    for (pair<int,int> x: count) {
+        int k = x.first;
+        if (k >= end) {
+            count[k]--;
+        }
+        if (k > start) {
+            count[k]++;
+        }
+    }
+
+    int max = 0; 
+    int freq; = 1;
+    for (pair<int,int> x : count) {
+        int v = x.second;
+        int k = x.first;
+        if (max < v) {
+            max = v;
+            freq = k;
+        }
+        if (max == v && freq > k) {
+            max = v;
+            freq = k;
+        }
+    }
+    return freq;
+}
+
+
+int main()
+{
+
+
+    Node* root = new Node(10);
+    root->left = new Node(4);
+    root->right = new Node(5);
+    root->left->left = new Node(6);
+    root->right->left = new Node(2);
+    root->right->right = new Node(1);
+
+    cout<<calculate(root);
 }

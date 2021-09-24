@@ -53,37 +53,7 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
 
-
-void dfs1(ll node) {
-    visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
-    }
-}
-
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
-    }
-    
-}
     
 int main() 
 {
@@ -91,39 +61,37 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    ll m;
-
-    read(n);
-    read(m);
-
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
-
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
-        u--;
-        v--;
-
-        adjList[u].pb(v);
-        adjList[v].pb(u);
-    }
-
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
-
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
-    }
-
+    test(t){     // tno[1..t]
     
+        ll n;
+        read(n);
 
+        vi arr(n);
+        cinarr(n,arr);
 
+        ll mn = *min_element(all(arr));
+
+        ll ans = n;
+        ll cnt = 0;
+        bool yo = 1;
+
+        for(ll x : arr) if(x != mn) {
+            if(x - mn > mn) {
+                cnt++;
+            }
+            else {
+                yo = 0;
+                break;
+            }
+        }
+
+        if(yo) {
+            cnl(cnt);
+        }
+        else {
+            cnl(n);
+        }
+    
+    }
     return 0;
 }

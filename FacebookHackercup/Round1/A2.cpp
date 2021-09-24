@@ -45,45 +45,13 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    const ll MOD   = 1000000007 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
-
-
-void dfs1(ll node) {
-    visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
-    }
-}
-
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
-    }
-    
-}
     
 int main() 
 {
@@ -91,39 +59,79 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    ll m;
-
-    read(n);
-    read(m);
-
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
-
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
-        u--;
-        v--;
-
-        adjList[u].pb(v);
-        adjList[v].pb(u);
-    }
-
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
-
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
-    }
-
+    test(t){     // tno[1..t]
     
+        ll n;
+        read(n);
+        string str;
+        read(str);
+
+        vi dp(n);
+
+        ll c = -1;
+        ll ci = -1;
 
 
+        // c=0->prev='X'
+        // c=1->prev='O'
+        for(int i = 0 ; i < n ; i++) {
+            char x = str[i];
+            if(x == 'X') {
+                if(c == -1) {
+                    dp[i] = 0;
+                    c = 0;
+                    ci = i;
+
+                }
+                else if(c == 0) {
+                    dp[i] = dp[ci];
+                    ci = i;
+                }
+                else if(c == 1) {
+                    dp[i] = ci + dp[ci] + 1;
+                    ci = i;
+                    c = 0;
+                }
+
+            }
+
+            else if(x == 'O') {
+                if(c == -1) {
+                    dp[i] = 0;
+                    c = 1;
+                    ci = i;
+
+                }
+                else if(c == 1) {
+                    dp[i] = dp[ci];
+                    ci = i;
+                }
+                else if(c == 0) {
+                    dp[i] = ci + dp[ci] + 1;
+                    ci = i;
+                    c = 1;
+                }
+
+            }
+            else {
+                if(c == -1) {
+                    dp[i] = 0;
+                }
+                else if(c == 0) {
+                    dp[i] = dp[i-1];
+                }
+                else if(c == 1) {
+                    dp[i] = dp[i-1];
+                }
+
+            }
+            // cout<<c<<" "<<ci<<" "<<dp[i]<<endl;
+        }
+        ll ans = 0;
+        for(ll x : dp) ans = (ans + x)%MOD;
+
+        cout<<"Case #"<<tno<<": "<<ans<<endl;
+    
+    }
     return 0;
 }

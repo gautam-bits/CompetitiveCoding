@@ -52,78 +52,47 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
-
-
-void dfs1(ll node) {
-    visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
-    }
-}
-
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
-    }
-    
-}
     
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+
+    freopen("output.txt","w",stdout);
+    freopen("input.txt","r",stdin);
     
-    ll n;
-    ll m;
+    test(t){     // tno[1..t]
+    
+        string s;
+        read(s);
 
-    read(n);
-    read(m);
+        vi arr(26,0);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
+        set<char> vo = {'A','E','I','O','U'};
 
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
-        u--;
-        v--;
+        int v = 0;
+        int c = 0;
 
-        adjList[u].pb(v);
-        adjList[v].pb(u);
-    }
+        for(char x : s) {
+            arr[x-'A']++;
+            if(vo.find(x) == vo.end()) c++;
+            else v++;
+        }
 
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
+        ll ans = 1e9;
+        fo(i,0,26) {
+            if(vo.find((char)(i+'A')) == vo.end()) {
+                ans = min(ans,2*(c-arr[i]) + v);
+            }
+            else {
+                ans = min(ans,2*(v-arr[i]) + c);
+            }
+        }
 
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
-    }
+        cout<<"Case #"<<tno<<": "<<ans<<endl;
 
     
-
-
+    }
     return 0;
 }

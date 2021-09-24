@@ -52,38 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
-
-
-void dfs1(ll node) {
-    visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
-    }
-}
-
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
-    }
-    
-}
     
 int main() 
 {
@@ -91,38 +59,33 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    ll m;
+    int n,x;
+    cin>>n;
 
-    read(n);
-    read(m);
+    int sz = 1e6 + 10;
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
+    int freq[sz] = {0};
+    int dp[sz] = {0};
 
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
-        u--;
-        v--;
-
-        adjList[u].pb(v);
-        adjList[v].pb(u);
+    for(int i = 0 ; i < n ; i++) {
+        cin>>x;
+        freq[x]++;
     }
 
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
 
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
+    for(int i = 1 ; i < sz ; i++) {
+        for(int j = i ; j < sz ; j+=i) {
+            if(freq[j] > 0) dp[i]++;
+        }
     }
 
-    
+    int ans = 0;
+
+    for(int i = 1 ; i < sz ; i++) if(dp[i] > 1) ans = i;
+    for(int i = 1 ; i < sz ; i++) if(freq[i] > 1) ans = max(ans,i);
+
+    cout<<ans<<endl;
+
 
 
     return 0;

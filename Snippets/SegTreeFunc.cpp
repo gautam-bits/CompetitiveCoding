@@ -108,6 +108,7 @@ void update(ll index, ll L, ll R, ll idx, ll val) {
         tree[index] = tree[left(index)] + tree[right(index)];
     }
 }
+
 ll query(ll index, ll L, ll R, ll i, ll j) {   
     //1) complete overlap
     if(i <= L && R <= j) {

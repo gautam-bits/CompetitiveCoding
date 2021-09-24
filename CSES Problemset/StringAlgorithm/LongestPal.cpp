@@ -52,38 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
-
-
-void dfs1(ll node) {
-    visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
-    }
-}
-
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
-    }
-    
-}
     
 int main() 
 {
@@ -91,39 +59,55 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    ll m;
+    string s;
+    cin>> s;
 
-    read(n);
-    read(m);
+    int n = s.size();
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
+    string s2 = "#";
 
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
-        u--;
-        v--;
-
-        adjList[u].pb(v);
-        adjList[v].pb(u);
+    for(char x : s) {
+        s2 += x;
+        s2 += "#";
     }
 
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
+    int n2 = s2.size();
+    vector<int> dp(n2,0);
 
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
-    }
+    int c = 0;
+    int r = 0;
+    int im = 0;
+
+    for(int i = 0 ; i < n2 ; i++) {
+        im = 2*c - i;
+
+        if(r > i) {
+            dp[i] = min(r-i,dp[im]);
+        }
+        else {
+            dp[i] = 0;
+        }
+
+        while(i+1+dp[i] < n2 && i - 1 - dp[i] >= 0 && s2[i+1+dp[i]] == s2[i-1-dp[i]]) dp[i]++;
+
+        if(i+dp[i] > r) {
+            c = i;
+            r = i + dp[i];
+        }
+
+    } 
+
+
+    int idx = max_element(dp.begin(),dp.end()) - dp.begin();
+    int l = *max_element(dp.begin(),dp.end());
+
+    string ans = "";
+
+    for(int i = idx-l ; i < idx+l ; i++) if(s2[i] != '#') ans += s2[i];
+
+    cout<<ans<<endl;
+
 
     
-
-
     return 0;
 }

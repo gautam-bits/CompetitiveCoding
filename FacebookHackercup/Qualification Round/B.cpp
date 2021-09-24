@@ -52,78 +52,92 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
-
-
-void dfs1(ll node) {
-    visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
-    }
-}
-
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
-    }
-    
-}
     
 int main() 
 {
+
+    freopen("output.txt","w",stdout);
+    freopen("input.txt","r",stdin);
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    ll m;
+    test(t){     // tno[1..t]
+    
+        ll n;
+        read(n);
+        vector<vector<char>> vec(n,vector<char>(n));
 
-    read(n);
-    read(m);
+        cinarr2d(n,n,vec);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
+        set<pair<int,vector<pi>>> aaa;
 
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
-        u--;
-        v--;
+        ll an;
 
-        adjList[u].pb(v);
-        adjList[v].pb(u);
-    }
+        //rows
+        fo(i,0,n) {
+            bool poss = 1;
+            ll ans = 0;
+            vector<pi> s;
+            fo(j,0,n) {
+                if(vec[i][j] == 'O') {
+                    poss = 0;
+                    break;
+                }
+                else if(vec[i][j] == '.') {
+                    ans++;
+                    // s.pb(vec[i][j]);
+                    s.pb({i,j});
+                }
+                else {
+                    // s.pb({i,j});
+                }
+            }
+            sort(all(s));
+            if(poss) aaa.insert({ans,s});
+        }
 
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
 
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
-    }
+        //cols
+        fo(j,0,n) {
+            bool poss = 1;
+            ll ans = 0;
+            vector<pi> s;
+            fo(i,0,n) {
+                if(vec[i][j] == 'O') {
+                    poss = 0;
+                    break;
+                }
+                else if(vec[i][j] == '.') {
+                    ans++;
+                    s.pb({i,j});
+                }
+                else {
+                    // s.pb({i,j});
+                }
+                
+            }
+            sort(all(s));
+            if(poss) aaa.insert({ans,s});
+        }
+
+        // sort(all(aaa));
+
+        if(aaa.size() == 0) {
+            cout<<"Case #"<<tno<<": "<<"Impossible"<<endl;
+        }
+        
+        else {
+            an = 0;
+
+            for(auto el : aaa) if(el.F == aaa.begin()->F) an++;
+            cout<<"Case #"<<tno<<": "<<aaa.begin()->F<<" "<<an<<endl;
+
+        }
+
+
 
     
-
-
+    }
     return 0;
 }

@@ -1,104 +1,69 @@
-#include <bits/stdc++.h>
-using namespace std;
+// This is an intellectual property of Diablo Escada ,
+// So please use it with extreme CAUTION .
+
+
+//-------We can be heroes , just for one day!!.---------//
     
-#define pb push_back
-#define MP make_pair
-#define ll long long
-#define lb lower_bound
-#define ub upper_bound
-#define bs binary_search
+    #include <bits/stdc++.h>
+    using namespace std;
+    
+//*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ knowledge $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+    
+    #define pb push_back
+    #define MP make_pair
+    #define F first
+    #define S second
+    #define ll long long
+    #define lb lower_bound
+    #define ub upper_bound
+    #define bs binary_search
 
-#define fo(i,a,b) for(int i=a;i<b;i++)
-#define rfo(i,b,a) for(int i=b;i>=a;i--)
+    #define cnl(x) cout << x << endl
+    #define csp(x) cout << x << " "
+    #define read(x) cin >> x
+    #define cinarr(n,arr) fo(i,0,n) read(arr[i]);
+    #define cinarr2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) read(arr[i][j]);}}
+    #define all(v) v.begin(),v.end()
 
-typedef vector<ll> vi;
-typedef vector<vi> vvi;
-typedef pair<ll,ll> pi;
-typedef vector<pi> vpi;
+    #define fo(i,a,b) for(int i=a;i<b;i++)
+    #define rfo(i,b,a) for(int i=b;i>=a;i--)
+    #define test(t) ll t; cin >> t; fo(tno,1,t+1)
 
-vector<vpi> adjlist;
-vector<bool> visited;
-vi parent;
-vi sidebranch;
-vvi ans;
+    #define vshow1d(arr) {ll n = arr.size(); fo(i,0,n) {csp(arr[i]);}cout<<endl;}
+    #define show1d(n,arr) fo(i,0,n) {csp(arr[i]);}cout<<endl;
+    #define vshow2d(arr) {ll n=arr.size();   fo(i,0,n) {ll m = arr[i].size(); fo(j,0,m) csp(arr[i][j]); cout << endl;}}
+    #define show2d(n,m,arr) {fo(i,0,n) {fo(j,0,m) csp(arr[i][j]); cout << endl;}}
+    
+    #define mem( a, val ) memset(a, val, sizeof( a ) )
+    #define deci( x ) cout<<fixed<<setprecision( x )
+    #define bitcount( x ) __builtin_popcountll( x )
+    #define endl "\n" 
+    
+    
+    typedef vector<ll> vi;
+    typedef pair<ll,ll> pi;
+    typedef vector<pi> vpi;
+    typedef vector<vi> vvi;
 
-
-void dfs(ll node){
-    visited[node] = 1;
-
-    if(node == 0) {
-        ans[node][0] = 0;
-        ans[node][1] = sidebranch[node];
-        
-    }
-
-    for(pi x : adjlist[node]) if(!visited[x.first]) {
-
-        ans[x.first][0] = min(2*x.second + ans[node][0],x.second + sidebranch[x.first] + ans[node][1]);
-        ans[x.first][1] = min(2*x.second + sidebranch[x.first] + ans[node][0],x.second + ans[node][1]);
-
-        dfs(x.first);
-
-    }
-}
-
-
-
-int main()
+    const int MOD   = 1000000007 ;
+    const int N     = 100005 ;
+    const int MAX   = 2e4 + 7;
+    const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
+    const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
+    
+//*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
+    
+int main() 
 {
-	ios_base::sync_with_stdio(false);
+    
+    ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
-    // cout<<"yo";
-    ll n;
-    cin>>n;
-
-    // cout<<"yo";
-
-    visited.assign(n,0);
-    parent.assign(n,-1);
-    sidebranch.assign(n,0);
-    ans.assign(n,vi(2,0));
-    adjlist.assign(n,vpi());
-
     
-
-    fo(i,0,n-1){
-        ll u,v,w;
-        cin>>u>>v>>w;
-        
-        u--;
-        v--;
-        adjlist[u].pb({v,w});
-        adjlist[v].pb({u,w});
-    }
-
-    fo(i,0,n) {
-        cin>>sidebranch[i];
-    }
-
-    // cout<<"yo";
-
-    dfs(0);
-
-    // cout<<"yo";
-
-    ll q;
-    cin>>q;
-
-
-    fo(i,0,q){
-        ll u,v;
-        cin>>u>>v;
-        u--;
-        v--;
-
-        cout<<ans[u][0]<<endl;
-
-
-    }
-
-
+    test(t){     // tno[1..t]
     
-	return 0;
+        ll n;
+        read(n);
+    
+    }
+    return 0;
 }

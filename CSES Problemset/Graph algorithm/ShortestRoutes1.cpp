@@ -86,8 +86,7 @@ int main()
     }
  
  
- 
-    priority_queue<pi,vpi,greater<pi>> pq;
+    priority_queue<pi,vector<pi>,greater<pi>> pq;
  
     pq.push({0,0});
  

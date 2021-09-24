@@ -52,38 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
-
-
-void dfs1(ll node) {
-    visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
-    }
-}
-
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
-    }
-    
-}
     
 int main() 
 {
@@ -91,39 +59,38 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    ll m;
+    ll n,m,q;
+    cin>>n>>m>>q;
 
-    read(n);
-    read(m);
+    ll INF = 1e16;
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
+    vector<vector<ll>> mat(n,vector<ll>(n,INF));
 
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
+    for(ll i = 0 ; i < n ; i++) mat[i][i] = 0;
+
+    for(ll i = 0 ; i < m ; i++) {
+        ll u,v,w;
+        cin>>u>>v>>w;
         u--;
         v--;
-
-        adjList[u].pb(v);
-        adjList[v].pb(u);
+        mat[u][v] = mat[v][u] = min(mat[u][v],w);
     }
 
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
-
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
+    for(ll k = 0 ; k < n ; k++) {
+        for(ll i = 0 ; i < n ; i++) {
+            for(ll j = 0 ; j < n ; j++) {
+                mat[i][j] = min(mat[i][j],mat[i][k]+mat[k][j]);
+            }
+        }
     }
 
-    
-
-
+    for(ll i = 0 ; i < q ; i++) {
+        ll u,v;
+        cin>>u>>v;
+        u--;
+        v--;
+        if(mat[u][v] == INF) cout<<-1<<endl;
+        else cout<<mat[u][v]<<endl;
+    }
     return 0;
 }

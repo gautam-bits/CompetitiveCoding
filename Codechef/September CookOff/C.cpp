@@ -52,38 +52,6 @@
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
-
-
-void dfs1(ll node) {
-    visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
-    }
-}
-
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
-    }
-    
-}
     
 int main() 
 {
@@ -91,39 +59,96 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    ll m;
+    test(t){     // tno[1..t]
+    
+        ll n;
+        read(n);
+        string s,p;
+        read(s);
+        read(p);
 
-    read(n);
-    read(m);
+        ll a11 = 0;
+        ll a00 = 0;
+        ll a01 = 0;
+        ll a10 = 0;
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
+        fo(i,0,n) {
+            if(s[i] == '0') a00++;
+            if(s[i] == '1') a01++;
+            if(p[i] == '0') a10++;
+            if(p[i] == '1') a11++;
+        }
 
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
-        u--;
-        v--;
+        // bool ye = 1;
 
-        adjList[u].pb(v);
-        adjList[v].pb(u);
-    }
+        // while(a10>0 || a01>0) {
+        //     if(a11 >= 2 && a10 > 0) {
+        //         a00++;
+        //         a10--;
+        //     }
 
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
+        //     else if(a00 >= 2 && a01 > 0) {
+        //         a11++;
+        //         a01--;
+        //     }
 
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
-    }
+        //     else if(a11 >= 1 && a10 > 1) {
+        //         a00 += 2;
+        //         a10 -= 2;
+        //     }
+
+        //     else if(a00 >= 1 && a01 > 1) {
+        //         a11 += 2;
+        //         a01 -= 2;
+        //     }
+
+        //     else if(a01 >= 2 && a10 >= 1) {
+        //         a01 -= 2;
+        //         a10 -= 1;
+        //         a11 += 2;
+        //         a00 += 1;
+        //     }
+        //     else if(a10 >= 2 && a01 >= 1) {
+        //         a01 -= 1;
+        //         a10 -= 2;
+        //         a11 += 1;
+        //         a00 += 2;
+        //     }
+
+        //     else if(a01 >= 1 && a10 >= 1 && (a11 > 0 || a00 > 0)) {
+        //         a01--;
+        //         a10--;
+        //         a11++;
+        //         a00++;
+        //     }
+
+        //     else {
+        //         ye = 0;
+        //         break;
+        //     }
+        // }
+
+        // if(ye) {
+        //     assert(a10 == 0 && a01 == 0);
+        //     cnl("YES");
+        // }
+        // else {
+        //     cnl("NO");
+        // }
+
+        if(s == p) {
+            cnl("YES");
+        }
+
+        else if(a10&&a11) {
+            cnl("YES");
+        }
+
+        else {
+            cnl("NO");
+        }
 
     
-
-
+    }
     return 0;
 }

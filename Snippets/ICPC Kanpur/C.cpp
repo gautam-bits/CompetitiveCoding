@@ -38,6 +38,8 @@
     #define deci( x ) cout<<fixed<<setprecision( x )
     #define bitcount( x ) __builtin_popcountll( x )
     #define endl "\n" 
+
+    const double PI =  3.14159265358979;
     
     
     typedef vector<ll> vi;
@@ -50,40 +52,17 @@
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
+
+
+
+// result = sin (param*PI/180);
+
+
+double ran(double ux,double T,double ax) {
+    return ux*T + 0.5*ax*T*T;
+}
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
-
-
-void dfs1(ll node) {
-    visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
-    }
-}
-
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
-    }
-    
-}
     
 int main() 
 {
@@ -91,39 +70,59 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    ll m;
+    test(t){     // tno[1..t]
+    
+        
+        double hei,tim,theta;
 
-    read(n);
-    read(m);
+        read(hei);
+        read(tim);
+        read(theta);
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
+        double u0 = sqrt(20*hei);
 
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
-        u--;
-        v--;
 
-        adjList[u].pb(v);
-        adjList[v].pb(u);
-    }
+        double disx = 0;
+        double disy = 0;
 
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
 
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
-    }
+        double t_per = 2*u0/10.0;
+
+        double incx = u0*sin(theta*PI/180.0);
+        double incy = u0*cos(theta*PI/180.0);
+
+        double ux = incx;
+        double uy = incy;
+
+        double ax = 10.0*sin(theta*PI/180.0);
+        double ay = -10.0*cos(theta*PI/180.0);
+
+
+        while(tim - t_per >= 0) {
+            disx += ran(ux,t_per,ax);
+            ux += 2*incx;
+
+            tim -= t_per;
+        }
+
+        disx += ran(ux,tim,ax);
+        disy += ran(uy,tim,ay);
+
+        assert(disy >= 0);
+
+        double disfin = sqrt(disx*disx + disy*disy);
+
+        deci(13);
+
+        cout<<disfin<<endl;
+
+
+
+
+
+
 
     
-
-
+    }
     return 0;
 }

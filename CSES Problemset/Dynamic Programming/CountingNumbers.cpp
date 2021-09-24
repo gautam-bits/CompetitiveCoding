@@ -53,36 +53,35 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
+vector<vector<vector<ll>>> dp;
 
-
-void dfs1(ll node) {
-    visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
+ll solve(string& num,ll n,ll lastdig,bool tight) {
+    if(n==0) {
+        return 1;
     }
-}
+    if(dp[n][lastdig][tight] != -1) return dp[n][lastdig][tight];
 
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
+    ll ubb = tight ? num[num.size() - n] -'0': 9;
 
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
+    ll ans = 0;
+
+    if(lastdig == ubb) {
+        for(ll dig = 0 ; dig <= 9 ; dig++){
+            if(dig != lastdig) {
+                ans += solve(num,n-1,dig,tight&1);
+            }
+        }
     }
 
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
+    else {
+        for(ll dig = 0 ; dig <= 9 ; dig++){
+            if(dig != lastdig) {
+                ans += solve(num,n-1,dig,0);
+            }
+        }
     }
-    
+    return dp[n][lastdig][tight] =  ans;
+
 }
     
 int main() 
@@ -90,40 +89,32 @@ int main()
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
-    ll n;
-    ll m;
 
-    read(n);
-    read(m);
+    ll a,b;
+    cin>>a>>b;
 
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
+    string mx = to_string(b);
+    string mn = to_string(a-1);
+    dp.assign(20,vector<vector<ll>>(10,vector<ll>(2,-1)));
 
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
-        u--;
-        v--;
+    ll ans1 = 0;
+    ll ans2 = 0;
 
-        adjList[u].pb(v);
-        adjList[v].pb(u);
+    for(ll i = 0 ; i <= mx[0] - '0'; i++) {
+        if(i==mx[0] - '0') ans1+=solve(mx,mx.size(),i,1);
+        else ans1+=solve(mx,mx.size(),i,0);
     }
 
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
-
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
+    for(ll i = 0 ; i <= mn[0] - '0'; i++) {
+        if(i==mn[0] - '0') ans2+=solve(mn,mn.size(),i,1);
+        else ans2+=solve(mn,mn.size(),i,0);
     }
 
+    cnl(ans1);
+
     
+    int ans = ans1 - ans2;
 
-
+    cout<<ans<<endl;
     return 0;
 }

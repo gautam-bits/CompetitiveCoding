@@ -4,7 +4,7 @@
 
 //-------We can be heroes , just for one day!!.---------//
     
-    #include <bits/stdc++.h>
+    #include <bits/stdc++.h> 
     using namespace std;
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ knowledge $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
@@ -53,77 +53,67 @@
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
 
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
+vector<vector<int>> adjList;
+vector<bool> visited;
+vector<int> ans;
+map<int,vector<pair<int,int>>> queries;
+vector<int> curr;
 
 
-void dfs1(ll node) {
+void dfs(int node) {
     visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
+    curr.push_back(node);
+    int n = curr.size();
+    for(auto que : queries[node]) {
+        if(que.first <= n - 1) {
+            ans[que.second] = curr[n - que.first - 1] + 1;
+        }
     }
+
+    for(int ch : adjList[node]) if(!visited[ch]) {
+        dfs(ch);
+    }
+
+    curr.pop_back();
 }
 
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
-    }
-    
-}
     
 int main() 
 {
     
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
-    ll n;
-    ll m;
 
-    read(n);
-    read(m);
+    int n,q;
+    cin>>n>>q;
 
-    adjList.assign(n,vi());
+    adjList.assign(n,vector<int>());
     visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
+    ans.assign(q,-1);
+    queries.clear();
+    curr.clear();
 
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
-        u--;
-        v--;
-
-        adjList[u].pb(v);
-        adjList[v].pb(u);
+    for(int i = 1 ; i < n ; i++) {
+        int temp;
+        cin>>temp;
+        temp--;
+        adjList[i].push_back(temp);
+        adjList[temp].push_back(i);
     }
 
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
-
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
+    for(int i = 0 ; i < q ; i++) {
+        int x,k;
+        cin>>x>>k;
+        x--;
+        queries[x].push_back({k,i});
     }
 
+    dfs(0);
+
+    for(int i = 0 ; i < q ; i++) {
+        cout<<ans[i]<<endl;
+    }
     
-
-
+    
     return 0;
 }

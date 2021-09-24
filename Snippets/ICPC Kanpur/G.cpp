@@ -45,45 +45,84 @@
     typedef vector<pi> vpi;
     typedef vector<vi> vvi;
 
-    const int MOD   = 1000000007 ;
+    const ll MOD   = 1e9 ;
     const int N     = 100005 ;
     const int MAX   = 2e4 + 7;
     const int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
     const int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
+
+ll add(ll x, ll y)
+{
+    x += y;
+    while(x >= MOD) x -= MOD;
+    while(x < 0) x += MOD;
+    return x;
+}
+
+ll mul(ll x, ll y)
+{
+    return (x * 1ll * y) % MOD;
+}
+
+ll binpow(ll x, ll y)
+{
+    ll ans = 1;
+    while(y > 0)
+    {
+        if(y % 2 == 1)
+            ans = mul(ans, x);
+        x = mul(x, x);
+        y >>= 1;
+    }
+    return ans;
+}
+
+ll divide(ll x, ll y)
+{
+    return mul(x, binpow(y, MOD - 2));
+}
+
+ll gcdExtended(ll a, ll b, ll *x, ll *y);
+ 
+ll modInverse(ll b, ll m)
+{
+    ll x, y; 
+    ll g = gcdExtended(b, m, &x, &y);
+
+    if (g != 1)
+        return -1;
+ 
+    return (x%m + m) % m;
+}
+ 
+ll modDivide(ll a, ll b, ll m)
+{
+    a = a % m;
+    ll inv = modInverse(b, m);
+    if (inv == -1)
+       assert(0);
+    else
+       return (inv * a) % m;
+}
+ 
+ll gcdExtended(ll a, ll b, ll *x, ll *y)
+{
+    if (a == 0)
+    {
+        *x = 0, *y = 1;
+        return b;
+    }
+ 
+    ll x1, y1;
+    ll gcd = gcdExtended(b%a, a, &x1, &y1);
+
+    *x = y1 - (b/a) * x1;
+    *y = x1;
+ 
+    return gcd;
+}
     
 //*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ intelligence $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*//
-
-vvi adjList;
-vi visited;
-vi val;
-vi ans;
-
-
-void dfs1(ll node) {
-    visited[node] = 1;
-    val[node] = 1;
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs1(x);
-        val[node] += val[x];
-    }
-}
-
-void dfs2(ll node,ll par) {
-    visited[node] = 1;
-    if(par != -1) {
-        ans[node] *= ans[par]/(val[node] + 1) + 1;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        ans[node] *= (val[x] + 1);
-        visited[x] = 0;
-    }
-
-    for(ll x : adjList[node]) if(!visited[x]) {
-        dfs2(x,node);
-    }
-    
-}
     
 int main() 
 {
@@ -91,39 +130,30 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    ll n;
-    ll m;
-
-    read(n);
-    read(m);
-
-    adjList.assign(n,vi());
-    visited.assign(n,0);
-    val.assign(n,0);
-    ans.assign(n,1);
-
-    fo(i,0,n-1) {
-        ll u,v;
-        read(u);
-        read(v);
-        u--;
-        v--;
-
-        adjList[u].pb(v);
-        adjList[v].pb(u);
-    }
-
-    dfs1(0);
-    visited.assign(n,0);
-    dfs2(0,-1);
-
-    fo(i,0,n) {
-        // ans[i] %= m;
-        cnl(ans[i]);
-    }
-
+    test(t){     // tno[1..t]
     
+        ll k,d;
+        read(k);
+        read(d);
 
+        // k = add(k,0);
+        // d = add(d,0);
 
+        ll ans = k;
+
+        ll aa = add(binpow(k,d-1),MOD-1);
+        aa = mul(aa,k);
+        ll bb = add(k,MOD-1);
+
+        ll cc = modDivide(aa,bb,MOD);
+        cc = mul(cc,k/2);
+
+        ans = add(ans,cc);
+
+        
+
+        cnl(ans);
+    
+    }
     return 0;
 }
